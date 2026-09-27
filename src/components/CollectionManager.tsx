@@ -109,7 +109,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   return <main className="collection-page">
     <header className="workspace-header">
       <div><Link className="back-link" href="/">← Players</Link><form className="inline-title" onSubmit={rename}><input aria-label="Profile name" name="name" defaultValue={profile.name} key={profile.name} /><button type="submit">Rename</button></form></div>
-      <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link></div>
+      <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="button-link" href="/analytics">Analytics</Link><Link className="button-link" href={`/p/${profileId}/matches`}>Matches →</Link><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link></div>
     </header>
     <section className="collection-tools">
       <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>

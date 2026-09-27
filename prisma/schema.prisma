@@ -13,6 +13,8 @@ model Profile {
   createdAt DateTime         @default(now())
   cards     CollectionCard[]
   decks     Deck[]
+  wins      Match[]          @relation("MatchWins")
+  losses    Match[]          @relation("MatchLosses")
 }
 
 model CollectionCard {
@@ -49,4 +51,19 @@ model DeckCard {
 
   @@unique([deckId, name])
   @@index([deckId])
+}
+
+model Match {
+  id           String   @id @default(cuid())
+  winner       Profile  @relation("MatchWins", fields: [winnerId], references: [id], onDelete: Cascade)
+  winnerId     String
+  loser        Profile  @relation("MatchLosses", fields: [loserId], references: [id], onDelete: Cascade)
+  loserId      String
+  winnerDeckId String?
+  loserDeckId  String?
+  note         String?
+  createdAt    DateTime @default(now())
+
+  @@index([winnerId])
+  @@index([loserId])
 }

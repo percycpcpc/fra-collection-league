@@ -21,21 +21,27 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
   const name = cleanName(body.name);
   if (!name) return error("Profile name is required.");
+  if (body.seedCommons !== undefined && typeof body.seedCommons !== "boolean") {
+    return error("seedCommons must be a boolean.");
+  }
+  const seedCommons = body.seedCommons ?? true;
   try {
-    const catalog = await getCatalog();
+    const catalog = seedCommons ? await getCatalog() : [];
     const seededCards = catalog.filter(
       (card) => card.rarity === "common" || card.rarity === "uncommon",
     );
     const profile = await prisma.$transaction(async (tx) => {
       const createdProfile = await tx.profile.create({ data: { name } });
-      await tx.collectionCard.createMany({
-        data: seededCards.map((card) => ({
-          profileId: createdProfile.id,
-          name: card.name,
-          qty: 1,
-          owned: true,
-        })),
-      });
+      if (seedCommons) {
+        await tx.collectionCard.createMany({
+          data: seededCards.map((card) => ({
+            profileId: createdProfile.id,
+            name: card.name,
+            qty: 1,
+            owned: true,
+          })),
+        });
+      }
       return createdProfile;
     });
     return NextResponse.json({ profile }, { status: 201 });
