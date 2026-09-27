@@ -14,8 +14,8 @@ export function DeckList({ profileId }: { profileId: string }) {
   useEffect(() => { void load(); }, [load]);
 
   async function create(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(""); const form = new FormData(event.currentTarget);
-    try { await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commander: form.get("commander") || null }) }); event.currentTarget.reset(); await load(); }
+    event.preventDefault(); setError(""); const form = new FormData(event.currentTarget); const formEl = event.currentTarget;
+    try { await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commander: form.get("commander") || null }) }); formEl.reset(); await load(); }
     catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
   }
   async function remove(deckId: string) { try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); setConfirmId(null); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
