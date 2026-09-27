@@ -21,6 +21,10 @@ h1, h2, h3, p { margin-top: 0; }
 .create-bar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .75rem; padding: 1rem; background: var(--panel); border: 1px solid var(--line); margin-bottom: 1.5rem; }
 .create-bar label { font-weight: 800; }
 .profile-list { display: grid; gap: .5rem; }
+.profile-row-wrap { display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: stretch; }
+.profile-delete { border: 1px solid var(--line); background: #14161a; color: var(--muted); padding: 0 1rem; cursor: pointer; }
+.profile-delete:hover { border-color: #e05a4e; color: #e05a4e; }
+.profile-delete.danger { border-color: #e05a4e; color: #fff; background: #7a2a22; }
 .profile-row { display: grid; grid-template-columns: 3rem 1fr auto auto auto; gap: 1rem; align-items: center; padding: .9rem 1rem; border: 1px solid var(--line); background: #14161a; text-decoration: none; }
 .profile-row:hover { border-color: var(--gold); background: #1b1b1a; }
 .profile-row span:not(.profile-monogram) { color: var(--muted); font-size: .9rem; }

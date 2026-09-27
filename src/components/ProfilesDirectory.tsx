@@ -11,6 +11,7 @@ export function ProfilesDirectory() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const load = () => jsonFetch<{ profiles: Profile[] }>("/api/profiles").then((data) => setProfiles(data.profiles)).catch((cause) => setError(cause.message)).finally(() => setLoading(false));
   useEffect(() => { void load(); }, []);
@@ -23,12 +24,21 @@ export function ProfilesDirectory() {
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create profile."); }
   }
 
+  async function remove(profile: Profile) {
+    if (confirmDelete !== profile.id) { setConfirmDelete(profile.id); return; }
+    setConfirmDelete(null); setError("");
+    try {
+      await jsonFetch(`/api/profiles/${profile.id}`, { method: "DELETE" });
+      await load();
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete profile."); }
+  }
+
   return <main className="shell directory">
     <header className="masthead"><div className="eyebrow">Reality Fracture</div><h1>Collection League</h1><p>Choose a player to manage their cards and decks.</p></header>
     <form className="create-bar" onSubmit={create}><label htmlFor="profile-name">New player</label><input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player name" maxLength={80} /><button className="primary" type="submit">Create profile</button></form>
     {error && <p className="error-banner" role="alert">{error}</p>}
     <section className="profile-list" aria-label="Player profiles">
-      {loading ? <p className="muted">Loading profiles…</p> : profiles.length === 0 ? <div className="empty"><h2>No players yet</h2><p>Create the first profile to start registering a collection.</p></div> : profiles.map((profile) => <Link className="profile-row" href={`/p/${profile.id}`} key={profile.id}><span className="profile-monogram">{profile.name.slice(0, 1).toUpperCase()}</span><strong>{profile.name}</strong><span>{profile.cardCount} collection entries</span><span>{profile.deckCount} decks</span><b aria-hidden>→</b></Link>)}
+      {loading ? <p className="muted">Loading profiles…</p> : profiles.length === 0 ? <div className="empty"><h2>No players yet</h2><p>Create the first profile to start registering a collection.</p></div> : profiles.map((profile) => <div className="profile-row-wrap" key={profile.id}><Link className="profile-row" href={`/p/${profile.id}`}><span className="profile-monogram">{profile.name.slice(0, 1).toUpperCase()}</span><strong>{profile.name}</strong><span>{profile.cardCount} collection entries</span><span>{profile.deckCount} decks</span><b aria-hidden>→</b></Link><button className={confirmDelete === profile.id ? "profile-delete danger" : "profile-delete"} type="button" onClick={() => remove(profile)}>{confirmDelete === profile.id ? "Sure?" : "✕"}</button></div>)}
     </section>
   </main>;
 }

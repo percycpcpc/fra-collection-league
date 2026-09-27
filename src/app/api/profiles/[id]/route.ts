@@ -36,3 +36,14 @@ export async function PUT(request: Request, { params }: Context) {
     throw cause;
   }
 }
+
+export async function DELETE(_: Request, { params }: Context) {
+  const { id } = await params;
+  try {
+    await prisma.profile.delete({ where: { id } });
+    return NextResponse.json({ deleted: true });
+  } catch (cause) {
+    if (cause && typeof cause === "object" && "code" in cause && cause.code === "P2025") return error("Profile not found.", 404);
+    throw cause;
+  }
+}
