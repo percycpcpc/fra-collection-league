@@ -1,0 +1,38 @@
+import { NextResponse } from "next/server";
+import { cleanName, error, isUniqueError } from "@/lib/api";
+import { prisma } from "@/lib/prisma";
+
+type Context = { params: Promise<{ id: string }> };
+
+export async function GET(_: Request, { params }: Context) {
+  const { id } = await params;
+  const profile = await prisma.profile.findUnique({
+    where: { id },
+    include: {
+      cards: { orderBy: { name: "asc" } },
+      decks: { orderBy: { createdAt: "desc" }, include: { cards: { select: { qty: true } } } },
+    },
+  });
+  if (!profile) return error("Profile not found.", 404);
+  const { cards, decks, ...details } = profile;
+  return NextResponse.json({
+    profile: details,
+    cards,
+    decks: decks.map(({ cards: deckCards, ...deck }) => ({ ...deck, cardCount: deckCards.reduce((sum, card) => sum + card.qty, 0) })),
+  });
+}
+
+export async function PUT(request: Request, { params }: Context) {
+  const { id } = await params;
+  const body = await request.json().catch(() => ({}));
+  const name = cleanName(body.name);
+  if (!name) return error("Profile name is required.");
+  try {
+    const profile = await prisma.profile.update({ where: { id }, data: { name } });
+    return NextResponse.json({ profile });
+  } catch (cause) {
+    if (isUniqueError(cause)) return error("A profile with that name already exists.", 409);
+    if (cause && typeof cause === "object" && "code" in cause && cause.code === "P2025") return error("Profile not found.", 404);
+    throw cause;
+  }
+}
