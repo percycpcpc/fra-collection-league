@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cleanName, error, isUniqueError } from "@/lib/api";
+import { getCatalog } from "@/lib/catalog";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
@@ -21,7 +22,22 @@ export async function POST(request: Request) {
   const name = cleanName(body.name);
   if (!name) return error("Profile name is required.");
   try {
-    const profile = await prisma.profile.create({ data: { name } });
+    const catalog = await getCatalog();
+    const seededCards = catalog.filter(
+      (card) => card.rarity === "common" || card.rarity === "uncommon",
+    );
+    const profile = await prisma.$transaction(async (tx) => {
+      const createdProfile = await tx.profile.create({ data: { name } });
+      await tx.collectionCard.createMany({
+        data: seededCards.map((card) => ({
+          profileId: createdProfile.id,
+          name: card.name,
+          qty: 1,
+          owned: true,
+        })),
+      });
+      return createdProfile;
+    });
     return NextResponse.json({ profile }, { status: 201 });
   } catch (cause) {
     if (isUniqueError(cause)) return error("A profile with that name already exists.", 409);
