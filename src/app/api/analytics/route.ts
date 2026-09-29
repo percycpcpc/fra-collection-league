@@ -1,26 +1,53 @@
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
 import { getCatalog } from "@/lib/catalog";
-import { prisma } from "@/lib/prisma";
+import { getDb } from "@/lib/db";
+import { collectionCards, profiles } from "@/db/schema";
 
 const TOTAL_CARDS = 251;
 
 export async function GET() {
-  const [catalog, profiles] = await Promise.all([
-    getCatalog(),
-    prisma.profile.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true, cards: { select: { name: true, qty: true, owned: true } } },
-    }),
-  ]);
-  const catalogByName = new Map(catalog.map((card) => [card.name.toLocaleLowerCase(), card]));
+  const db = getDb();
 
-  const players = profiles.map((profile) => {
+  const [catalog, allProfiles] = await Promise.all([
+    Promise.resolve(getCatalog()),
+    db
+      .select({ id: profiles.id, name: profiles.name })
+      .from(profiles)
+      .orderBy(profiles.name),
+  ]);
+
+  const catalogByName = new Map(
+    catalog.map((card) => [card.name.toLocaleLowerCase(), card]),
+  );
+
+  // Fetch all collection cards for all profiles in one query
+  const allCards = await db
+    .select({
+      profileId: collectionCards.profileId,
+      name: collectionCards.name,
+      qty: collectionCards.qty,
+      owned: collectionCards.owned,
+    })
+    .from(collectionCards)
+    .where(eq(collectionCards.owned, true));
+
+  // Group cards by profileId
+  const cardsByProfile = new Map<string, typeof allCards>();
+  for (const card of allCards) {
+    const list = cardsByProfile.get(card.profileId) ?? [];
+    list.push(card);
+    cardsByProfile.set(card.profileId, list);
+  }
+
+  const players = allProfiles.map((profile) => {
+    const cards = cardsByProfile.get(profile.id) ?? [];
     const byRarity = { common: 0, uncommon: 0, rare: 0, mythic: 0 };
     let ownedCards = 0;
     let ownedQty = 0;
-    for (const entry of profile.cards) {
+    for (const entry of cards) {
       const card = catalogByName.get(entry.name.toLocaleLowerCase());
-      if (!entry.owned || !card) continue;
+      if (!card) continue;
       ownedCards += 1;
       ownedQty += entry.qty;
       const rarity = card.rarity.toLocaleLowerCase() as keyof typeof byRarity;
@@ -39,9 +66,10 @@ export async function GET() {
   const cards = catalog.map((card) => {
     let owners = 0;
     let totalQty = 0;
-    for (const profile of profiles) {
-      const entry = profile.cards.find(
-        (item) => item.owned && item.name.toLocaleLowerCase() === card.name.toLocaleLowerCase(),
+    for (const [, profileCards] of cardsByProfile) {
+      const entry = profileCards.find(
+        (item) =>
+          item.name.toLocaleLowerCase() === card.name.toLocaleLowerCase(),
       );
       if (!entry) continue;
       owners += 1;

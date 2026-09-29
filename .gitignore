@@ -5,3 +5,6 @@ node_modules
 .DS_Store
 .hermes
 codex-output.txt
+/dist/
+.vinext/
+.cloudflare/

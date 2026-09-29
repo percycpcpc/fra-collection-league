@@ -1,0 +1,9 @@
+name = "fra-collection-league"
+compatibility_date = "2026-09-29"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fra-db"
+database_id = "fc641dce-5b70-45dc-8b9c-b69b20bba7f5"
+migrations_dir = "drizzle"
