@@ -119,8 +119,8 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-card-tile.at-cap .card-image-button:disabled { cursor: not-allowed; }
 .deck-card-tile.is-commander .deck-card-visual { filter: drop-shadow(0 0 7px #d8ad5766); }
 .deck-qty-badge { position: absolute; top: .45rem; right: .45rem; display: grid; place-items: center; min-width: 2rem; height: 2rem; padding: 0 .45rem; border: 1px solid var(--gold-2); border-radius: 999px; color: #17130b; background: var(--gold-2); box-shadow: 0 2px 8px #000c; font-weight: 900; }
-.deck-card-overlay { position: absolute; inset: auto 0 0; display: grid; gap: .4rem; padding: 2.6rem .55rem .55rem; background: linear-gradient(transparent, #08090af2 42%); opacity: 0; transform: translateY(.25rem); transition: opacity .14s, transform .14s; }
-.deck-card-tile:hover .deck-card-overlay, .deck-card-tile:focus .deck-card-overlay, .deck-card-tile:focus-within .deck-card-overlay { opacity: 1; transform: none; }
+.deck-card-overlay { position: absolute; inset: auto 0 0; display: grid; gap: .4rem; padding: 2.6rem .55rem .55rem; background: linear-gradient(transparent, #08090af2 42%); opacity: 0; transform: translateY(.25rem); transition: opacity .14s, transform .14s; pointer-events: none; }
+.deck-card-tile:hover .deck-card-overlay, .deck-card-tile:focus .deck-card-overlay, .deck-card-tile:focus-within .deck-card-overlay { opacity: 1; transform: none; pointer-events: auto; }
 .deck-card-overlay > span { color: #eee8d9; font-size: .74rem; font-weight: 700; text-shadow: 0 1px 2px #000; }
 .deck-card-actions { display: flex; gap: .35rem; }
 .deck-card-actions .mini-stepper { flex: 1; }
