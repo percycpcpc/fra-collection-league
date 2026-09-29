@@ -1,4 +1,4 @@
-export type CatalogCard = { name: string; qty: number; img: string; colors: string; rarity: string; type: string };
+export type CatalogCard = { name: string; qty: number; img: string; colors: string; rarity: string; type: string; colorIdentity: string };
 export type CollectionCard = { id: string; profileId: string; name: string; qty: number; owned: boolean };
 export type DeckSummary = { id: string; name: string; commander: string | null; cardCount: number };
 export type DeckCard = { id: string; deckId: string; name: string; qty: number; isBasic: boolean };

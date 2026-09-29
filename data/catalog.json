@@ -5,7 +5,8 @@
     "img": "https://mythicspoiler.com/fra/cards/academicascent.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "W"
   },
   {
     "name": "Aerid Konstrari",
@@ -13,7 +14,8 @@
     "colors": "multi",
     "type": "Legendary Creature — Elder Sphinx",
     "img": "https://mythicspoiler.com/fra/cards/aeridkonstrari.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "RG"
   },
   {
     "name": "Afterthought Sentry",
@@ -21,7 +23,8 @@
     "img": "https://mythicspoiler.com/fra/cards/afterthoughtsentry.jpg",
     "colors": "colorless",
     "rarity": "common",
-    "type": "Artifact Creature — Gargoyle"
+    "type": "Artifact Creature — Gargoyle",
+    "colorIdentity": ""
   },
   {
     "name": "Ajani Resolute",
@@ -29,7 +32,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ajaniresolute.jpg",
     "colors": "white",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Ajani"
+    "type": "Legendary Planeswalker — Ajani",
+    "colorIdentity": "W"
   },
   {
     "name": "Ajani Unrelenting",
@@ -37,7 +41,8 @@
     "colors": "red",
     "type": "Legendary Planeswalker — Ajani",
     "img": "https://mythicspoiler.com/fra/cards/ajaniunrelenting.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "R"
   },
   {
     "name": "Ajani's Anguish",
@@ -45,7 +50,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ajanisanguish.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Enchantment"
+    "type": "Enchantment",
+    "colorIdentity": "R"
   },
   {
     "name": "Apex Witchstalker",
@@ -53,7 +59,8 @@
     "colors": "black",
     "type": "Creature — Wolf",
     "img": "https://mythicspoiler.com/fra/cards/apexwitchstalker.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Arcane Amphisbaena",
@@ -61,7 +68,8 @@
     "img": "https://mythicspoiler.com/fra/cards/arcaneamphisbaena.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Creature — Snake"
+    "type": "Creature — Snake",
+    "colorIdentity": "G"
   },
   {
     "name": "Archive Arbiter",
@@ -69,7 +77,8 @@
     "img": "https://mythicspoiler.com/fra/cards/archivearbiter.jpg",
     "colors": "colorless",
     "rarity": "uncommon",
-    "type": "Artifact Creature — Sphinx"
+    "type": "Artifact Creature — Sphinx",
+    "colorIdentity": ""
   },
   {
     "name": "Arni, Humble Scribe",
@@ -77,7 +86,8 @@
     "colors": "blue",
     "type": "Legendary Creature — Human Wizard",
     "img": "https://mythicspoiler.com/fra/cards/arnihumblescribe.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Arni, Renowned Champion",
@@ -85,7 +95,8 @@
     "colors": "red",
     "type": "Legendary Creature — Human Berserker",
     "img": "https://mythicspoiler.com/fra/cards/arnirenownedchampion.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "R"
   },
   {
     "name": "Artifist Acumen",
@@ -93,7 +104,8 @@
     "img": "https://mythicspoiler.com/fra/cards/artifistacumen.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Avatar of Burgeoning Echoes",
@@ -101,7 +113,8 @@
     "colors": "multi",
     "type": "Creature — Avatar",
     "img": "https://mythicspoiler.com/fra/cards/avatarofburgeoningechoes.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "UG"
   },
   {
     "name": "Awaken the Inferno",
@@ -109,7 +122,8 @@
     "img": "https://mythicspoiler.com/fra/cards/awakentheinferno.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Bestial Incursion",
@@ -117,7 +131,8 @@
     "img": "https://mythicspoiler.com/fra/cards/bestialincursion.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "G"
   },
   {
     "name": "Blazing Crescendo",
@@ -125,7 +140,8 @@
     "img": "https://mythicspoiler.com/fra/cards/blazingcrescendof.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Blessed Ghoul",
@@ -133,7 +149,8 @@
     "img": "https://mythicspoiler.com/fra/cards/blessedghoul.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Zombie Cleric"
+    "type": "Creature — Zombie Cleric",
+    "colorIdentity": "WB"
   },
   {
     "name": "Bloodline Recollector // Ancestral Craving",
@@ -141,7 +158,8 @@
     "colors": "black",
     "type": "Creature — Vampire Warlock // Instant",
     "img": "https://cards.scryfall.io/normal/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Bloombrute",
@@ -149,7 +167,8 @@
     "img": "https://mythicspoiler.com/fra/cards/bloombrute.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Plant Elemental"
+    "type": "Creature — Plant Elemental",
+    "colorIdentity": "WG"
   },
   {
     "name": "Blossom-Blessed Angel // Seed Suture",
@@ -157,7 +176,8 @@
     "img": "https://mythicspoiler.com/fra/cards/blossomblessesdangel.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Angel Cleric // Sorcery"
+    "type": "Creature — Angel Cleric // Sorcery",
+    "colorIdentity": "WG"
   },
   {
     "name": "Break Under Pressure",
@@ -165,7 +185,8 @@
     "colors": "black",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/breakunderpressure.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Budding Insurgent",
@@ -173,7 +194,8 @@
     "img": "https://mythicspoiler.com/fra/cards/buddinginsurgent.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Creature — Dryad Scout"
+    "type": "Creature — Dryad Scout",
+    "colorIdentity": "G"
   },
   {
     "name": "Campus Crier",
@@ -181,7 +203,8 @@
     "img": "https://mythicspoiler.com/fra/cards/campuscriter.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Creature — Human Advisor"
+    "type": "Creature — Human Advisor",
+    "colorIdentity": "W"
   },
   {
     "name": "Carnivorous Cultivator // Enroot",
@@ -189,7 +212,8 @@
     "img": "https://mythicspoiler.com/fra/cards/carnivorouscultivatorf.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Creature — Elf Warlock // Sorcery"
+    "type": "Creature — Elf Warlock // Sorcery",
+    "colorIdentity": "G"
   },
   {
     "name": "Cast Away Doubt",
@@ -197,7 +221,8 @@
     "colors": "black",
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/castawaydoubt.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Chandra's Emberling",
@@ -205,7 +230,8 @@
     "img": "https://mythicspoiler.com/fra/cards/chandrasemberling.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Creature — Gremlin Elemental"
+    "type": "Creature — Gremlin Elemental",
+    "colorIdentity": "R"
   },
   {
     "name": "Chandra, Chill of Compliance",
@@ -213,7 +239,8 @@
     "img": "https://mythicspoiler.com/fra/cards/chandrachillofcompliance.jpg",
     "colors": "blue",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Chandra"
+    "type": "Legendary Planeswalker — Chandra",
+    "colorIdentity": "U"
   },
   {
     "name": "Chandra, Torch of Defiance",
@@ -221,7 +248,8 @@
     "img": "https://mythicspoiler.com/fra/cards/chandratorchofdefiance.jpg",
     "colors": "red",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Chandra"
+    "type": "Legendary Planeswalker — Chandra",
+    "colorIdentity": "R"
   },
   {
     "name": "Charge the Sanctum",
@@ -229,7 +257,8 @@
     "img": "https://mythicspoiler.com/fra/cards/chargethesanctum.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "WR"
   },
   {
     "name": "Clash of Elements",
@@ -237,7 +266,8 @@
     "img": "https://mythicspoiler.com/fra/cards/clashofelements.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "UR"
   },
   {
     "name": "Codie, Ravenous Codex",
@@ -245,7 +275,8 @@
     "img": "https://mythicspoiler.com/fra/cards/codieravenouscodex.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Legendary Artifact Creature — Book Construct"
+    "type": "Legendary Artifact Creature — Book Construct",
+    "colorIdentity": "WUBRG"
   },
   {
     "name": "Command the Stage",
@@ -253,7 +284,8 @@
     "img": "https://mythicspoiler.com/fra/cards/commandthestage.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Compel Brutality",
@@ -261,7 +293,8 @@
     "img": "https://mythicspoiler.com/fra/cards/compelbrutality.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "G"
   },
   {
     "name": "Countersculpt",
@@ -269,7 +302,8 @@
     "colors": "blue",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/countersculpt.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Craftwork Crusher",
@@ -277,7 +311,8 @@
     "img": "https://mythicspoiler.com/fra/cards/craftworkcrusher.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Artifact Creature — Boar Construct"
+    "type": "Artifact Creature — Boar Construct",
+    "colorIdentity": "RG"
   },
   {
     "name": "Craterclaw Colossus",
@@ -285,7 +320,8 @@
     "img": "https://mythicspoiler.com/fra/cards/craterclawcolossus.jpg",
     "colors": "red",
     "rarity": "mythic",
-    "type": "Artifact Creature — Beast Construct"
+    "type": "Artifact Creature — Beast Construct",
+    "colorIdentity": "R"
   },
   {
     "name": "Cruel Calculations",
@@ -293,7 +329,8 @@
     "img": "https://mythicspoiler.com/fra/cards/cruelcalculationsf.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "U"
   },
   {
     "name": "Cryotheory Adept",
@@ -301,7 +338,8 @@
     "colors": "blue",
     "type": "Creature — Human Wizard",
     "img": "https://mythicspoiler.com/fra/cards/cryotheoryadept.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Curse-Marred Demon",
@@ -309,7 +347,8 @@
     "img": "https://mythicspoiler.com/fra/cards/cursemarreddemon.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Creature — Demon"
+    "type": "Creature — Demon",
+    "colorIdentity": "R"
   },
   {
     "name": "Danitha, Spear of Agony",
@@ -317,7 +356,8 @@
     "img": "https://mythicspoiler.com/fra/cards/danithaspearofagonyf.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Knight"
+    "type": "Legendary Creature — Human Knight",
+    "colorIdentity": "B"
   },
   {
     "name": "Danitha, Sword of Hope",
@@ -325,7 +365,8 @@
     "img": "https://mythicspoiler.com/fra/cards/danithaswordofhopef.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Knight"
+    "type": "Legendary Creature — Human Knight",
+    "colorIdentity": "W"
   },
   {
     "name": "Dark Matter Manipulator",
@@ -333,7 +374,8 @@
     "img": "https://mythicspoiler.com/fra/cards/darkmattermanipulator.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Creature — Human Warlock"
+    "type": "Creature — Human Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Darklight Phoenix",
@@ -341,7 +383,8 @@
     "img": "https://mythicspoiler.com/fra/cards/darklightphoenix.jpg",
     "colors": "black",
     "rarity": "mythic",
-    "type": "Creature — Phoenix"
+    "type": "Creature — Phoenix",
+    "colorIdentity": "B"
   },
   {
     "name": "Dedicated Commons",
@@ -349,7 +392,8 @@
     "img": "https://mythicspoiler.com/fra/cards/dedicatedcommons.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WR"
   },
   {
     "name": "Denzilore Fatehold",
@@ -357,7 +401,8 @@
     "img": "https://mythicspoiler.com/fra/cards/denzilorefatehold.jpg",
     "colors": "multi",
     "rarity": "mythic",
-    "type": "Legendary Creature — Elder Sphinx"
+    "type": "Legendary Creature — Elder Sphinx",
+    "colorIdentity": "WU"
   },
   {
     "name": "Deserted Beach",
@@ -365,7 +410,8 @@
     "img": "https://mythicspoiler.com/fra/cards/desertedbeach.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WU"
   },
   {
     "name": "Desperate Futurescribe",
@@ -373,7 +419,8 @@
     "img": "https://mythicspoiler.com/fra/cards/desperatefuturescribe.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Kor Scout"
+    "type": "Creature — Kor Scout",
+    "colorIdentity": "WU"
   },
   {
     "name": "Diviner of Victory // Unwind History",
@@ -381,7 +428,8 @@
     "img": "https://mythicspoiler.com/fra/cards/divinerofvictory.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Creature — Dwarf Wizard // Sorcery"
+    "type": "Creature — Dwarf Wizard // Sorcery",
+    "colorIdentity": "U"
   },
   {
     "name": "Divining Duelist",
@@ -389,7 +437,8 @@
     "colors": "blue",
     "type": "Creature — Merfolk Wizard",
     "img": "https://mythicspoiler.com/fra/cards/diviningduelist.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Draconic Visitor",
@@ -397,7 +446,8 @@
     "img": "https://mythicspoiler.com/fra/cards/draconicvisitor.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Creature — Dragon"
+    "type": "Creature — Dragon",
+    "colorIdentity": "R"
   },
   {
     "name": "Eardrum Rattler",
@@ -405,7 +455,8 @@
     "img": "https://mythicspoiler.com/fra/cards/eardrumrattler.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Creature — Human Bard"
+    "type": "Creature — Human Bard",
+    "colorIdentity": "R"
   },
   {
     "name": "Edgar, Ancient Bloodlord",
@@ -413,7 +464,8 @@
     "img": "https://mythicspoiler.com/fra/cards/edgarancientbloodlordf.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Vampire Noble"
+    "type": "Legendary Creature — Vampire Noble",
+    "colorIdentity": "WB"
   },
   {
     "name": "Edgar, Moonlit Sovereign",
@@ -421,7 +473,8 @@
     "img": "https://mythicspoiler.com/fra/cards/edgarmoonlitsovereignf.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Werewolf Noble"
+    "type": "Legendary Creature — Werewolf Noble",
+    "colorIdentity": "G"
   },
   {
     "name": "Emergency Phytomedic // Seed Suture",
@@ -429,7 +482,8 @@
     "img": "https://mythicspoiler.com/fra/cards/emergencyphytomedicf.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Dryad Cleric // Sorcery"
+    "type": "Creature — Dryad Cleric // Sorcery",
+    "colorIdentity": "WG"
   },
   {
     "name": "Emrakul, the Exigent Doom",
@@ -437,7 +491,8 @@
     "img": "https://mythicspoiler.com/fra/cards/emrakultheexigentdoom.jpg",
     "colors": "colorless",
     "rarity": "mythic",
-    "type": "Legendary Creature — Eldrazi"
+    "type": "Legendary Creature — Eldrazi",
+    "colorIdentity": ""
   },
   {
     "name": "Enlightened Confidant",
@@ -445,7 +500,8 @@
     "img": "https://mythicspoiler.com/fra/cards/enlightenedconfidant.jpg",
     "colors": "white",
     "rarity": "mythic",
-    "type": "Creature — Kor Cleric"
+    "type": "Creature — Kor Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Entrust the Spark",
@@ -453,7 +509,8 @@
     "img": "https://mythicspoiler.com/fra/cards/entrustthespark.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "UG"
   },
   {
     "name": "Essence Burn",
@@ -461,7 +518,8 @@
     "img": "https://mythicspoiler.com/fra/cards/essenceburn.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Extended Absence",
@@ -469,7 +527,8 @@
     "colors": "black",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/extendedabsence.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Extrapolate the Impossible",
@@ -477,7 +536,8 @@
     "colors": "black",
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/extrapolatetheimpossiblef.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Eye of Jace",
@@ -485,7 +545,8 @@
     "img": "https://mythicspoiler.com/fra/cards/eyeofjace.jpg",
     "colors": "colorless",
     "rarity": "uncommon",
-    "type": "Artifact"
+    "type": "Artifact",
+    "colorIdentity": ""
   },
   {
     "name": "Face Yourself",
@@ -493,7 +554,8 @@
     "img": "https://mythicspoiler.com/fra/cards/faceyourselff.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Fatehold Annex",
@@ -501,7 +563,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fateholdannex.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WU"
   },
   {
     "name": "Fatehold Charm",
@@ -509,7 +572,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fateholdcharm.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "WU"
   },
   {
     "name": "Fatehold Chronologist // Peer Review",
@@ -517,7 +581,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fateholdchronologist.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Bird Wizard // Sorcery"
+    "type": "Creature — Bird Wizard // Sorcery",
+    "colorIdentity": "WU"
   },
   {
     "name": "Fateshaper Aspirant",
@@ -525,7 +590,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fateshaperaspirant.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Creature — Rhino Cleric"
+    "type": "Creature — Rhino Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Fblthp, Impossibly Lost",
@@ -533,7 +599,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fblthpimpossiblylostf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Homunculus"
+    "type": "Legendary Creature — Homunculus",
+    "colorIdentity": "U"
   },
   {
     "name": "Fblthp, Knows the Way",
@@ -541,7 +608,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fblthpknowsthewayf.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Homunculus Scout"
+    "type": "Legendary Creature — Homunculus Scout",
+    "colorIdentity": "G"
   },
   {
     "name": "Ferocity of the Hunt",
@@ -549,7 +617,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ferocityofthehunt.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Enchantment — Aura"
+    "type": "Enchantment — Aura",
+    "colorIdentity": "BG"
   },
   {
     "name": "Flickering Hound",
@@ -557,7 +626,8 @@
     "img": "https://mythicspoiler.com/fra/cards/flickeringhound.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Creature — Dog"
+    "type": "Creature — Dog",
+    "colorIdentity": "W"
   },
   {
     "name": "Flourishing Grapple",
@@ -565,7 +635,8 @@
     "img": "https://mythicspoiler.com/fra/cards/flourishinggrapple.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "G"
   },
   {
     "name": "Forest",
@@ -573,7 +644,8 @@
     "img": "https://mythicspoiler.com/fra/cards/forest1.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Basic Land — Forest"
+    "type": "Basic Land — Forest",
+    "colorIdentity": "G"
   },
   {
     "name": "Formidable Commons",
@@ -581,7 +653,8 @@
     "img": "https://mythicspoiler.com/fra/cards/formidablecommons.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "BG"
   },
   {
     "name": "Frostbite Pyromental",
@@ -589,7 +662,8 @@
     "img": "https://mythicspoiler.com/fra/cards/frostbitepyromental.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Creature — Elemental"
+    "type": "Creature — Elemental",
+    "colorIdentity": "UR"
   },
   {
     "name": "Fulminous Forte",
@@ -597,7 +671,8 @@
     "img": "https://mythicspoiler.com/fra/cards/fulminousforte.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Gallia, the Merrymaker",
@@ -605,7 +680,8 @@
     "img": "https://mythicspoiler.com/fra/cards/galliathemerrymaker.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Satyr"
+    "type": "Legendary Creature — Satyr",
+    "colorIdentity": "R"
   },
   {
     "name": "Gallia, Tragic Host",
@@ -613,7 +689,8 @@
     "img": "https://mythicspoiler.com/fra/cards/galliatragichostf.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Zombie Satyr"
+    "type": "Legendary Creature — Zombie Satyr",
+    "colorIdentity": "B"
   },
   {
     "name": "Gardenize",
@@ -621,7 +698,8 @@
     "colors": "green",
     "type": "Enchantment",
     "img": "https://mythicspoiler.com/fra/cards/gardenizef.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Garruk, Curse Breaker",
@@ -629,7 +707,8 @@
     "img": "https://mythicspoiler.com/fra/cards/garrukcursebreaker.jpg",
     "colors": "green",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Garruk"
+    "type": "Legendary Planeswalker — Garruk",
+    "colorIdentity": "G"
   },
   {
     "name": "Garruk, Veiled Butcher",
@@ -637,7 +716,8 @@
     "img": "https://mythicspoiler.com/fra/cards/garrukveildbutcher.jpg",
     "colors": "black",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Garruk"
+    "type": "Legendary Planeswalker — Garruk",
+    "colorIdentity": "B"
   },
   {
     "name": "Geist of Saint Thalia",
@@ -645,7 +725,8 @@
     "img": "https://mythicspoiler.com/fra/cards/geistofsaintthaliaf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Spirit Cleric"
+    "type": "Legendary Creature — Spirit Cleric",
+    "colorIdentity": "U"
   },
   {
     "name": "Generous Revival",
@@ -653,7 +734,8 @@
     "img": "https://mythicspoiler.com/fra/cards/generousrevival.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Germinate Recruits",
@@ -661,7 +743,8 @@
     "img": "https://mythicspoiler.com/fra/cards/germinaterecruitsf.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "W"
   },
   {
     "name": "Ghalta the Immovable",
@@ -669,7 +752,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ghaltatheimmovable.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Elder Dinosaur"
+    "type": "Legendary Creature — Elder Dinosaur",
+    "colorIdentity": "W"
   },
   {
     "name": "Ghalta the Unstoppable",
@@ -677,7 +761,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ghaltatheunstoppable.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Elder Dinosaur"
+    "type": "Legendary Creature — Elder Dinosaur",
+    "colorIdentity": "G"
   },
   {
     "name": "Gideon the Oathless",
@@ -685,7 +770,8 @@
     "img": "https://mythicspoiler.com/fra/cards/gideontheoathlessf.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Legendary Creature — Human Mercenary"
+    "type": "Legendary Creature — Human Mercenary",
+    "colorIdentity": "B"
   },
   {
     "name": "Gideon's Memorial",
@@ -693,7 +779,8 @@
     "img": "https://mythicspoiler.com/fra/cards/gideonsmemorialf.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Legendary Artifact"
+    "type": "Legendary Artifact",
+    "colorIdentity": "W"
   },
   {
     "name": "Graft Surgeon",
@@ -701,7 +788,8 @@
     "img": "https://mythicspoiler.com/fra/cards/graftsurgeon.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Creature — Human Cleric"
+    "type": "Creature — Human Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Greenhouse Propagator",
@@ -709,7 +797,8 @@
     "img": "https://mythicspoiler.com/fra/cards/greenhousepropagatorf.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Creature — Cat Druid"
+    "type": "Creature — Cat Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Grim Repriser",
@@ -717,7 +806,8 @@
     "img": "https://mythicspoiler.com/fra/cards/grimrepriser.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Zombie Bard"
+    "type": "Creature — Zombie Bard",
+    "colorIdentity": "BR"
   },
   {
     "name": "Guiding Hydra",
@@ -725,7 +815,8 @@
     "img": "https://mythicspoiler.com/fra/cards/guidinghydra.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Creature — Hydra Horror"
+    "type": "Creature — Hydra Horror",
+    "colorIdentity": "W"
   },
   {
     "name": "Hall of Echoes",
@@ -733,7 +824,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hallofechoesf.jpg",
     "colors": "colorless",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": ""
   },
   {
     "name": "Hallway Heckler // Vicious Verse",
@@ -741,7 +833,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hallwayhecklerf.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Elemental Sorcerer // Sorcery"
+    "type": "Creature — Elemental Sorcerer // Sorcery",
+    "colorIdentity": "BR"
   },
   {
     "name": "Hapatra, the Desert Fang",
@@ -749,7 +842,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hapatradesertsfangf.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Cleric"
+    "type": "Legendary Creature — Human Cleric",
+    "colorIdentity": "BG"
   },
   {
     "name": "Hapatra, the Desert Frost",
@@ -757,7 +851,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hapatradesertsfrostf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Wizard"
+    "type": "Legendary Creature — Human Wizard",
+    "colorIdentity": "U"
   },
   {
     "name": "Haunted Ridge",
@@ -765,7 +860,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hauntedridge.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "BR"
   },
   {
     "name": "Heartstring Puller",
@@ -773,7 +869,8 @@
     "img": "https://mythicspoiler.com/fra/cards/heartstringpuller.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Creature — Elf Sorcerer"
+    "type": "Creature — Elf Sorcerer",
+    "colorIdentity": "R"
   },
   {
     "name": "Heartwood Crafter // Soul Tether",
@@ -781,7 +878,8 @@
     "img": "https://mythicspoiler.com/fra/cards/heartwoodcrafterf.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Elf Artificer // Sorcery"
+    "type": "Creature — Elf Artificer // Sorcery",
+    "colorIdentity": "RG"
   },
   {
     "name": "Hexhaven Battalion",
@@ -789,7 +887,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hexhavenbattalion.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Hexhaven Dueling Arena",
@@ -797,7 +896,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hexhavenduelingarena.jpg",
     "colors": "colorless",
     "rarity": "uncommon",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": ""
   },
   {
     "name": "Hexhaven Invigorator",
@@ -805,7 +905,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hexhaveninvigorator.jpg",
     "colors": "green",
     "rarity": "mythic",
-    "type": "Creature — Chimera Horror"
+    "type": "Creature — Chimera Horror",
+    "colorIdentity": "G"
   },
   {
     "name": "Hungering Puppetbeast",
@@ -813,7 +914,8 @@
     "img": "https://mythicspoiler.com/fra/cards/hungeringpuppetbeastf.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Artifact Creature — Beast Construct"
+    "type": "Artifact Creature — Beast Construct",
+    "colorIdentity": "G"
   },
   {
     "name": "Hunter's Axe",
@@ -821,7 +923,8 @@
     "img": "https://mythicspoiler.com/fra/cards/huntersaxe.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Artifact — Equipment"
+    "type": "Artifact — Equipment",
+    "colorIdentity": "G"
   },
   {
     "name": "Icy Reception",
@@ -829,7 +932,8 @@
     "colors": "blue",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/icyreception.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Identity Echo",
@@ -837,7 +941,8 @@
     "img": "https://mythicspoiler.com/fra/cards/identifyechof.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Enchantment"
+    "type": "Enchantment",
+    "colorIdentity": "R"
   },
   {
     "name": "Infinite Coursework",
@@ -845,7 +950,8 @@
     "colors": "blue",
     "type": "Enchantment — Aura",
     "img": "https://mythicspoiler.com/fra/cards/infinitecourseworkf.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Ingris Stingerquill",
@@ -853,7 +959,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ingrisstingerquill.jpg",
     "colors": "multi",
     "rarity": "mythic",
-    "type": "Legendary Creature — Elder Sphinx"
+    "type": "Legendary Creature — Elder Sphinx",
+    "colorIdentity": "BR"
   },
   {
     "name": "Innovative Commons",
@@ -861,7 +968,8 @@
     "img": "https://mythicspoiler.com/fra/cards/innovativecommons.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "UR"
   },
   {
     "name": "Inspired Tethermage",
@@ -869,7 +977,8 @@
     "img": "https://mythicspoiler.com/fra/cards/inspiredtethermage.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Creature — Elf Warrior"
+    "type": "Creature — Elf Warrior",
+    "colorIdentity": "G"
   },
   {
     "name": "Island",
@@ -877,7 +986,8 @@
     "img": "https://mythicspoiler.com/fra/cards/island1.jpg",
     "colors": "blue",
     "rarity": "common",
-    "type": "Basic Land — Island"
+    "type": "Basic Land — Island",
+    "colorIdentity": "U"
   },
   {
     "name": "Jace's Machinations",
@@ -885,7 +995,8 @@
     "img": "https://mythicspoiler.com/fra/cards/jacesmachinations.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "U"
   },
   {
     "name": "Jace, Reality Sculptor",
@@ -893,7 +1004,8 @@
     "img": "https://mythicspoiler.com/fra/cards/jacerealitysculptorf.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Legendary Planeswalker — Jace"
+    "type": "Legendary Planeswalker — Jace",
+    "colorIdentity": "U"
   },
   {
     "name": "Jiang Yanggu, Alone",
@@ -901,7 +1013,8 @@
     "img": "https://mythicspoiler.com/fra/cards/jiangyanggualone.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Berserker"
+    "type": "Legendary Creature — Human Berserker",
+    "colorIdentity": "R"
   },
   {
     "name": "Jiang Yanggu, Never Alone",
@@ -909,7 +1022,8 @@
     "img": "https://mythicspoiler.com/fra/cards/jiangyangguneveralone.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Druid"
+    "type": "Legendary Creature — Human Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Karn, Argent Defender",
@@ -917,7 +1031,8 @@
     "img": "https://mythicspoiler.com/fra/cards/karnargentdefender.jpg",
     "colors": "colorless",
     "rarity": "rare",
-    "type": "Legendary Artifact Creature — Golem"
+    "type": "Legendary Artifact Creature — Golem",
+    "colorIdentity": ""
   },
   {
     "name": "Karn, Gilded Guardian",
@@ -925,7 +1040,8 @@
     "img": "https://mythicspoiler.com/fra/cards/karngildedguardian.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Legendary Artifact Creature — Golem"
+    "type": "Legendary Artifact Creature — Golem",
+    "colorIdentity": "WUBRG"
   },
   {
     "name": "Keeper of the Quiet Hour",
@@ -933,7 +1049,8 @@
     "img": "https://mythicspoiler.com/fra/cards/keeperofthequiethour.jpg",
     "colors": "colorless",
     "rarity": "common",
-    "type": "Artifact Creature — Chimera"
+    "type": "Artifact Creature — Chimera",
+    "colorIdentity": ""
   },
   {
     "name": "Kindred Judgment",
@@ -941,7 +1058,8 @@
     "img": "https://mythicspoiler.com/fra/cards/kindredjudgment.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Kiora of Fire and Ashes",
@@ -949,7 +1067,8 @@
     "img": "https://mythicspoiler.com/fra/cards/kioraoffireandashesf.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Merfolk Noble"
+    "type": "Legendary Creature — Merfolk Noble",
+    "colorIdentity": "R"
   },
   {
     "name": "Kiora of Salt and Sand",
@@ -957,7 +1076,8 @@
     "img": "https://mythicspoiler.com/fra/cards/kioraofsaltandsandf.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Merfolk Noble"
+    "type": "Legendary Creature — Merfolk Noble",
+    "colorIdentity": "UG"
   },
   {
     "name": "Konstrari Annex",
@@ -965,7 +1085,8 @@
     "img": "https://mythicspoiler.com/fra/cards/konstrariannex.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "RG"
   },
   {
     "name": "Konstrari Charm",
@@ -973,7 +1094,8 @@
     "img": "https://mythicspoiler.com/fra/cards/konstraricharm.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "RG"
   },
   {
     "name": "Konstrari Improviser // Soul Tether",
@@ -981,7 +1103,8 @@
     "img": "https://mythicspoiler.com/fra/cards/konstrariimproviser.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Human Artificer // Sorcery"
+    "type": "Creature — Human Artificer // Sorcery",
+    "colorIdentity": "RG"
   },
   {
     "name": "Koth of the Homestead",
@@ -989,7 +1112,8 @@
     "img": "https://mythicspoiler.com/fra/cards/kothofthehomestead.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Citizen"
+    "type": "Legendary Creature — Human Citizen",
+    "colorIdentity": "W"
   },
   {
     "name": "Koth, the Geomancer",
@@ -997,7 +1121,8 @@
     "img": "https://mythicspoiler.com/fra/cards/koththegeomancer.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Warrior"
+    "type": "Legendary Creature — Human Warrior",
+    "colorIdentity": "R"
   },
   {
     "name": "Kwia Vigorbloom",
@@ -1005,7 +1130,8 @@
     "img": "https://mythicspoiler.com/fra/cards/kwiavigorbloom.jpg",
     "colors": "multi",
     "rarity": "mythic",
-    "type": "Legendary Creature — Elder Sphinx"
+    "type": "Legendary Creature — Elder Sphinx",
+    "colorIdentity": "WG"
   },
   {
     "name": "Last Gasp",
@@ -1013,7 +1139,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lastgaspf.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "B"
   },
   {
     "name": "Lich's Relic",
@@ -1021,7 +1148,8 @@
     "colors": "black",
     "type": "Artifact — Equipment",
     "img": "https://mythicspoiler.com/fra/cards/lichsrelicf.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Liliana the Faultless",
@@ -1029,7 +1157,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lilianathefaultless.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Legendary Creature — Human Cleric"
+    "type": "Legendary Creature — Human Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Liliana the Repentant",
@@ -1037,7 +1166,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lilianatherepentant.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Legendary Creature — Human Warlock"
+    "type": "Legendary Creature — Human Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Living Library",
@@ -1045,7 +1175,8 @@
     "img": "https://mythicspoiler.com/fra/cards/livinglibrary.jpg",
     "colors": "colorless",
     "rarity": "common",
-    "type": "Artifact Creature — Book Illusion"
+    "type": "Artifact Creature — Book Illusion",
+    "colorIdentity": ""
   },
   {
     "name": "Loot, the Anomaly",
@@ -1053,7 +1184,8 @@
     "img": "https://mythicspoiler.com/fra/cards/loottheanomaly.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Beast Horror"
+    "type": "Legendary Creature — Beast Horror",
+    "colorIdentity": "B"
   },
   {
     "name": "Loot, the Nexus",
@@ -1061,7 +1193,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lootthenexus.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Beast Noble"
+    "type": "Legendary Creature — Beast Noble",
+    "colorIdentity": "G"
   },
   {
     "name": "Loyal Tutor",
@@ -1069,7 +1202,8 @@
     "img": "https://mythicspoiler.com/fra/cards/loyaltutor.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "W"
   },
   {
     "name": "Lyra, Archangel of Dawn",
@@ -1077,7 +1211,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lyraarchangelofdawnf.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Legendary Creature — Angel Knight"
+    "type": "Legendary Creature — Angel Knight",
+    "colorIdentity": "W"
   },
   {
     "name": "Lyra, Tolarian Archangel",
@@ -1085,7 +1220,8 @@
     "img": "https://mythicspoiler.com/fra/cards/lyratolarianarchangelf.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Legendary Creature — Angel Wizard"
+    "type": "Legendary Creature — Angel Wizard",
+    "colorIdentity": "U"
   },
   {
     "name": "Mabel, Bitter Recluse",
@@ -1093,7 +1229,8 @@
     "img": "https://mythicspoiler.com/fra/cards/mabelbitterrecluse.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Mouse Warlock"
+    "type": "Legendary Creature — Mouse Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Mabel, Valley Hero",
@@ -1101,7 +1238,8 @@
     "img": "https://mythicspoiler.com/fra/cards/mabelvalleyhero.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Mouse Soldier"
+    "type": "Legendary Creature — Mouse Soldier",
+    "colorIdentity": "WR"
   },
   {
     "name": "Marwyn, the Clearcutter",
@@ -1109,7 +1247,8 @@
     "img": "https://mythicspoiler.com/fra/cards/marwyntheclearcutterf.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Elf Warrior"
+    "type": "Legendary Creature — Elf Warrior",
+    "colorIdentity": "R"
   },
   {
     "name": "Marwyn, the Preserver",
@@ -1117,7 +1256,8 @@
     "img": "https://mythicspoiler.com/fra/cards/marwynthepreserverf.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Elf Druid"
+    "type": "Legendary Creature — Elf Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Massacre Girl, Most Wanted",
@@ -1125,7 +1265,8 @@
     "colors": "black",
     "type": "Legendary Creature — Human Assassin",
     "img": "https://mythicspoiler.com/fra/cards/massacregirlmostwantedf.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Master of Barbs",
@@ -1133,7 +1274,8 @@
     "img": "https://mythicspoiler.com/fra/cards/masterofbarbsf.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Creature — Lizard Bard"
+    "type": "Creature — Lizard Bard",
+    "colorIdentity": "R"
   },
   {
     "name": "Medic's Kitesail",
@@ -1141,7 +1283,8 @@
     "img": "https://mythicspoiler.com/fra/cards/medicskitesail.jpg",
     "colors": "colorless",
     "rarity": "common",
-    "type": "Artifact — Equipment"
+    "type": "Artifact — Equipment",
+    "colorIdentity": ""
   },
   {
     "name": "Memory Trap",
@@ -1149,7 +1292,8 @@
     "img": "https://mythicspoiler.com/fra/cards/memorytrap.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Enchantment"
+    "type": "Enchantment",
+    "colorIdentity": "W"
   },
   {
     "name": "Meticulous Commons",
@@ -1157,7 +1301,8 @@
     "img": "https://mythicspoiler.com/fra/cards/meticulouscommons.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WB"
   },
   {
     "name": "Mind Meanderer",
@@ -1165,7 +1310,8 @@
     "img": "https://mythicspoiler.com/fra/cards/mindmeanderer.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Bird Fish Illusion"
+    "type": "Creature — Bird Fish Illusion",
+    "colorIdentity": "UG"
   },
   {
     "name": "Mindseeker Oculus",
@@ -1173,7 +1319,8 @@
     "img": "https://mythicspoiler.com/fra/cards/mindseekeroculus.jpg",
     "colors": "blue",
     "rarity": "common",
-    "type": "Creature — Homunculus"
+    "type": "Creature — Homunculus",
+    "colorIdentity": "U"
   },
   {
     "name": "Mountain",
@@ -1181,7 +1328,8 @@
     "img": "https://mythicspoiler.com/fra/cards/mountain1.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Basic Land — Mountain"
+    "type": "Basic Land — Mountain",
+    "colorIdentity": "R"
   },
   {
     "name": "Multiply by Zero",
@@ -1189,7 +1337,8 @@
     "colors": "black",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/multiplybyzero.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Murmuring Volume",
@@ -1197,7 +1346,8 @@
     "img": "https://mythicspoiler.com/fra/cards/murmuringvolume.jpg",
     "colors": "colorless",
     "rarity": "common",
-    "type": "Artifact — Book"
+    "type": "Artifact — Book",
+    "colorIdentity": ""
   },
   {
     "name": "No Admittance",
@@ -1205,7 +1355,8 @@
     "img": "https://mythicspoiler.com/fra/cards/noadmittance.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Null Summoner",
@@ -1213,7 +1364,8 @@
     "img": "https://mythicspoiler.com/fra/cards/nullsummonerf.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Creature — Human Warlock"
+    "type": "Creature — Human Warlock",
+    "colorIdentity": "UB"
   },
   {
     "name": "Omnipresence",
@@ -1221,7 +1373,8 @@
     "img": "https://mythicspoiler.com/fra/cards/omnipresence.jpg",
     "colors": "green",
     "rarity": "mythic",
-    "type": "Enchantment"
+    "type": "Enchantment",
+    "colorIdentity": "G"
   },
   {
     "name": "Overgrown Farmland",
@@ -1229,7 +1382,8 @@
     "img": "https://mythicspoiler.com/fra/cards/overgrownfarmland.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WG"
   },
   {
     "name": "Overwrite the Multiverse",
@@ -1237,7 +1391,8 @@
     "img": "https://mythicspoiler.com/fra/cards/overwritethemultiverse.jpg",
     "colors": "black",
     "rarity": "mythic",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "B"
   },
   {
     "name": "Paradox Shaper // Omit Variables",
@@ -1245,7 +1400,8 @@
     "img": "https://mythicspoiler.com/fra/cards/paradoxshaper.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Octopus Wizard // Sorcery"
+    "type": "Creature — Octopus Wizard // Sorcery",
+    "colorIdentity": "UB"
   },
   {
     "name": "Perfected Theory",
@@ -1253,7 +1409,8 @@
     "colors": "blue",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/perfectedtheory.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Pia, Aether Ascetic",
@@ -1261,7 +1418,8 @@
     "img": "https://mythicspoiler.com/fra/cards/piaaetherascetic.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Druid"
+    "type": "Legendary Creature — Human Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Pia, Determined Rebuilder",
@@ -1269,7 +1427,8 @@
     "img": "https://mythicspoiler.com/fra/cards/piadeterminedrebuilder.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Artificer"
+    "type": "Legendary Creature — Human Artificer",
+    "colorIdentity": "R"
   },
   {
     "name": "Plains",
@@ -1277,7 +1436,8 @@
     "img": "https://mythicspoiler.com/fra/cards/plains1.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Basic Land — Plains"
+    "type": "Basic Land — Plains",
+    "colorIdentity": "W"
   },
   {
     "name": "Plan for All Outcomes",
@@ -1285,7 +1445,8 @@
     "colors": "blue",
     "type": "Enchantment",
     "img": "https://mythicspoiler.com/fra/cards/planforalloutcomes.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Pompous Battlemage // Improvised Act",
@@ -1293,7 +1454,8 @@
     "img": "https://mythicspoiler.com/fra/cards/pompousbattlemage.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Creature — Goblin Sorcerer // Sorcery"
+    "type": "Creature — Goblin Sorcerer // Sorcery",
+    "colorIdentity": "R"
   },
   {
     "name": "Precise Redaction",
@@ -1301,7 +1463,8 @@
     "img": "https://mythicspoiler.com/fra/cards/preciseredaction.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "U"
   },
   {
     "name": "Predictive Preparations",
@@ -1309,7 +1472,8 @@
     "img": "https://mythicspoiler.com/fra/cards/predictivepreparations.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Primal Witchstalker",
@@ -1317,7 +1481,8 @@
     "img": "https://mythicspoiler.com/fra/cards/primalwitchstalker.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Wolf"
+    "type": "Creature — Wolf",
+    "colorIdentity": "BG"
   },
   {
     "name": "Proctor of Potential",
@@ -1325,7 +1490,8 @@
     "img": "https://mythicspoiler.com/fra/cards/proctorofpotentialf.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Creature — Human Cleric"
+    "type": "Creature — Human Cleric",
+    "colorIdentity": "WU"
   },
   {
     "name": "Proft, Consulting Detective",
@@ -1333,7 +1499,8 @@
     "img": "https://mythicspoiler.com/fra/cards/proftconsultingdetectivef.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Detective"
+    "type": "Legendary Creature — Human Detective",
+    "colorIdentity": "U"
   },
   {
     "name": "Proft, Sinister Mastermind",
@@ -1341,7 +1508,8 @@
     "img": "https://mythicspoiler.com/fra/cards/proftsinistermastermindf.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Rogue"
+    "type": "Legendary Creature — Human Rogue",
+    "colorIdentity": "B"
   },
   {
     "name": "Prophesied End",
@@ -1349,7 +1517,8 @@
     "img": "https://mythicspoiler.com/fra/cards/prophesiedend.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "W"
   },
   {
     "name": "Protege's Awakening",
@@ -1357,7 +1526,8 @@
     "colors": "blue",
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/protegesawakening.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Prudent Fateseer // Peer Review",
@@ -1365,7 +1535,8 @@
     "img": "https://mythicspoiler.com/fra/cards/prudentfateseer.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Dwarf Wizard // Sorcery"
+    "type": "Creature — Dwarf Wizard // Sorcery",
+    "colorIdentity": "WU"
   },
   {
     "name": "Puppet Crafting",
@@ -1373,7 +1544,8 @@
     "img": "https://mythicspoiler.com/fra/cards/puppetcrafting.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Enchantment — Aura"
+    "type": "Enchantment — Aura",
+    "colorIdentity": "G"
   },
   {
     "name": "Pyre Rhymer // Molten Tide",
@@ -1381,7 +1553,8 @@
     "img": "https://mythicspoiler.com/fra/cards/pyrerhymer.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Creature — Elemental Sorcerer // Instant"
+    "type": "Creature — Elemental Sorcerer // Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Radiant Summit",
@@ -1389,7 +1562,8 @@
     "img": "https://cards.scryfall.io/normal/front/f/8/f8cd6aae-a1cb-43b1-aca9-09fe2778969f.jpg?1790063310",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land — Mountain Plains"
+    "type": "Land — Mountain Plains",
+    "colorIdentity": "WR"
   },
   {
     "name": "Rampart Hunter",
@@ -1397,7 +1571,8 @@
     "colors": "black",
     "type": "Creature — Horror",
     "img": "https://mythicspoiler.com/fra/cards/ramparthunterf.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "B"
   },
   {
     "name": "Rank Rat",
@@ -1405,7 +1580,8 @@
     "img": "https://mythicspoiler.com/fra/cards/rankrat.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Creature — Zombie Rat"
+    "type": "Creature — Zombie Rat",
+    "colorIdentity": "B"
   },
   {
     "name": "Recursive Recruitment",
@@ -1413,7 +1589,8 @@
     "img": "https://mythicspoiler.com/fra/cards/recursiverecruitment.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "UB"
   },
   {
     "name": "Refute Destiny",
@@ -1421,7 +1598,8 @@
     "img": "https://mythicspoiler.com/fra/cards/refutedestiny.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Repurposed Enforcer",
@@ -1429,7 +1607,8 @@
     "img": "https://mythicspoiler.com/fra/cards/repurposedenforcer.jpg",
     "colors": "white",
     "rarity": "rare",
-    "type": "Creature — Human Soldier"
+    "type": "Creature — Human Soldier",
+    "colorIdentity": "W"
   },
   {
     "name": "Rescue Girl, First Responder",
@@ -1437,7 +1616,8 @@
     "img": "https://mythicspoiler.com/fra/cards/rescuegirlfirstresponderf.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Cleric"
+    "type": "Legendary Creature — Human Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Restore with Empathy",
@@ -1445,7 +1625,8 @@
     "colors": "green",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/restorewithempathy.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Return to the Light Realms",
@@ -1453,7 +1634,8 @@
     "img": "https://mythicspoiler.com/fra/cards/returntothelightrealms.jpg",
     "colors": "white",
     "rarity": "mythic",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Rewrite Regrets",
@@ -1461,7 +1643,8 @@
     "img": "https://mythicspoiler.com/fra/cards/rewriteregrets.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "B"
   },
   {
     "name": "Rise of the Deathbringer",
@@ -1469,7 +1652,8 @@
     "img": "https://mythicspoiler.com/fra/cards/riseofthedeathbringer.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "B"
   },
   {
     "name": "Rockfall Vale",
@@ -1477,7 +1661,8 @@
     "img": "https://mythicspoiler.com/fra/cards/rockfallvale.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "RG"
   },
   {
     "name": "Roiling Canopy",
@@ -1485,7 +1670,8 @@
     "img": "https://mythicspoiler.com/fra/cards/roilingcanopy.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "G"
   },
   {
     "name": "Room of Refuge",
@@ -1493,7 +1679,8 @@
     "colors": "colorless",
     "type": "Land",
     "img": "https://mythicspoiler.com/fra/cards/roomofrefuge.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": ""
   },
   {
     "name": "Ruric Thar, Biomagus",
@@ -1501,7 +1688,8 @@
     "img": "https://mythicspoiler.com/fra/cards/ruricthatbiomagusf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Ogre Crab Wizard"
+    "type": "Legendary Creature — Ogre Crab Wizard",
+    "colorIdentity": "U"
   },
   {
     "name": "Ruric Thar, Magecrusher",
@@ -1509,7 +1697,8 @@
     "colors": "green",
     "type": "Legendary Creature — Ogre Warrior",
     "img": "https://mythicspoiler.com/fra/cards/rurictharmagecrusherf.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Saheeli, Consul of Oversight",
@@ -1517,7 +1706,8 @@
     "img": "https://mythicspoiler.com/fra/cards/saheeliconsulofoversight.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Advisor"
+    "type": "Legendary Creature — Human Advisor",
+    "colorIdentity": "W"
   },
   {
     "name": "Saheeli, Jewel of Avishkar",
@@ -1525,7 +1715,8 @@
     "img": "https://mythicspoiler.com/fra/cards/saheelijewelofavishkar.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Artificer"
+    "type": "Legendary Creature — Human Artificer",
+    "colorIdentity": "UR"
   },
   {
     "name": "Samut, Hazoret's Champion",
@@ -1533,7 +1724,8 @@
     "img": "https://mythicspoiler.com/fra/cards/samuthazoretschampion.jpg",
     "colors": "red",
     "rarity": "rare",
-    "type": "Legendary Creature — Human Warrior Cleric"
+    "type": "Legendary Creature — Human Warrior Cleric",
+    "colorIdentity": "R"
   },
   {
     "name": "Samut, Tyrant of Naktamun",
@@ -1541,7 +1733,8 @@
     "img": "https://mythicspoiler.com/fra/cards/samuttyrantofnaktamun.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Legendary Creature — Human Wizard"
+    "type": "Legendary Creature — Human Wizard",
+    "colorIdentity": "U"
   },
   {
     "name": "Sanctum Lurker",
@@ -1549,7 +1742,8 @@
     "img": "https://mythicspoiler.com/fra/cards/sanctumlurker.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Creature — Horror"
+    "type": "Creature — Horror",
+    "colorIdentity": "B"
   },
   {
     "name": "Screeching Soulbreaker",
@@ -1557,7 +1751,8 @@
     "img": "https://mythicspoiler.com/fra/cards/screechingsoulbreaker.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Creature — Siren Bard"
+    "type": "Creature — Siren Bard",
+    "colorIdentity": "B"
   },
   {
     "name": "Seasoned Cryomancer",
@@ -1565,7 +1760,8 @@
     "img": "https://mythicspoiler.com/fra/cards/seasonedcryomancer.jpg",
     "colors": "blue",
     "rarity": "mythic",
-    "type": "Creature — Human Wizard"
+    "type": "Creature — Human Wizard",
+    "colorIdentity": "U"
   },
   {
     "name": "Semester Foreseer // Peer Review",
@@ -1573,7 +1769,8 @@
     "img": "https://mythicspoiler.com/fra/cards/semesterforeseerf.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Human Wizard // Sorcery"
+    "type": "Creature — Human Wizard // Sorcery",
+    "colorIdentity": "WU"
   },
   {
     "name": "Shatterwing Pegasus",
@@ -1581,7 +1778,8 @@
     "img": "https://mythicspoiler.com/fra/cards/shatterwingpegasus.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Creature — Pegasus"
+    "type": "Creature — Pegasus",
+    "colorIdentity": "W"
   },
   {
     "name": "Shipwreck Marsh",
@@ -1589,7 +1787,8 @@
     "img": "https://mythicspoiler.com/fra/cards/shipwreckmarsh.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "UB"
   },
   {
     "name": "Silence the Echo",
@@ -1597,7 +1796,8 @@
     "img": "https://mythicspoiler.com/fra/cards/silencethecho.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "B"
   },
   {
     "name": "Simulacrum Shaper",
@@ -1605,7 +1805,8 @@
     "img": "https://mythicspoiler.com/fra/cards/simulacrumshaper.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Creature — Elf Druid"
+    "type": "Creature — Elf Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Skilled Battlecarver",
@@ -1613,7 +1814,8 @@
     "img": "https://mythicspoiler.com/fra/cards/skilledbattlecarver.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Creature — Human Warrior"
+    "type": "Creature — Human Warrior",
+    "colorIdentity": "R"
   },
   {
     "name": "Solarium Sentry",
@@ -1621,7 +1823,8 @@
     "img": "https://mythicspoiler.com/fra/cards/solariumsentryf.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Creature — Cat Soldier"
+    "type": "Creature — Cat Soldier",
+    "colorIdentity": "WG"
   },
   {
     "name": "Solitary Cell",
@@ -1629,7 +1832,8 @@
     "img": "https://mythicspoiler.com/fra/cards/solitarycell.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Artifact"
+    "type": "Artifact",
+    "colorIdentity": "WR"
   },
   {
     "name": "Solve for Disappointment",
@@ -1637,7 +1841,8 @@
     "img": "https://mythicspoiler.com/fra/cards/solvefordisappointment.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "B"
   },
   {
     "name": "Something Worth Saving",
@@ -1645,7 +1850,8 @@
     "img": "https://mythicspoiler.com/fra/cards/somethingworthsaving.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "G"
   },
   {
     "name": "Sphinx of False Conclusions",
@@ -1653,7 +1859,8 @@
     "img": "https://mythicspoiler.com/fra/cards/sphinxoffalseconclusionsf.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Creature — Sphinx Illusion"
+    "type": "Creature — Sphinx Illusion",
+    "colorIdentity": "U"
   },
   {
     "name": "Sphinx's Approach",
@@ -1661,7 +1868,8 @@
     "img": "https://mythicspoiler.com/fra/cards/sphinxsapproach.jpg",
     "colors": "blue",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "U"
   },
   {
     "name": "Steel Hellkite",
@@ -1669,7 +1877,8 @@
     "img": "https://cards.scryfall.io/normal/front/5/4/548cbc66-d915-4b94-86da-4c909a1ce645.jpg?1783907007",
     "colors": "colorless",
     "rarity": "rare",
-    "type": "Artifact Creature — Dragon"
+    "type": "Artifact Creature — Dragon",
+    "colorIdentity": ""
   },
   {
     "name": "Stingcaster Mage",
@@ -1677,7 +1886,8 @@
     "img": "https://mythicspoiler.com/fra/cards/stingcastermage.jpg",
     "colors": "red",
     "rarity": "mythic",
-    "type": "Creature — Human Wizard"
+    "type": "Creature — Human Wizard",
+    "colorIdentity": "R"
   },
   {
     "name": "Stingerquill Annex",
@@ -1685,7 +1895,8 @@
     "colors": "colorless",
     "type": "Land",
     "img": "https://mythicspoiler.com/fra/cards/stingerquillannex.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "BR"
   },
   {
     "name": "Stingerquill Charm",
@@ -1693,7 +1904,8 @@
     "img": "https://mythicspoiler.com/fra/cards/stingerquillcharm.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "BR"
   },
   {
     "name": "Stingerquill Voxmancer // Vicious Verse",
@@ -1701,7 +1913,8 @@
     "img": "https://mythicspoiler.com/fra/cards/stingerquillvoxmancer.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Goblin Sorcerer // Sorcery"
+    "type": "Creature — Goblin Sorcerer // Sorcery",
+    "colorIdentity": "BR"
   },
   {
     "name": "Stinging Vitriol",
@@ -1709,7 +1922,8 @@
     "img": "https://mythicspoiler.com/fra/cards/stingingvirtriolf.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "BR"
   },
   {
     "name": "Sureshot Sower",
@@ -1717,7 +1931,8 @@
     "img": "https://mythicspoiler.com/fra/cards/sureshotsower.jpg",
     "colors": "green",
     "rarity": "common",
-    "type": "Creature — Human Archer"
+    "type": "Creature — Human Archer",
+    "colorIdentity": "G"
   },
   {
     "name": "Surgical Precision",
@@ -1725,7 +1940,8 @@
     "img": "https://mythicspoiler.com/fra/cards/surgicalprecision.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "W"
   },
   {
     "name": "Surveillance Phantasm",
@@ -1733,7 +1949,8 @@
     "colors": "blue",
     "type": "Creature — Bird Illusion",
     "img": "https://mythicspoiler.com/fra/cards/surveillancephantasm.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Swamp",
@@ -1741,7 +1958,8 @@
     "img": "https://mythicspoiler.com/fra/cards/swamp1.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Basic Land — Swamp"
+    "type": "Basic Land — Swamp",
+    "colorIdentity": "B"
   },
   {
     "name": "Tam's Resistance",
@@ -1749,7 +1967,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tamsresistance.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "UG"
   },
   {
     "name": "Tam, the Possibility",
@@ -1757,7 +1976,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tamthepossibilityf.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Legendary Creature — Gorgon Wizard"
+    "type": "Legendary Creature — Gorgon Wizard",
+    "colorIdentity": "WUBRG"
   },
   {
     "name": "Tarmogoyf",
@@ -1765,7 +1985,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tarmogoyff.jpg",
     "colors": "green",
     "rarity": "mythic",
-    "type": "Creature — Lhurgoyf"
+    "type": "Creature — Lhurgoyf",
+    "colorIdentity": "G"
   },
   {
     "name": "Tenured Tethermage",
@@ -1773,7 +1994,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tenuredtethermagef.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Creature — Human Artificer"
+    "type": "Creature — Human Artificer",
+    "colorIdentity": "RG"
   },
   {
     "name": "Terminal Criticism",
@@ -1781,7 +2003,8 @@
     "img": "https://mythicspoiler.com/fra/cards/terminalcriticism.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "B"
   },
   {
     "name": "Tether Technician",
@@ -1789,7 +2012,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tethertechnician.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Creature — Minotaur Artificer"
+    "type": "Creature — Minotaur Artificer",
+    "colorIdentity": "R"
   },
   {
     "name": "Tethermage's Advantage",
@@ -1797,7 +2021,8 @@
     "colors": "green",
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/tethermagesadvantage.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Tetsuko Umezawa, Fugitive",
@@ -1805,7 +2030,8 @@
     "colors": "blue",
     "type": "Legendary Creature — Human Rogue",
     "img": "https://mythicspoiler.com/fra/cards/tetsukoumezawafugitivef.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Tetsuko Umezawa, Pursuer",
@@ -1813,7 +2039,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tetsukoumezawapursuerf.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Mercenary"
+    "type": "Legendary Creature — Human Mercenary",
+    "colorIdentity": "R"
   },
   {
     "name": "Teyo, Diamondblade Mage",
@@ -1821,7 +2048,8 @@
     "img": "https://mythicspoiler.com/fra/cards/teyodiamondblademage.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Warlock"
+    "type": "Legendary Creature — Human Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Teyo, Lightshield Expert",
@@ -1829,7 +2057,8 @@
     "img": "https://mythicspoiler.com/fra/cards/teyolightshieldexpert.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Cleric"
+    "type": "Legendary Creature — Human Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Thalia, the Survivor",
@@ -1837,7 +2066,8 @@
     "img": "https://mythicspoiler.com/fra/cards/thaliathesurvivorf.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Soldier"
+    "type": "Legendary Creature — Human Soldier",
+    "colorIdentity": "W"
   },
   {
     "name": "The Echoverse Fulcrum",
@@ -1845,7 +2075,8 @@
     "img": "https://mythicspoiler.com/fra/cards/theechoversefulcrum.jpg",
     "colors": "colorless",
     "rarity": "mythic",
-    "type": "Legendary Artifact"
+    "type": "Legendary Artifact",
+    "colorIdentity": ""
   },
   {
     "name": "The Theorist, Jace Beleren",
@@ -1853,7 +2084,8 @@
     "img": "https://mythicspoiler.com/fra/cards/thetheoristjacebeleren.jpg",
     "colors": "blue",
     "rarity": "mythic",
-    "type": "Legendary Planeswalker — Jace"
+    "type": "Legendary Planeswalker — Jace",
+    "colorIdentity": "U"
   },
   {
     "name": "Theoretical Necromancer",
@@ -1861,7 +2093,8 @@
     "img": "https://mythicspoiler.com/fra/cards/theoreticalnecromancer.jpg",
     "colors": "black",
     "rarity": "common",
-    "type": "Creature — Vampire Warlock"
+    "type": "Creature — Vampire Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Theorist's Proxy",
@@ -1869,7 +2102,8 @@
     "img": "https://cards.scryfall.io/normal/front/7/1/710302ca-c4be-4069-8ce1-f531414c74e9.jpg?1788878151",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Creature — Illusion"
+    "type": "Creature — Illusion",
+    "colorIdentity": "U"
   },
   {
     "name": "Theorist's Sanctum",
@@ -1877,7 +2111,8 @@
     "colors": "colorless",
     "type": "Land — Island",
     "img": "https://mythicspoiler.com/fra/cards/theoristssanctum.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Theorix Annex",
@@ -1885,7 +2120,8 @@
     "img": "https://mythicspoiler.com/fra/cards/theorixannex.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "UB"
   },
   {
     "name": "Theorix Charm",
@@ -1893,7 +2129,8 @@
     "img": "https://mythicspoiler.com/fra/cards/theorixcharm.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "UB"
   },
   {
     "name": "Theorix Metamage // Omit Variables",
@@ -1901,7 +2138,8 @@
     "img": "https://mythicspoiler.com/fra/cards/theorixmetamage.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Shade Wizard // Sorcery"
+    "type": "Creature — Shade Wizard // Sorcery",
+    "colorIdentity": "UB"
   },
   {
     "name": "Tinybones, Pocket Nuisance",
@@ -1909,7 +2147,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tinybonespocketnuisance.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Skeleton Rogue"
+    "type": "Legendary Creature — Skeleton Rogue",
+    "colorIdentity": "B"
   },
   {
     "name": "Titanbones, Towering Heart",
@@ -1917,7 +2156,8 @@
     "img": "https://mythicspoiler.com/fra/cards/titanbonestoweringheart.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Skeleton Druid"
+    "type": "Legendary Creature — Skeleton Druid",
+    "colorIdentity": "G"
   },
   {
     "name": "Tomik, Izzet Sparkmage",
@@ -1925,7 +2165,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tomikizzetsparkmage.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Wizard"
+    "type": "Legendary Creature — Human Wizard",
+    "colorIdentity": "R"
   },
   {
     "name": "Tomik, Orzhov Lawmage",
@@ -1933,7 +2174,8 @@
     "img": "https://mythicspoiler.com/fra/cards/tomikorzhovlawmage.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Advisor"
+    "type": "Legendary Creature — Human Advisor",
+    "colorIdentity": "W"
   },
   {
     "name": "Transformative Commons",
@@ -1941,7 +2183,8 @@
     "img": "https://mythicspoiler.com/fra/cards/transformativecommons.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "UG"
   },
   {
     "name": "Traxos, Academy Guardian",
@@ -1949,7 +2192,8 @@
     "img": "https://mythicspoiler.com/fra/cards/traxosacademyguardian.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Artifact Creature — Dragon Construct"
+    "type": "Legendary Artifact Creature — Dragon Construct",
+    "colorIdentity": "U"
   },
   {
     "name": "Traxos, Scourge Eternal",
@@ -1957,7 +2201,8 @@
     "img": "https://mythicspoiler.com/fra/cards/traxosscourgeeternal.jpg",
     "colors": "colorless",
     "rarity": "uncommon",
-    "type": "Legendary Artifact Creature — Dragon Construct"
+    "type": "Legendary Artifact Creature — Dragon Construct",
+    "colorIdentity": ""
   },
   {
     "name": "Twinned Vision",
@@ -1965,7 +2210,8 @@
     "img": "https://mythicspoiler.com/fra/cards/twinnedvision.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "UR"
   },
   {
     "name": "Twisted Fates",
@@ -1973,7 +2219,8 @@
     "img": "https://mythicspoiler.com/fra/cards/twistedfates.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "WB"
   },
   {
     "name": "Uldaros Theorix",
@@ -1981,7 +2228,8 @@
     "img": "https://mythicspoiler.com/fra/cards/uldarostheorix.jpg",
     "colors": "multi",
     "rarity": "mythic",
-    "type": "Legendary Creature — Elder Sphinx"
+    "type": "Legendary Creature — Elder Sphinx",
+    "colorIdentity": "UB"
   },
   {
     "name": "Undulating Witness",
@@ -1989,7 +2237,8 @@
     "colors": "blue",
     "type": "Creature — Serpent",
     "img": "https://mythicspoiler.com/fra/cards/undulatingwitness.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "U"
   },
   {
     "name": "Unflinching Hortimancer",
@@ -1997,7 +2246,8 @@
     "img": "https://mythicspoiler.com/fra/cards/unflinchinghortimancer.jpg",
     "colors": "white",
     "rarity": "common",
-    "type": "Creature — Human Cleric"
+    "type": "Creature — Human Cleric",
+    "colorIdentity": "W"
   },
   {
     "name": "Unsummon",
@@ -2005,7 +2255,8 @@
     "img": "https://mythicspoiler.com/fra/cards/unsummon.jpg",
     "colors": "blue",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "U"
   },
   {
     "name": "Variable Chaser // Arc of Fortune",
@@ -2013,7 +2264,8 @@
     "img": "https://mythicspoiler.com/fra/cards/variablechaser.jpg",
     "colors": "blue",
     "rarity": "rare",
-    "type": "Creature — Human Wizard // Sorcery"
+    "type": "Creature — Human Wizard // Sorcery",
+    "colorIdentity": "U"
   },
   {
     "name": "Verdant Kraken",
@@ -2021,7 +2273,8 @@
     "img": "https://mythicspoiler.com/fra/cards/verdantkrakenf.jpg",
     "colors": "green",
     "rarity": "rare",
-    "type": "Creature — Plant Kraken"
+    "type": "Creature — Plant Kraken",
+    "colorIdentity": "G"
   },
   {
     "name": "Vigorbloom Annex",
@@ -2029,7 +2282,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vigorbloomannex.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Land"
+    "type": "Land",
+    "colorIdentity": "WG"
   },
   {
     "name": "Vigorbloom Charm",
@@ -2037,7 +2291,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vigorbloomcharm.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "WG"
   },
   {
     "name": "Vigorbloom Vanguard // Seed Suture",
@@ -2045,7 +2300,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vigorbloomvanguard.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Troll Druid // Sorcery"
+    "type": "Creature — Troll Druid // Sorcery",
+    "colorIdentity": "WG"
   },
   {
     "name": "Vindictive Triumph",
@@ -2053,7 +2309,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vindictivetriumph.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "WB"
   },
   {
     "name": "Vinelasher Adept",
@@ -2061,7 +2318,8 @@
     "colors": "green",
     "type": "Creature — Rhino Soldier",
     "img": "https://mythicspoiler.com/fra/cards/vinelasheradept.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Violent Echoes",
@@ -2069,7 +2327,8 @@
     "img": "https://mythicspoiler.com/fra/cards/violentechoesf.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Void Extrapolator // Omit Variables",
@@ -2077,7 +2336,8 @@
     "img": "https://mythicspoiler.com/fra/cards/voidextrapolator.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Aetherborn Warlock // Sorcery"
+    "type": "Creature — Aetherborn Warlock // Sorcery",
+    "colorIdentity": "UB"
   },
   {
     "name": "Vraska's Final Mercy",
@@ -2085,7 +2345,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vraskasfinalmercy.jpg",
     "colors": "black",
     "rarity": "rare",
-    "type": "Sorcery"
+    "type": "Sorcery",
+    "colorIdentity": "B"
   },
   {
     "name": "Vraska, Soul of Stone",
@@ -2093,7 +2354,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vraskasoulofstonef.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Legendary Creature — Gorgon Wizard"
+    "type": "Legendary Creature — Gorgon Wizard",
+    "colorIdentity": "WUR"
   },
   {
     "name": "Vraska, the Cutting Glare",
@@ -2101,7 +2363,8 @@
     "img": "https://mythicspoiler.com/fra/cards/vraskathecuttingglaref.jpg",
     "colors": "multi",
     "rarity": "rare",
-    "type": "Legendary Creature — Gorgon Assassin"
+    "type": "Legendary Creature — Gorgon Assassin",
+    "colorIdentity": "BG"
   },
   {
     "name": "Warrior's Blades",
@@ -2109,7 +2372,8 @@
     "img": "https://mythicspoiler.com/fra/cards/warriorsbladesf.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Artifact — Equipment"
+    "type": "Artifact — Equipment",
+    "colorIdentity": "WR"
   },
   {
     "name": "Way of the Cryomancer",
@@ -2117,7 +2381,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthecryomancer.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "U"
   },
   {
     "name": "Way of the Deathbringer",
@@ -2125,7 +2390,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthedeathbringer.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "B"
   },
   {
     "name": "Way of the Healer",
@@ -2133,7 +2399,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthehealer.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "W"
   },
   {
     "name": "Way of the Mentor",
@@ -2141,7 +2408,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthementor.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "W"
   },
   {
     "name": "Way of the Mind Sculptor",
@@ -2149,7 +2417,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthemindsculptor.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "U"
   },
   {
     "name": "Way of the Necromancer",
@@ -2157,7 +2426,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthenecromancer.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "B"
   },
   {
     "name": "Way of the Paradox",
@@ -2165,7 +2435,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayoftheparadox.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "G"
   },
   {
     "name": "Way of the Pyromancer",
@@ -2173,7 +2444,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthepyromancer.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "R"
   },
   {
     "name": "Way of the Warlord",
@@ -2181,7 +2453,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthewarlord.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "R"
   },
   {
     "name": "Way of the Wildspeaker",
@@ -2189,7 +2462,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wayofthewildspeaker.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Enchantment"
+    "type": "Legendary Enchantment",
+    "colorIdentity": "G"
   },
   {
     "name": "Whiplash Wordsmith // Vicious Verse",
@@ -2197,7 +2471,8 @@
     "img": "https://mythicspoiler.com/fra/cards/whiplashwordsmithf.jpg",
     "colors": "multi",
     "rarity": "common",
-    "type": "Creature — Vampire Sorcerer // Sorcery"
+    "type": "Creature — Vampire Sorcerer // Sorcery",
+    "colorIdentity": "BR"
   },
   {
     "name": "Winter, Team Player",
@@ -2205,7 +2480,8 @@
     "img": "https://mythicspoiler.com/fra/cards/winterteamplayerf.jpg",
     "colors": "red",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Warrior"
+    "type": "Legendary Creature — Human Warrior",
+    "colorIdentity": "R"
   },
   {
     "name": "Winter, Tormented Loner",
@@ -2213,7 +2489,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wintertormentedlonerf.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Warlock"
+    "type": "Legendary Creature — Human Warlock",
+    "colorIdentity": "B"
   },
   {
     "name": "Woodwork Prodigy // Soul Tether",
@@ -2221,7 +2498,8 @@
     "img": "https://mythicspoiler.com/fra/cards/woodworkprodigy.jpg",
     "colors": "multi",
     "rarity": "uncommon",
-    "type": "Creature — Cat Druid // Sorcery"
+    "type": "Creature — Cat Druid // Sorcery",
+    "colorIdentity": "RG"
   },
   {
     "name": "Wrath of the Bloodmane",
@@ -2229,7 +2507,8 @@
     "img": "https://mythicspoiler.com/fra/cards/wrathofthebloodmane.jpg",
     "colors": "red",
     "rarity": "common",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "R"
   },
   {
     "name": "Wrecking Gecko",
@@ -2237,7 +2516,8 @@
     "colors": "green",
     "type": "Artifact Creature — Lizard Construct",
     "img": "https://mythicspoiler.com/fra/cards/wreckinggecko.jpg",
-    "qty": 1
+    "qty": 1,
+    "colorIdentity": "G"
   },
   {
     "name": "Yargle, Glutton of Urborg",
@@ -2245,7 +2525,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yarglegluttonofurborgf.jpg",
     "colors": "black",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Frog Spirit"
+    "type": "Legendary Creature — Frog Spirit",
+    "colorIdentity": "B"
   },
   {
     "name": "Yargle, Goliath of Otaria",
@@ -2253,7 +2534,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yarglegoliathofotariaf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Frog Spirit"
+    "type": "Legendary Creature — Frog Spirit",
+    "colorIdentity": "U"
   },
   {
     "name": "Yoshimaru, Beloved Companion",
@@ -2261,7 +2543,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yoshimarubelovedcompanion.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Dog"
+    "type": "Legendary Creature — Dog",
+    "colorIdentity": "W"
   },
   {
     "name": "Yoshimaru, Scrappy Stray",
@@ -2269,7 +2552,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yoshimaruscrappystray.jpg",
     "colors": "green",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Dog"
+    "type": "Legendary Creature — Dog",
+    "colorIdentity": "G"
   },
   {
     "name": "Your Fate Ends Here",
@@ -2277,7 +2561,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yourfateendshere.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Instant"
+    "type": "Instant",
+    "colorIdentity": "W"
   },
   {
     "name": "Yuriko, Blade of the Mighty",
@@ -2285,7 +2570,8 @@
     "img": "https://mythicspoiler.com/fra/cards/yurikobladeofthemightyf.jpg",
     "colors": "white",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Samurai"
+    "type": "Legendary Creature — Human Samurai",
+    "colorIdentity": "W"
   },
   {
     "name": "Yuriko, Hope from the Shadows",
@@ -2293,6 +2579,7 @@
     "img": "https://mythicspoiler.com/fra/cards/yurikohopefromtheshadowsf.jpg",
     "colors": "blue",
     "rarity": "uncommon",
-    "type": "Legendary Creature — Human Ninja"
+    "type": "Legendary Creature — Human Ninja",
+    "colorIdentity": "U"
   }
 ]
