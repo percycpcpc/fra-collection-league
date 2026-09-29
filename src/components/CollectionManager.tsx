@@ -113,7 +113,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     </header>
     <section className="collection-tools">
       <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>
-      <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"4 Card Name (FRA)\n1 Split Card // Other Half\nUnknown Card"} /><button className="primary" onClick={() => void runImport()}>Import & merge</button></div>
+      <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} /><button className="primary" onClick={() => void runImport()}>Import & merge</button></div>
       {message && <p className="notice" role="status">{message}</p>}
     </section>
     {GROUPS.map((group) => {

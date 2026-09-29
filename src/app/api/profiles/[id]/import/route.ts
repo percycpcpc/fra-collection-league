@@ -6,12 +6,25 @@ import { prisma } from "@/lib/prisma";
 type Context = { params: Promise<{ id: string }> };
 
 function parseLine(line: string) {
-  const trimmed = line.trim();
-  if (!trimmed) return null;
-  const match = trimmed.match(/^(?:(\d+)\s+)?(.+?)(?:\s+\([A-Za-z0-9]+\))?$/);
-  if (!match) return null;
-  const qty = match[1] ? Number(match[1]) : 1;
-  const name = match[2].trim();
+  let name = line.trim();
+  if (!name) return null;
+
+  const quantity = name.match(/^(\d+)(?:x)?\s+(.+)$/i);
+  const qty = quantity ? Number(quantity[1]) : 1;
+  if (quantity) name = quantity[2];
+
+  const setCode = name.match(/\s+\([A-Za-z0-9]+\)/);
+  if (setCode?.index !== undefined) {
+    name = name.slice(0, setCode.index);
+  } else {
+    // Common exports append these fields even when they omit a set code.
+    name = name
+      .replace(/\s+\[[^\]]*\]\s*$/, "")
+      .replace(/\s+\*[^*]+\*\s*$/, "")
+      .replace(/\s+\d+\s*$/, "");
+  }
+
+  name = name.trim().replace(/[\s,;:.!?-]+$/, "");
   return qty > 0 && name ? { qty, name } : null;
 }
 
