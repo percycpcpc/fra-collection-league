@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
-import { cleanName, error } from "@/lib/api";
+import { cleanName, error, parseBody } from "@/lib/api";
 import { catalogNames } from "@/lib/catalog";
 import { getDb } from "@/lib/db";
 import { collectionCards, profiles } from "@/db/schema";
@@ -9,7 +9,7 @@ type Context = { params: Promise<{ id: string }> };
 
 export async function PUT(request: Request, { params }: Context) {
   const { id } = await params;
-  const body = await request.json().catch(() => ({}));
+  const body = await parseBody(request);
   const rawName = cleanName(body.name);
   if (!rawName) return error("Card name is required.");
   if (body.qty !== undefined && (!Number.isInteger(body.qty) || body.qty < 0))

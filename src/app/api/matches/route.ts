@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { eq, inArray } from "drizzle-orm";
-import { cleanName, error } from "@/lib/api";
+import { cleanName, error, parseBody } from "@/lib/api";
 import { matchDeckIds, matchResponse } from "@/lib/matches";
 import { getDb } from "@/lib/db";
 import { decks, matches, profiles } from "@/db/schema";
@@ -47,7 +47,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => ({}));
+  const body = await parseBody(request);
   const winnerId = cleanName(body.winnerId);
   const loserId = cleanName(body.loserId);
   if (!winnerId || !loserId) return error("Winner and loser are required.");

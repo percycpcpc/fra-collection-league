@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { cleanName, error } from "@/lib/api";
+import { cleanName, error, parseBody } from "@/lib/api";
 import { getDb } from "@/lib/db";
 import { decks, profiles } from "@/db/schema";
 
@@ -8,7 +8,7 @@ type Context = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, { params }: Context) {
   const { id } = await params;
-  const body = await request.json().catch(() => ({}));
+  const body = await parseBody(request);
   const name = cleanName(body.name);
   if (!name) return error("Deck name is required.");
   if (

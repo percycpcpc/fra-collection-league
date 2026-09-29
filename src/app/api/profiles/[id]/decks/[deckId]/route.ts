@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
-import { cleanName, error } from "@/lib/api";
+import { cleanName, error, parseBody } from "@/lib/api";
 import { getDb } from "@/lib/db";
 import { deckCards, decks } from "@/db/schema";
 
@@ -29,7 +29,7 @@ export async function GET(_: Request, { params }: Context) {
 
 export async function PUT(request: Request, { params }: Context) {
   const { id, deckId } = await params;
-  const body = await request.json().catch(() => ({}));
+  const body = await parseBody(request);
   if (body.name === undefined && body.commander === undefined)
     return error("Provide a name or commander to update.");
 

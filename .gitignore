@@ -8,3 +8,5 @@ codex-output.txt
 /dist/
 .vinext/
 .cloudflare/
+.kiro/
+tsconfig.tsbuildinfo
