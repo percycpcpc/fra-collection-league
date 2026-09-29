@@ -9,7 +9,7 @@ export default defineConfig({
     assets: { notFoundHandling: "none" },
     env: {
       ASSETS: bindings.assets(),
-      DB: bindings.d1({ name: "fra-db-staging" }),
+      DB: bindings.d1({ name: "fra-db-prod-20260930" }),
     },
   }),
 });

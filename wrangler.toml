@@ -4,7 +4,6 @@ compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "fra-db-staging"
-# staging — swap to prod UUID at cutover
-database_id = "1e0f90ff-b12e-4368-bd07-fdb4b4160984"
+database_name = "fra-db-prod-20260930"
+database_id = "4c090a01-d384-429c-a572-ab3d887caea5"
 migrations_dir = "drizzle"
