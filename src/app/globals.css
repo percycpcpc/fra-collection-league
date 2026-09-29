@@ -50,6 +50,10 @@ h1, h2, h3, p { margin-top: 0; }
 .save-state { min-width: 4rem; color: var(--muted); font-size: .85rem; }
 .save-state.saved { color: var(--green); }
 .save-state.error { color: var(--red); }
+.view-mode-switch { display: inline-flex; overflow: hidden; border: 1px solid #4b422e; border-radius: 5px; background: #17191d; }
+.view-mode-switch button { min-height: 2rem; padding: .35rem .7rem; border: 0; border-radius: 0; color: var(--muted); background: transparent; font-size: .78rem; }
+.view-mode-switch button + button { border-left: 1px solid #4b422e; }
+.view-mode-switch button.active { color: #17130b; background: var(--gold-2); }
 .collection-tools { padding: 1rem max(1rem, calc((100vw - 1440px) / 2)); background: var(--panel); border-bottom: 1px solid var(--line); }
 .tool-row { display: flex; gap: .6rem; }
 .search { flex: 1; min-width: 12rem; }
@@ -104,6 +108,7 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-group h3 small, .basic-block h3 small { float: right; color: var(--muted); letter-spacing: 0; text-transform: none; }
 .card-line, .add-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3rem; padding: .35rem .25rem; border-bottom: 1px solid #26292f; }
 .card-line > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-line-actions { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
 .mini-stepper button { min-height: 2rem; width: 2.2rem; padding: .2rem; border-radius: 0; }
 .mini-stepper b { min-width: 2.3rem; text-align: center; }
 .add-list { max-height: 58vh; overflow: auto; }

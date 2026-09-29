@@ -7,6 +7,8 @@ import { jsonFetch, type CatalogCard, type CollectionCard, type DeckCard } from 
 
 type ProfileData = { profile: { name: string }; cards: CollectionCard[] };
 type DeckData = { deck: { id: string; name: string; commander: string | null }; cards: DeckCard[] };
+type ViewMode = "images" | "list";
+const VIEW_STORAGE_KEY = "fra-deck-view";
 const BASICS = ["Plains", "Island", "Swamp", "Mountain", "Forest"];
 const COLORS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"];
 const RARITY: Record<string, number> = { mythic: 0, rare: 1, uncommon: 2, common: 3 };
@@ -33,9 +35,15 @@ function GalleryCard({ name, catalog, qty, owned, cap, commander, onQty, onComma
 }
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
-  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const saves = useRef(0);
+  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images"); const saves = useRef(0);
   const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setCatalog(c); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); } }, [profileId, deckId]);
   useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+      if (stored === "images" || stored === "list") setViewMode(stored);
+    } catch { /* localStorage may be unavailable (privacy mode/SSR). */ }
+  }, []);
   const catalogMap = useMemo(() => new Map(catalog.map((card) => [card.name.toLowerCase(), card])), [catalog]);
   const deckMap = useMemo(() => new Map((deck?.cards || []).map((card) => [card.name.toLowerCase(), card])), [deck]);
 
@@ -50,6 +58,10 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, qty }) }); setStatus("Saved"); } catch (cause) { setError(cause instanceof Error ? cause.message : "Save failed."); await load(); } finally { saves.current -= 1; if (saves.current > 0) setStatus("Saving…"); }
   }
   function rename(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void saveDeck({ name: String(new FormData(event.currentTarget).get("name") || "") }); }
+  function changeViewMode(mode: ViewMode) {
+    setViewMode(mode);
+    try { window.localStorage.setItem(VIEW_STORAGE_KEY, mode); } catch { /* Keep the in-memory preference. */ }
+  }
 
   if (!profile || !deck) return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));
@@ -60,9 +72,10 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   poolGroups.forEach((items) => items.sort((a, b) => (RARITY[catalogMap.get(a.name.toLowerCase())?.rarity.toLowerCase() || ""] ?? 9) - (RARITY[catalogMap.get(b.name.toLowerCase())?.rarity.toLowerCase() || ""] ?? 9) || a.name.localeCompare(b.name)));
   const setCommander = (name: string) => void saveDeck({ commander: deck.deck.commander?.toLowerCase() === name.toLowerCase() ? null : name });
   const deckTile = (card: DeckCard) => <GalleryCard key={card.name} name={card.name} catalog={catalogMap.get(card.name.toLowerCase())} qty={card.qty} owned={card.isBasic ? undefined : ownedMap.get(card.name.toLowerCase())?.qty || 0} cap={card.isBasic ? 99 : ownedMap.get(card.name.toLowerCase())?.qty || 0} commander={deck.deck.commander?.toLowerCase() === card.name.toLowerCase()} onQty={(qty) => void saveCard(card.name, qty)} onCommander={() => setCommander(card.name)} />;
+  const rowActions = (name: string, qty: number, cap: number) => <div className="card-line-actions"><div className="mini-stepper"><button type="button" onClick={() => void saveCard(name, Math.max(0, qty - 1))} disabled={qty === 0} aria-label={`Decrease ${name}`}>−</button><b>{qty}</b><button type="button" onClick={() => void saveCard(name, qty + 1)} disabled={qty >= cap} aria-label={`Increase ${name}`}>+</button></div><button type="button" className={`commander-star ${deck.deck.commander?.toLowerCase() === name.toLowerCase() ? "active" : ""}`} onClick={() => setCommander(name)} aria-label={`Set commander ${name}`} aria-pressed={deck.deck.commander?.toLowerCase() === name.toLowerCase()}>★</button></div>;
 
-  return <main className="deck-editor"><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} key={deck.deck.name} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span></div></header>
-    {error && <p className="error-banner deck-error" role="alert">{error}</p>}<div className="editor-columns">
+  return <main className="deck-editor"><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} key={deck.deck.name} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div></div></header>
+    {error && <p className="error-banner deck-error" role="alert">{error}</p>}{viewMode === "images" ? <div className="editor-columns">
       <section className="deck-contents"><div className="panel-title"><h2>Deck</h2><span>{total} cards · commander excluded</span></div>
         {deck.deck.commander && <section className="deck-group"><h3><span>★ Commander</span><small>1</small></h3><div className="deck-grid"><GalleryCard name={deck.deck.commander} catalog={catalogMap.get(deck.deck.commander.toLowerCase())} qty={deckMap.get(deck.deck.commander.toLowerCase())?.qty || 0} owned={ownedMap.get(deck.deck.commander.toLowerCase())?.qty} cap={ownedMap.get(deck.deck.commander.toLowerCase())?.qty || 0} commander onQty={(qty) => void saveCard(deck.deck.commander!, qty)} onCommander={() => setCommander(deck.deck.commander!)} /></div></section>}
         {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3><span>{group}</span><small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3><div className="deck-grid">{items.sort((a, b) => a.name.localeCompare(b.name)).map(deckTile)}</div></section> : null)}
@@ -71,5 +84,14 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
         {COLORS.map((group) => { const items = poolGroups.get(group) || []; return items.length ? <section className="pool-section" key={group}><h3><span>{group}</span><small>{items.length} owned</small></h3><div className="pool-grid">{items.map((card) => { const qty = deckMap.get(card.name.toLowerCase())?.qty || 0; return <GalleryCard key={card.name} name={card.name} catalog={catalogMap.get(card.name.toLowerCase())} qty={qty} owned={card.qty} cap={card.qty} commander={deck.deck.commander?.toLowerCase() === card.name.toLowerCase()} imageAdds onQty={(next) => void saveCard(card.name, next)} onCommander={() => setCommander(card.name)} />; })}</div></section> : null; })}
         <section className="pool-section basic-block"><h3><span>Basic lands</span><small>Unlimited · max 99</small></h3><div className="pool-grid">{BASICS.filter((name) => name.toLowerCase().includes(search.toLowerCase())).map((name) => { const qty = deckMap.get(name.toLowerCase())?.qty || 0; return <GalleryCard key={name} name={name} catalog={catalogMap.get(name.toLowerCase())} qty={qty} cap={99} commander={deck.deck.commander?.toLowerCase() === name.toLowerCase()} imageAdds onQty={(next) => void saveCard(name, next)} onCommander={() => setCommander(name)} />; })}</div></section>
       </aside>
-    </div></main>;
+    </div> : <div className="editor-columns list-view">
+      <section className="deck-contents"><div className="panel-title"><h2>Deck contents</h2><span>{total} cards · commander excluded</span></div>
+        {deck.deck.commander && <section className="deck-group"><h3>Commander <small>1</small></h3><div className="card-line"><span>{deck.deck.commander}</span>{rowActions(deck.deck.commander, deckMap.get(deck.deck.commander.toLowerCase())?.qty || 0, ownedMap.get(deck.deck.commander.toLowerCase())?.qty || 0)}</div></section>}
+        {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3>{group} <small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3>{items.sort((a, b) => a.name.localeCompare(b.name)).map((card) => <div className="card-line" key={card.name}><span>{card.name}</span>{rowActions(card.name, card.qty, card.isBasic ? 99 : ownedMap.get(card.name.toLowerCase())?.qty || 0)}</div>)}</section> : null)}
+      </section>
+      <aside className="add-panel"><div className="panel-title"><h2>Add cards</h2><input className="search" type="search" placeholder="Search owned cards" aria-label="Search owned cards" value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+        <div className="add-list">{owned.filter((card) => !BASICS.some((basic) => basic.toLowerCase() === card.name.toLowerCase()) && card.name.toLowerCase().includes(search.toLowerCase())).map((card) => { const qty = deckMap.get(card.name.toLowerCase())?.qty || 0; return <div className="add-row" key={card.name}><span><b>{card.name}</b><small>{qty} in deck · {card.qty} owned</small></span>{rowActions(card.name, qty, card.qty)}</div>; })}</div>
+        <section className="basic-block"><h3>Basic lands <small>Unlimited · max 99</small></h3>{BASICS.filter((name) => name.toLowerCase().includes(search.toLowerCase())).map((name) => { const qty = deckMap.get(name.toLowerCase())?.qty || 0; return <div className="add-row" key={name}><span><b>{name}</b><small>{qty} in deck · unlimited owned</small></span>{rowActions(name, qty, 99)}</div>; })}</section>
+      </aside>
+    </div>}</main>;
 }
