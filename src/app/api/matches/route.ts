@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq, inArray } from "drizzle-orm";
+import { desc, inArray } from "drizzle-orm";
 import { cleanName, error, parseBody } from "@/lib/api";
 import { matchDeckIds, matchResponse } from "@/lib/matches";
 import { getDb } from "@/lib/db";
@@ -8,12 +8,13 @@ import { decks, matches, profiles } from "@/db/schema";
 export async function GET() {
   const db = getDb();
 
+  // Newest 100 matches. Order in SQL (desc) so limit() keeps the latest,
+  // not the oldest — a JS re-sort after limit cannot recover dropped rows.
   const rawMatches = await db
     .select()
     .from(matches)
-    .orderBy(matches.createdAt)
+    .orderBy(desc(matches.createdAt))
     .limit(100);
-  rawMatches.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   const playerIds = [
     ...new Set(rawMatches.flatMap((m) => [m.winnerId, m.loserId])),

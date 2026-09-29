@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
-import { cleanName, error, parseBody } from "@/lib/api";
+import { cleanName, error, isUniqueError, parseBody } from "@/lib/api";
 import { getCatalog } from "@/lib/catalog";
 import { getDb } from "@/lib/db";
 import { collectionCards, decks, profiles } from "@/db/schema";
@@ -70,6 +70,7 @@ export async function POST(request: Request) {
 
   const db = getDb();
 
+  // Fast-path duplicate check for a friendly message on the common case.
   const existing = await db
     .select({ id: profiles.id })
     .from(profiles)
@@ -82,7 +83,15 @@ export async function POST(request: Request) {
   const createdAt = new Date().toISOString();
 
   // Insert profile first so we have the ID for the seed inserts.
-  await db.insert(profiles).values({ id, name, createdAt });
+  // Catch the UNIQUE violation too, in case two same-name creates race
+  // past the pre-check above.
+  try {
+    await db.insert(profiles).values({ id, name, createdAt });
+  } catch (cause) {
+    if (isUniqueError(cause))
+      return error("A profile with that name already exists.", 409);
+    throw cause;
+  }
 
   if (seedCommons) {
     const catalog = getCatalog();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq, inArray, or } from "drizzle-orm";
+import { desc, eq, inArray, or } from "drizzle-orm";
 import { error } from "@/lib/api";
 import { matchDeckIds, matchResponse } from "@/lib/matches";
 import { getDb } from "@/lib/db";
@@ -22,8 +22,8 @@ export async function GET(_: Request, { params }: Context) {
   const rawMatches = await db
     .select()
     .from(matches)
-    .where(or(eq(matches.winnerId, id), eq(matches.loserId, id)));
-  rawMatches.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    .where(or(eq(matches.winnerId, id), eq(matches.loserId, id)))
+    .orderBy(desc(matches.createdAt));
 
   // Resolve player names in one query
   const playerIds = [

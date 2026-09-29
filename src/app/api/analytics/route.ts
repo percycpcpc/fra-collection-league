@@ -4,8 +4,6 @@ import { getCatalog } from "@/lib/catalog";
 import { getDb } from "@/lib/db";
 import { collectionCards, profiles } from "@/db/schema";
 
-const TOTAL_CARDS = 251;
-
 export async function GET() {
   const db = getDb();
 
@@ -16,6 +14,9 @@ export async function GET() {
       .from(profiles)
       .orderBy(profiles.name),
   ]);
+
+  // Completion is measured against the full catalog, not a hardcoded count.
+  const totalCards = catalog.length;
 
   const catalogByName = new Map(
     catalog.map((card) => [card.name.toLocaleLowerCase(), card]),
@@ -59,7 +60,7 @@ export async function GET() {
       ownedCards,
       ownedQty,
       byRarity,
-      completionPct: Number(((ownedCards / TOTAL_CARDS) * 100).toFixed(1)),
+      completionPct: Number(((ownedCards / totalCards) * 100).toFixed(1)),
     };
   });
 
@@ -75,7 +76,14 @@ export async function GET() {
       owners += 1;
       totalQty += entry.qty;
     }
-    return { name: card.name, rarity: card.rarity, colors: card.colors, img: card.img, owners, totalQty };
+    return {
+      name: card.name,
+      rarity: card.rarity,
+      colors: card.colors,
+      img: card.img,
+      owners,
+      totalQty,
+    };
   });
 
   return NextResponse.json({ players, cards });

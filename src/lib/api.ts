@@ -8,13 +8,15 @@ export function cleanName(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/** Detect a SQLite/D1 UNIQUE constraint violation from a thrown error. */
 export function isUniqueError(value: unknown) {
-  return Boolean(
-    value &&
-    typeof value === "object" &&
-    "code" in value &&
-    value.code === "P2002",
-  );
+  const message =
+    value instanceof Error
+      ? value.message
+      : typeof value === "string"
+        ? value
+        : "";
+  return /UNIQUE constraint failed/i.test(message);
 }
 
 /** Parse request JSON, returning a plain object. Never throws. */
