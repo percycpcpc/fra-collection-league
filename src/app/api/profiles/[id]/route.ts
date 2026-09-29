@@ -46,7 +46,9 @@ export async function PUT(request: Request, { params }: Context) {
   if (Object.prototype.hasOwnProperty.call(body, "iconCard")) {
     if (body.iconCard === null) data.iconCard = null;
     else if (typeof body.iconCard === "string") {
-      const canonicalName = catalogNames().get(body.iconCard.toLocaleLowerCase());
+      const canonicalName = (await catalogNames()).get(
+        body.iconCard.toLocaleLowerCase(),
+      );
       if (!canonicalName) return error("Unknown card name.");
       data.iconCard = canonicalName;
     } else return error("iconCard must be a card name or null.");

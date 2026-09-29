@@ -27,7 +27,7 @@ export async function PUT(request: Request, { params }: Context) {
     .then((r) => r[0] ?? null);
   if (!deck) return error("Deck not found.", 404);
 
-  const names = catalogNames();
+  const names = await catalogNames(db);
   const name = names.get(rawName.toLocaleLowerCase()) ?? rawName;
   const isBasic = BASICS.has(name.toLocaleLowerCase());
 

@@ -2,6 +2,12 @@ name = "fra-collection-league"
 compatibility_date = "2026-09-29"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+# Password guarding the admin panel. Override in production with:
+#   cf secret put ADMIN_PASSWORD
+# (a secret takes precedence over this plaintext default).
+ADMIN_PASSWORD = "change-me"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "fra-db-prod-20260930"

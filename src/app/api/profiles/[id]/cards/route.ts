@@ -28,7 +28,7 @@ export async function PUT(request: Request, { params }: Context) {
     .then((r) => r[0] ?? null);
   if (!profile) return error("Profile not found.", 404);
 
-  const names = catalogNames();
+  const names = await catalogNames(db);
   const name = names.get(rawName.toLocaleLowerCase()) ?? rawName;
 
   if (qtyInput === 0) {

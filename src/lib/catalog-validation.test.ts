@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateCatalog, type CatalogCard } from "./catalog";
+import { validateCatalog, type CatalogCard } from "./catalog-data";
 
 function card(overrides: Partial<CatalogCard>): CatalogCard {
   return {

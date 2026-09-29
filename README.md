@@ -1,6 +1,6 @@
 # FRA Collection League
 
-A friendly, login-free registry for tracking Reality Fracture card collections and building decks against each player's owned pool. The shipped `data/catalog.json` is the read-only card reference; player data is stored in Cloudflare D1.
+A friendly, login-free registry for tracking Reality Fracture card collections and building decks against each player's owned pool. The card catalog and all player data live in Cloudflare D1. `data/catalog.json` is the bundled **seed** for the catalog — the catalog itself is now stored in the database and editable through the password-guarded admin panel.
 
 ## Stack
 
@@ -26,7 +26,38 @@ The comparison rules live in two pure, unit-tested modules:
 node scripts/enrich-catalog.mjs
 ```
 
-The script fetches the Reality Fracture block from Scryfall, writes a canonical `colorIdentity` into every `data/catalog.json` entry, cross-checks each value, and aborts without writing if any card has no Scryfall match. `getCatalog()` also validates the bundled data on first access and throws (naming the card) if any `colorIdentity` is missing or malformed.
+The script fetches the Reality Fracture block from Scryfall, writes a canonical `colorIdentity` into every `data/catalog.json` entry, cross-checks each value, and aborts without writing if any card has no Scryfall match. This edits the bundled **seed** only; reseed the database afterward (admin panel → "Reseed from bundled catalog", or `POST /api/admin/catalog/seed`). `validateCatalog()` rejects any card whose `colorIdentity` is missing or non-canonical on every write path.
+
+## Card catalog (database)
+
+The catalog is stored in the D1 `Catalog` table and read at request time via `getCatalog()` in `src/lib/catalog.ts`. The pure, DB-free primitives (the `CatalogCard` type, `validateCatalog`, `parseCatalogCard`, and the bundled seed accessor) live in `src/lib/catalog-data.ts` so they can be unit-tested without the Workers runtime.
+
+A fresh database starts with an **empty** catalog. Seed it from the bundled `data/catalog.json` via the admin panel, or:
+
+```bash
+curl -X POST https://<your-host>/api/admin/catalog/seed --cookie "fra_admin=<session>"
+```
+
+### Admin panel
+
+Visit `/admin`. It is guarded by a single password read from the `ADMIN_PASSWORD` environment variable (see below). From there you can:
+
+- **Card catalog** — full CRUD: add a single card, edit any field inline and save per row, delete a card, reseed from the bundled dataset, or bulk-replace the whole catalog via JSON.
+- **Site settings** — a generic key/value store (`SiteSetting` table) for future site-wide options.
+
+The catalog admin API (all guarded by the admin session cookie):
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/api/admin/catalog` | List all cards |
+| `POST` | `/api/admin/catalog` | Create one card |
+| `PUT` | `/api/admin/catalog` | Replace the entire catalog (`{ catalog: [...] }`) |
+| `GET` | `/api/admin/catalog/:name` | Fetch one card |
+| `PUT` | `/api/admin/catalog/:name` | Update / rename one card |
+| `DELETE` | `/api/admin/catalog/:name` | Delete one card |
+| `POST` | `/api/admin/catalog/seed` | Reseed from the bundled JSON |
+| `GET` / `PUT` | `/api/admin/settings` | Read / upsert site settings |
+| `POST` | `/api/admin/login` · `logout` · `session` | Auth |
 
 ## Local development
 
@@ -63,13 +94,26 @@ Set these in **Settings → Secrets and variables → Actions** on your GitHub r
 | `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID. Found in the dashboard URL: `dash.cloudflare.com/<account-id>`. |
 | `D1_DATABASE_ID` | UUID of the D1 database. Found in `wrangler.toml` → `database_id`, or via `cf d1 list`. |
 
+### Admin password
+
+The admin panel at `/admin` is guarded by `ADMIN_PASSWORD`.
+
+- **Production**: set it as a Worker secret — it takes precedence over any plaintext value in `wrangler.toml`:
+
+  ```bash
+  cf secret put ADMIN_PASSWORD
+  ```
+
+- The empty string and the placeholder `change-me` (the default committed in `wrangler.toml`) are **rejected** — either one leaves the panel disabled and all `/api/admin/*` routes locked. Set a real password before relying on the panel.
+- The password is never stored in the session cookie; the cookie holds a SHA-256 token derived from it (`src/lib/admin-auth.ts`).
+
 ### Local development
 
-No `.env` file is needed for local dev — the D1 binding is provided by the Vite dev server (workerd). If you need to override anything, create `.dev.vars` (gitignored):
+No `.env` file is needed for local dev — the D1 binding is provided by the Vite dev server (workerd). To exercise the admin panel locally, set the password in `.dev.vars` (gitignored):
 
 ```ini
 # .dev.vars — local secrets, never commit this file
-# No vars required for basic dev; add any future secrets here
+ADMIN_PASSWORD = "a-real-local-password"
 ```
 
 ## Database

@@ -8,9 +8,13 @@ export async function GET() {
   const db = getDb();
 
   const [catalog, allProfiles] = await Promise.all([
-    Promise.resolve(getCatalog()),
+    getCatalog(db),
     db
-      .select({ id: profiles.id, name: profiles.name, iconCard: profiles.iconCard })
+      .select({
+        id: profiles.id,
+        name: profiles.name,
+        iconCard: profiles.iconCard,
+      })
       .from(profiles)
       .orderBy(profiles.name),
   ]);
