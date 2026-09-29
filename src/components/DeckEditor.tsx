@@ -23,7 +23,7 @@ function GalleryCard({ name, catalog, qty, owned, cap, commander, onQty, onComma
   const capped = qty >= cap;
   return <article className={`deck-card-tile card-tile ${commander ? "is-commander" : ""} ${capped && imageAdds ? "at-cap" : ""}`} tabIndex={0}>
     <div className="deck-card-visual">
-      <CardImage name={name} catalog={catalog} onClick={imageAdds && !capped ? () => onQty(qty + 1) : undefined} ariaLabel={imageAdds ? `Add ${name} to deck` : undefined} />
+      <CardImage name={name} catalog={catalog} dimmed={owned !== undefined && owned <= 0} onClick={imageAdds && !capped ? () => onQty(qty + 1) : undefined} ariaLabel={imageAdds ? `Add ${name} to deck` : undefined} />
       {qty > 0 && <span className="deck-qty-badge" aria-label={`${qty} in deck`}>{qty}</span>}
       <div className="deck-card-overlay"><span>{qty} in deck{owned !== undefined ? ` · ${owned} owned` : ""}</span><div className="deck-card-actions">
         <div className="mini-stepper"><button type="button" onClick={() => onQty(Math.max(0, qty - 1))} disabled={qty === 0} aria-label={`Decrease ${name}`}>−</button><b>{qty}</b><button type="button" onClick={() => onQty(qty + 1)} disabled={capped} aria-label={`Increase ${name}`}>+</button></div>
