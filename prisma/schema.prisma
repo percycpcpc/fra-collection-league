@@ -10,6 +10,7 @@ datasource db {
 model Profile {
   id        String           @id @default(cuid())
   name      String           @unique
+  iconCard  String?
   createdAt DateTime         @default(now())
   cards     CollectionCard[]
   decks     Deck[]

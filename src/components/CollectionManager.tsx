@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardImage } from "./CardImage";
+import { PlayerAvatar } from "./PlayerAvatar";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 
-type ProfileData = { profile: { id: string; name: string }; cards: CollectionCard[] };
+type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
 const GROUPS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"];
 const RARITY: Record<string, number> = { mythic: 0, rare: 1, uncommon: 2, common: 3 };
 
@@ -21,6 +22,8 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [cards, setCards] = useState<CollectionCard[]>([]);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [search, setSearch] = useState("");
+  const [iconSearch, setIconSearch] = useState("");
+  const [iconPickerOpen, setIconPickerOpen] = useState(false);
   const [importText, setImportText] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -62,6 +65,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     return totals;
   }, [catalog]);
   const ownedCount = catalog.reduce((sum, card) => sum + (collectionMap.get(card.name.toLowerCase())?.owned ? 1 : 0), 0);
+  const ownedIconCards = useMemo(() => catalog.filter((card) => collectionMap.get(card.name.toLowerCase())?.owned && card.name.toLowerCase().includes(iconSearch.toLowerCase())), [catalog, collectionMap, iconSearch]);
 
   async function saveCard(name: string, patch: { qty?: number; owned?: boolean }) {
     const card = collectionMap.get(name.toLowerCase()) || { id: "", profileId, name, qty: 1, owned: true };
@@ -93,6 +97,14 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     catch (cause) { setMessage(cause instanceof Error ? cause.message : "Rename failed."); }
   }
 
+  async function setIcon(iconCard: string | null) {
+    setStatus("saving"); setMessage("");
+    try {
+      const data = await jsonFetch<{ profile: ProfileData["profile"] }>(`/api/profiles/${profileId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ iconCard }) });
+      setProfile(data.profile); setIconPickerOpen(false); setIconSearch(""); setStatus("saved");
+    } catch (cause) { setStatus("error"); setMessage(cause instanceof Error ? cause.message : "Icon save failed."); }
+  }
+
   async function runImport() {
     setMessage("");
     try { const result = await jsonFetch<{ added: number; updated: number; unknown: string[] }>(`/api/profiles/${profileId}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: importText }) }); setImportText(""); setMessage(`Imported ${result.added} new and updated ${result.updated}.${result.unknown.length ? ` Unknown: ${result.unknown.join(", ")}` : ""}`); await load(); }
@@ -108,9 +120,10 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   if (!profile) return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
   return <main className="collection-page">
     <header className="workspace-header">
-      <div><Link className="back-link" href="/">← Players</Link><form className="inline-title" onSubmit={rename}><input aria-label="Profile name" name="name" defaultValue={profile.name} key={profile.name} /><button type="submit">Rename</button></form></div>
+      <div className="profile-heading"><button className="avatar-edit" type="button" onClick={() => setIconPickerOpen((open) => !open)} aria-expanded={iconPickerOpen} aria-controls="icon-picker" aria-label="Edit profile icon"><PlayerAvatar name={profile.name} iconCard={profile.iconCard} size={44} /></button><div><Link className="back-link" href="/">← Players</Link><form className="inline-title" onSubmit={rename}><input aria-label="Profile name" name="name" defaultValue={profile.name} key={profile.name} /><button type="submit">Rename</button></form></div></div>
       <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="button-link" href="/analytics">Analytics</Link><Link className="button-link" href={`/p/${profileId}/matches`}>Matches →</Link><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link></div>
     </header>
+    {iconPickerOpen && <section className="icon-picker" id="icon-picker" aria-label="Choose profile icon"><div className="icon-picker-tools"><strong>Choose an icon</strong><input type="search" placeholder="Search owned cards" value={iconSearch} onChange={(event) => setIconSearch(event.target.value)} autoFocus /></div><div className="icon-picker-grid"><button className="icon-choice initial-choice" type="button" onClick={() => void setIcon(null)}><PlayerAvatar name={profile.name} iconCard={null} size={90} /><span>Use initial</span></button>{ownedIconCards.map((card) => <div className={`icon-choice ${profile.iconCard === card.name ? "selected" : ""}`} key={card.name}><CardImage name={card.name} catalog={card} onClick={() => void setIcon(card.name)} ariaLabel={`Use ${card.name} as profile icon`} /><span title={card.name}>{card.name}</span></div>)}</div>{ownedIconCards.length === 0 && <p className="muted">No owned cards match that search.</p>}</section>}
     <section className="collection-tools">
       <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>
       <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} /><button className="primary" onClick={() => void runImport()}>Import & merge</button></div>

@@ -7,7 +7,7 @@ export async function GET() {
   const matches = await prisma.match.findMany({
     take: 100,
     orderBy: { createdAt: "desc" },
-    include: { winner: { select: { name: true } }, loser: { select: { name: true } } },
+    include: { winner: { select: { name: true, iconCard: true } }, loser: { select: { name: true, iconCard: true } } },
   });
   const decks = await prisma.deck.findMany({
     where: { id: { in: matchDeckIds(matches) } },
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
   const match = await prisma.match.create({
     data: { winnerId, loserId, winnerDeckId, loserDeckId, note },
-    include: { winner: { select: { name: true } }, loser: { select: { name: true } } },
+    include: { winner: { select: { name: true, iconCard: true } }, loser: { select: { name: true, iconCard: true } } },
   });
   const deckNames = new Map(
     (await prisma.deck.findMany({ where: { id: { in: matchDeckIds([match]) } }, select: { id: true, name: true } }))

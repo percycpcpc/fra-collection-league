@@ -9,7 +9,7 @@ export async function GET() {
     getCatalog(),
     prisma.profile.findMany({
       orderBy: { name: "asc" },
-      select: { id: true, name: true, cards: { select: { name: true, qty: true, owned: true } } },
+      select: { id: true, name: true, iconCard: true, cards: { select: { name: true, qty: true, owned: true } } },
     }),
   ]);
   const catalogByName = new Map(catalog.map((card) => [card.name.toLocaleLowerCase(), card]));
@@ -29,6 +29,7 @@ export async function GET() {
     return {
       id: profile.id,
       name: profile.name,
+      iconCard: profile.iconCard,
       ownedCards,
       ownedQty,
       byRarity,

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { jsonFetch } from "@/lib/client";
+import { PlayerAvatar } from "./PlayerAvatar";
 
-type Profile = { id: string; name: string; cardCount: number; deckCount: number };
+type Profile = { id: string; name: string; iconCard: string | null; cardCount: number; deckCount: number };
 
 export function ProfilesDirectory() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -44,7 +45,7 @@ export function ProfilesDirectory() {
     <form className="create-bar" onSubmit={create}><label htmlFor="profile-name">New player</label><input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player name" maxLength={80} /><label className="seed-option"><input type="checkbox" checked={seedCommons} onChange={(e) => setSeedCommons(e.target.checked)} /> Start with all commons &amp; uncommons ×1</label><button className="primary" type="submit">Create profile</button></form>
     {error && <p className="error-banner" role="alert">{error}</p>}
     <section className="profile-list" aria-label="Player profiles">
-      {loading ? <p className="muted">Loading profiles…</p> : profiles.length === 0 ? <div className="empty"><h2>No players yet</h2><p>Create the first profile to start registering a collection.</p></div> : profiles.map((profile) => <div className="profile-row-wrap" key={profile.id}><Link className="profile-row" href={`/p/${profile.id}`}><span className="profile-monogram">{profile.name.slice(0, 1).toUpperCase()}</span><strong>{profile.name}</strong><span>{profile.cardCount} collection entries</span><span>{profile.deckCount} decks</span><b aria-hidden>→</b></Link>{confirmDelete === profile.id ? <div className="inline-confirm"><span>Delete {profile.name}?</span><button className="danger" type="button" onClick={() => void remove(profile)}>Confirm</button><button type="button" onClick={() => closeConfirm(profile.id)}>Cancel</button></div> : <button ref={(node) => { if (node) deleteTriggers.current.set(profile.id, node); else deleteTriggers.current.delete(profile.id); }} className="profile-delete danger-ghost" type="button" onClick={() => setConfirmDelete(profile.id)}>Delete</button>}</div>)}
+      {loading ? <p className="muted">Loading profiles…</p> : profiles.length === 0 ? <div className="empty"><h2>No players yet</h2><p>Create the first profile to start registering a collection.</p></div> : profiles.map((profile) => <div className="profile-row-wrap" key={profile.id}><Link className="profile-row" href={`/p/${profile.id}`}><PlayerAvatar name={profile.name} iconCard={profile.iconCard} size={44} /><strong>{profile.name}</strong><span>{profile.cardCount} collection entries</span><span>{profile.deckCount} decks</span><b aria-hidden>→</b></Link>{confirmDelete === profile.id ? <div className="inline-confirm"><span>Delete {profile.name}?</span><button className="danger" type="button" onClick={() => void remove(profile)}>Confirm</button><button type="button" onClick={() => closeConfirm(profile.id)}>Cancel</button></div> : <button ref={(node) => { if (node) deleteTriggers.current.set(profile.id, node); else deleteTriggers.current.delete(profile.id); }} className="profile-delete danger-ghost" type="button" onClick={() => setConfirmDelete(profile.id)}>Delete</button>}</div>)}
     </section>
   </main>;
 }

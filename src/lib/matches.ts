@@ -6,8 +6,8 @@ export type MatchWithPlayers = {
   loserDeckId: string | null;
   note: string | null;
   createdAt: Date;
-  winner: { name: string };
-  loser: { name: string };
+  winner: { name: string; iconCard: string | null };
+  loser: { name: string; iconCard: string | null };
 };
 
 export function matchResponse(match: MatchWithPlayers, deckNames: Map<string, string>) {
@@ -15,8 +15,10 @@ export function matchResponse(match: MatchWithPlayers, deckNames: Map<string, st
     id: match.id,
     winnerId: match.winnerId,
     winnerName: match.winner.name,
+    winnerIconCard: match.winner.iconCard,
     loserId: match.loserId,
     loserName: match.loser.name,
+    loserIconCard: match.loser.iconCard,
     winnerDeckName: match.winnerDeckId ? deckNames.get(match.winnerDeckId) ?? null : null,
     loserDeckName: match.loserDeckId ? deckNames.get(match.loserDeckId) ?? null : null,
     note: match.note,
