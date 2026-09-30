@@ -124,6 +124,7 @@ export const catalog = sqliteTable(
     rarity:        text("rarity").notNull().default(""),
     type:          text("type").notNull().default(""),
     colorIdentity: text("colorIdentity").notNull().default(""),
+    manaCost:      text("manaCost").notNull().default(""),
   },
   // Case-insensitive single-card lookup (`name = ? COLLATE NOCASE`).
   (t) => [index("Catalog_name_nocase_idx").on(sql`${t.name} COLLATE NOCASE`)],
