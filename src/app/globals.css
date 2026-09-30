@@ -146,14 +146,15 @@ h1, h2, h3, p { margin-top: 0; }
 .ms-g { background: #00733e; color: #fff; }
 .ms-c { background: #ccc2c0; color: #403d30; }
 .ms-x { background: #555; color: #fff; }
+.ms-n { background: #c0bfbc; color: #222; }
 .ms-generic { background: #444; color: #ccc; }
 .card-line-actions { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
 .mini-stepper button { min-height: 2rem; width: 2.2rem; padding: .2rem; border-radius: 0; }
 .mini-stepper button:active:not(:disabled), .commander-star:active:not(:disabled) { filter: brightness(.85); transform: scale(.96); }
 .mini-stepper b { min-width: 2.3rem; text-align: center; }
 .add-list { max-height: 58vh; overflow: auto; }
-.add-row > span { display: grid; min-width: 0; }
-.add-row > span b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.add-row > span:not(.mana-cost) { display: grid; min-width: 0; flex: 1; }
+.add-row > span:not(.mana-cost) b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .add-row small { color: var(--muted); }
 .basic-block { margin-top: 1.5rem; }
 .deck-grid, .pool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: .85rem; }

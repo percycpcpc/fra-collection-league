@@ -18,6 +18,7 @@ function ManaSymbol({ sym }: { sym: string }) {
   if (s === "G") return <span className="ms ms-g">G</span>;
   if (s === "C") return <span className="ms ms-c">◇</span>;
   if (s === "X") return <span className="ms ms-x">X</span>;
+  if (/^\d+$/.test(s)) return <span className="ms ms-n">{s}</span>;
   if (s.includes("/")) {
     const [a] = s.split("/");
     return <span className={`ms ms-${a.toLowerCase()}`}>{sym}</span>;
