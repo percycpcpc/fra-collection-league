@@ -4,10 +4,14 @@ import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { jsonFetch } from "@/lib/client";
 import { PlayerAvatar } from "./PlayerAvatar";
+import { AltPlayersDirectory } from "./AltPlayersDirectory";
+import { UiStyleToggle } from "./UiStyleToggle";
+import { useUiStyle } from "./useUiStyle";
 
 type Profile = { id: string; name: string; iconCard: string | null; cardCount: number; deckCount: number };
 
 export function ProfilesDirectory() {
+  const { style, toggle } = useUiStyle();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [name, setName] = useState("");
   const [seedCommons, setSeedCommons] = useState(true);
@@ -40,8 +44,10 @@ export function ProfilesDirectory() {
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete profile."); }
   }
 
+  const createForm = <form className="alt-create-inline" onSubmit={create}><input aria-label="New player name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player name" maxLength={80} /><button className="alt-pill alt-primary" type="submit">+ New player</button></form>;
+  if (style === "alt") return <AltPlayersDirectory players={profiles} createForm={createForm} error={error} onToggleStyle={toggle} />;
   return <main className="shell directory">
-    <header className="masthead"><div className="masthead-links"><div><div className="eyebrow">Reality Fracture</div><h1>Collection League</h1><p>Choose a player to manage their cards and decks.</p></div><nav><Link href="/analytics">Analytics</Link><Link href="/matches">Matches</Link></nav></div></header>
+    <header className="masthead"><div className="masthead-links"><div><div className="eyebrow">Reality Fracture</div><h1>Collection League</h1><p>Choose a player to manage their cards and decks.</p></div><nav><Link href="/analytics">Analytics</Link><Link href="/matches">Matches</Link><UiStyleToggle onToggle={toggle} /></nav></div></header>
     <form className="create-bar" onSubmit={create}><label htmlFor="profile-name">New player</label><input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player name" maxLength={80} /><label className="seed-option"><input type="checkbox" checked={seedCommons} onChange={(e) => setSeedCommons(e.target.checked)} /> Start with all commons &amp; uncommons ×1</label><button className="primary" type="submit">Create profile</button></form>
     {error && <p className="error-banner" role="alert">{error}</p>}
     <section className="profile-list" aria-label="Player profiles">

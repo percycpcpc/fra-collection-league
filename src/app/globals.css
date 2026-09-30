@@ -591,6 +591,34 @@ h1, h2, h3, p { margin-top: 0; }
 }
 @media (hover: none) { .alt-card-toggle { opacity: 1; transform: none; } }
 
+/* Shared alternate page primitives. */
+.alt-topbar-spacer { flex: 1; }
+.alt-content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; padding: 18px 28px; }
+.alt-panel { padding: 20px; border: 1px solid #303030; border-radius: 12px; color: var(--fra-alt-text); background: var(--fra-alt-surface); box-shadow: 0 12px 28px #0005; }
+.alt-player-card { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+.alt-player-card div, .alt-deck-card > div:first-child { flex: 1; }
+.alt-player-card h2, .alt-deck-card h2 { margin: 0; font-size: 20px; }
+.alt-player-card p, .alt-deck-card p { margin: 5px 0 0; color: var(--fra-alt-muted); }
+.alt-create-inline { display: flex; gap: 8px; }
+.alt-create-inline input, .alt-ui-root select { min-height: 38px; padding: 8px 14px; border: 1px solid #444; border-radius: 9999px; color: #fff; background: var(--fra-alt-interactive); }
+.alt-page-section { padding: 18px 28px; }
+.alt-page-section > h2 { margin: 0 0 14px; font-size: 21px; }
+.alt-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 18px 28px; }
+.alt-stat-grid article { display: grid; gap: 8px; padding: 20px; border-radius: 12px; background: var(--fra-alt-surface); box-shadow: 0 10px 25px #0005; }
+.alt-stat-grid small, .alt-deck-card small { color: var(--fra-alt-muted); font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+.alt-stat-grid strong { font-size: 32px; }
+.alt-list, .alt-card-list { display: grid; overflow: hidden; border: 1px solid #303030; border-radius: 12px; background: var(--fra-alt-surface); }
+.alt-list > a, .alt-list > article, .alt-card-list > article { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid #303030; color: #fff; text-decoration: none; }
+.alt-list small, .alt-card-list small { display: block; color: var(--fra-alt-muted); }
+.alt-card-list img { width: 48px; height: 64px; border-radius: 5px; object-fit: cover; }
+.alt-card-list article > div:first-of-type { flex: 1; }
+.alt-deck-card { display: grid; gap: 18px; }
+.alt-deck-card > div:last-child, .alt-commander-picker > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.alt-danger { color: var(--fra-alt-negative); }
+.alt-stepper { display: flex; align-items: center; gap: 10px; }
+.alt-stepper button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: #000; background: var(--fra-alt-accent); }
+@media (max-width: 700px) { .alt-stat-grid { grid-template-columns: repeat(2, 1fr); } .alt-content-grid, .alt-page-section, .alt-stat-grid { padding-inline: 16px; } }
+
 /* Deck editor pool: sticky toolbar under the sticky workspace header. */
 .add-panel > .pool-toolbar { position: sticky; top: var(--workspace-header-h, 78px); z-index: 15; flex-wrap: wrap; margin: -1rem -1rem 0; padding: .75rem 1rem; background: #0d0e10f2; backdrop-filter: blur(10px); }
 .pool-toolbar h2 { flex: 1 1 auto; }

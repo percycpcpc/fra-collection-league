@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { cardImage, jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
+import { AltShell } from "./AltShell";
 
 type Profile = { id: string; name: string; iconCard: string | null };
 type ProfileSummary = Profile & { cardCount: number; deckCount: number };
@@ -65,38 +65,20 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
     onSaveCard(card.name, entry ? { owned: !entry.owned } : { qty: 1, owned: true });
   }
 
-  return <div className="alt-ui-root">
-    <aside className="alt-sidebar">
-      <Link className="alt-brand" href="/"><span>F</span><div><strong>FRA League</strong><small>Reality Fracture</small></div></Link>
-      <nav className="alt-nav" aria-label="League navigation">
-        <Link className="active" href={`/p/${profile.id}`}>◆ <span>Collection</span></Link>
-        <Link href={`/p/${profile.id}/decks`}>▦ <span>Decks</span></Link>
-        <Link href="/analytics">⌁ <span>Analytics</span></Link>
-        <Link href={`/p/${profile.id}/matches`}>● <span>Matches</span></Link>
-      </nav>
-      <div className="alt-players-label">Players</div>
-      <div className="alt-players">
-        {(profiles.length ? profiles : [{ ...profile, cardCount: ownedCount, deckCount: 0 }]).map((player, index) => <Link className={player.id === profile.id ? "active" : ""} href={`/p/${player.id}`} key={player.id}>
-          <span className="alt-avatar" style={{ background: AVATAR_COLORS[index % AVATAR_COLORS.length] }}>{player.name.charAt(0).toUpperCase()}</span>
-          <span><strong>{player.name}</strong><small>{player.cardCount} owned</small></span>
-        </Link>)}
-      </div>
-    </aside>
+  const shellPlayers = profiles.length ? profiles : [{ ...profile, cardCount: ownedCount, deckCount: 0 }];
+  const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><span>Qty ×{selectedEntry?.qty || 0}</span><span>In deck</span><button type="button" onClick={() => toggle(selected)} aria-label={`Toggle owned status for ${selected.name}`}>{selectedEntry?.owned ? "✓" : "+"}</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
-    <main className="alt-main">
-      <header className="alt-topbar">
+  return <AltShell title={`${profile.name}'s collection`} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
         <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>
         <div className="alt-owned-counter">Owned <b>{ownedCount} / {catalog.length}</b></div>
         <button className="alt-pill alt-outline" type="button" onClick={() => setImportOpen((open) => !open)} aria-expanded={importOpen}>Import &amp; merge</button>
-        <button className="alt-pill alt-style-toggle" type="button" onClick={onToggleStyle} aria-label="Switch to Classic UI">Classic</button>
-      </header>
+      </>}>
       {importOpen && <section className="alt-import" aria-label="Import collection">
         <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} />
         <button className="alt-pill alt-primary" type="button" onClick={onImport}>Import &amp; merge</button>
       </section>}
       {(message || status === "saving") && <p className={`alt-notice ${status}`} role="status">{status === "saving" ? "Saving…" : message}</p>}
 
-      <div className="alt-greeting"><h1>{profile.name}&apos;s collection</h1><p>Reality Fracture league · season 1</p></div>
       <div className="alt-groups">
         {GROUPS.map((group) => {
           const items = groups.get(group) || [];
@@ -124,17 +106,5 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
           </section>;
         })}
       </div>
-      <div className="alt-footer-space" />
-    </main>
-
-    <footer className="alt-nowbar">
-      <div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>
-      {selected ? <>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={cardImage(selected.name, selected)} alt="" />
-        <div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div>
-        <div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><span>Qty ×{selectedEntry?.qty || 0}</span><span>In deck</span><button type="button" onClick={() => toggle(selected)} aria-label={`Toggle owned status for ${selected.name}`}>{selectedEntry?.owned ? "✓" : "+"}</button></div>
-      </> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}
-    </footer>
-  </div>;
+  </AltShell>;
 }

@@ -15,6 +15,9 @@ import {
   isLegal as isLegalIdentity,
   isOutOfIdentity as isOutOfIdentityCard,
 } from "@/lib/deck-identity";
+import { AltDeckEditor } from "./AltDeckEditor";
+import { UiStyleToggle } from "./UiStyleToggle";
+import { useUiStyle } from "./useUiStyle";
 
 type ProfileData = { profile: { name: string }; cards: CollectionCard[] };
 type DeckData = { deck: { id: string; name: string; commander: string | null }; cards: DeckCard[] };
@@ -66,6 +69,7 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 }
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
+  const { style, toggle } = useUiStyle();
   const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images"); const saves = useRef(0);
   // Collapsed pool groups (persisted), and whether off-color cards are shown.
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
@@ -185,7 +189,9 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   </div>;
   const emptyPool = pool.groups.length === 0 && <p className="muted pool-empty">{search.trim() ? "No owned cards match your search." : pool.hiddenCount ? "Every other owned card is outside the commander's colors." : "No owned cards yet."}</p>;
 
-  return <main className="deck-editor" ref={editorRef}><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} key={deck.deck.name} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div></div></header>
+  if (style === "alt") return <AltDeckEditor profileId={profileId} profileName={profile.profile.name} players={[{ id: profileId, name: profile.profile.name }]} deckName={deck.deck.name} cards={deck.cards} catalog={catalog} status={status} onToggleStyle={toggle} onQty={(name, qty) => void saveCard(name, qty)} controls={<form className="alt-create-inline" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} /><button className="alt-pill alt-outline">Rename</button></form>} commander={<div className="alt-commander-picker"><p>{commanderNames.length ? commanderNames.join(" & ") : "No commander selected"}</p><div>{[...eligibleCommanders].map((key) => { const card = catalogMap.get(key); if (!card) return null; return <button className={`alt-pill ${isCommander(card.name) ? "alt-primary" : ""}`} type="button" key={key} disabled={!isCommander(card.name) && commanderNames.length >= MAX_COMMANDERS} onClick={() => setCommander(card.name)}>{isCommander(card.name) ? "Remove " : "Set "}{card.name}</button>; })}</div><small>{commanderIdentity === undefined ? "Choose a commander to filter color identity." : "Deck legality is checked against commander color identity."}</small></div>} />;
+
+  return <main className="deck-editor" ref={editorRef}><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} key={deck.deck.name} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div><UiStyleToggle onToggle={toggle} /></div></header>
     {error && <p className="error-banner deck-error" role="alert">{error}</p>}{viewMode === "images" ? <div className="editor-columns">
       <section className="deck-contents"><div className="panel-title"><h2>Deck</h2><span>{total} cards · commander excluded</span></div>
         {commanderNames.length > 0 && <section className="deck-group"><h3><span>★ {commanderNames.length > 1 ? "Commanders" : "Commander"}</span><small>{commanderNames.length}</small></h3><div className="deck-grid">{commanderNames.map((cmd) => <GalleryCard key={cmd} name={cmd} catalog={catalogMap.get(cmd.toLowerCase())} qty={deckMap.get(cmd.toLowerCase())?.qty || 0} owned={ownedMap.get(cmd.toLowerCase())?.qty} cap={ownedMap.get(cmd.toLowerCase())?.qty || 0} star="active" onQty={(qty) => void saveCard(cmd, qty)} onCommander={() => setCommander(cmd)} />)}</div></section>}
