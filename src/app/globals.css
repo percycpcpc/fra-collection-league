@@ -139,7 +139,9 @@ h1, h2, h3, p { margin-top: 0; }
 .card-line, .add-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3rem; padding: .35rem .25rem; border-bottom: 1px solid #26292f; }
 .card-line > span { display: flex; align-items: center; gap: .4em; flex: 1; overflow: hidden; min-width: 0; }
 .card-line > span > b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
-.mana-cost { display: inline-flex; align-items: center; gap: 1px; flex-shrink: 0; font-size: 1.1em; }
+.mana-cost { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 1.1em; }
+.mana-face { display: inline-flex; align-items: center; gap: 1px; }
+.mana-sep { font-size: .7em; color: var(--muted); padding: 0 2px; }
 .card-line-actions { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
 .mini-stepper button { min-height: 2rem; width: 2.2rem; padding: .2rem; border-radius: 0; }
 .mini-stepper button:active:not(:disabled), .commander-star:active:not(:disabled) { filter: brightness(.85); transform: scale(.96); }
