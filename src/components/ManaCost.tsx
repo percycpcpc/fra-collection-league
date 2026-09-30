@@ -11,7 +11,7 @@ export function ManaCost({ cost }: { cost: string }) {
         <span key={fi} className="mana-face">
           {fi > 0 && <span className="mana-sep">//</span>}
           {symbols.map((sym, i) => {
-            const cls = sym.toLowerCase().replace("/", "");
+            const cls = sym.toLowerCase().replaceAll("/", "");
             return <i key={i} className={`ms ms-${cls} ms-cost`} aria-hidden="true" />;
           })}
         </span>

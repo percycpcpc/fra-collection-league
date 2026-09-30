@@ -111,7 +111,7 @@ function ManaDistChart({ cardSymbols, landSymbols }: { cardSymbols: Slice[]; lan
           <text x="85" y="11" textAnchor="middle" fontSize="10" fill="#9ca3af">costs</text>
           {ringPath(85, 101, 78, 57, cardSymbols)}
           {ringPath(85, 101, 52, 30, landSymbols)}
-          <text x="85" y="105" textAnchor="middle" fontSize="10" fill="#9ca3af">land</text>
+          {landSymbols.length > 0 && <text x="85" y="105" textAnchor="middle" fontSize="10" fill="#9ca3af">land</text>}
         </svg>
       </div>
     </div>
@@ -179,9 +179,9 @@ function TypeChart({ slices }: { slices: Slice[] }) {
   const h = hovered ? slices.find(s => s.label === hovered) : null;
 
   return (
-    <div className="analysis-chart" style={{ overflow: "visible" }}>
+    <div className="analysis-chart">
       <p className="analysis-chart-title">Card types</p>
-      <svg width="186" height="186" viewBox="0 0 140 140" overflow="visible">
+      <svg width="186" height="186" viewBox="0 0 140 140" overflow="visible" aria-hidden="true">
         {paths}
         {labels}
         {h && (
@@ -233,7 +233,6 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
             rects.push(<rect key={color} x={x} y={y} width={bw} height={bh} fill={CURVE_COLOR_MAP[color]} />);
             yOffset += bh;
           }
-          const total = totals[bi];
           return (
             <g key={bucket}>
               {rects}
@@ -259,7 +258,8 @@ export function DeckAnalysis({
   commanderNames: string[];
   catalogMap: Map<string, CatalogCard>;
 }) {
-  const all = [...commanderNames.map(n => ({ name: n, qty: 1 })), ...cards];
+  const commanderSet = new Set(commanderNames.map(n => n.toLowerCase()));
+  const all = [...commanderNames.map(n => ({ name: n, qty: 1 })), ...cards.filter(c => !commanderSet.has(c.name.toLowerCase()))];
 
   const cardSymCounts: Record<string, number> = {};
   const landSymCounts: Record<string, number> = {};
