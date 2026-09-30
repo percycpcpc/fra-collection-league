@@ -91,21 +91,6 @@ function ringPath(cx: number, cy: number, ro: number, ri: number, slices: Slice[
   });
 }
 
-function Legend({ slices, total }: { slices: Slice[]; total: number }) {
-  return (
-    <ul className="analysis-legend">
-      {slices.filter(s => s.value > 0).map(s => (
-        <li key={s.label}>
-          <span className="legend-swatch" style={{ background: s.color }} />
-          <span className="legend-label">{s.label}</span>
-          <span className="legend-count">{Math.round(s.value)}</span>
-          <span className="legend-pct">{Math.round(s.value / total * 100)}%</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 // ── Chart 1: Concentric double pie (card symbols outer, land mana inner) ────
 
 function ManaDistChart({ cardSymbols, landSymbols }: { cardSymbols: Slice[]; landSymbols: Slice[] }) {
