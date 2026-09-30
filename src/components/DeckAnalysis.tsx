@@ -287,12 +287,10 @@ export function DeckAnalysis({
       }
     }
 
-    if (ct !== "Land") {
-      const cmc = cost ? parseCMC(cost) : 0;
-      const bucket = cmc >= 6 ? "6+" : String(cmc);
-      const colorKey = entry.colors ?? "colorless";
-      curveBuckets[bucket][colorKey] = (curveBuckets[bucket][colorKey] ?? 0) + qty;
-    }
+    const cmc = cost ? parseCMC(cost) : 0;
+    const bucket = cmc >= 6 ? "6+" : String(cmc);
+    const colorKey = entry.colors ?? "colorless";
+    curveBuckets[bucket][colorKey] = (curveBuckets[bucket][colorKey] ?? 0) + qty;
   }
 
   const cardSymSlices = SYMBOL_ORDER.filter(s => (cardSymCounts[s] ?? 0) > 0)

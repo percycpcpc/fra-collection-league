@@ -50,7 +50,7 @@ const catalogArb = fc
   .chain((names) =>
     fc.tuple(...names.map((name) =>
       fc.constantFrom(...RARITY).map((rarity): CatalogCard => ({
-        name, rarity, qty: 1, img: "", colors: "", type: "", colorIdentity: "",
+        name, rarity, qty: 1, img: "", colors: "", type: "", colorIdentity: "", manaCost: "",
       })),
     )),
   );

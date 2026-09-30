@@ -12,6 +12,7 @@ describe("parseCatalogCard", () => {
         rarity: "rare",
         type: "Creature",
         colorIdentity: "W",
+        manaCost: "{1}{W}",
       },
       "Card",
     );
@@ -23,6 +24,7 @@ describe("parseCatalogCard", () => {
       rarity: "rare",
       type: "Creature",
       colorIdentity: "W",
+      manaCost: "{1}{W}",
     });
   });
 
@@ -36,6 +38,7 @@ describe("parseCatalogCard", () => {
       rarity: "",
       type: "",
       colorIdentity: "",
+      manaCost: "",
     });
   });
 
