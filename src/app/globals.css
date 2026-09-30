@@ -1,3 +1,4 @@
+@import 'mana-font/css/mana.css';
 :root { --bg: #0d0e10; --panel: #17191d; --panel-2: #202329; --line: #343840; --text: #f1eee6; --muted: #a7a9ae; --gold: #d8ad57; --gold-2: #f0ce85; --red: #d96464; --green: #7ec58d; color-scheme: dark; }
 * { box-sizing: border-box; }
 html { background: var(--bg); }
@@ -136,25 +137,17 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-group h3, .basic-block h3 { color: var(--gold); font-size: .84rem; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: .45rem; margin-bottom: .25rem; }
 .deck-group h3 small, .basic-block h3 small { float: right; color: var(--muted); letter-spacing: 0; text-transform: none; }
 .card-line, .add-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3rem; padding: .35rem .25rem; border-bottom: 1px solid #26292f; }
-.card-line > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
-.mana-cost { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
-.ms { display: inline-grid; place-items: center; width: 1.15em; height: 1.15em; border-radius: 999px; font-size: .7rem; font-weight: 900; line-height: 1; border: 1px solid #0003; }
-.ms-w { background: #f9faf4; color: #403d30; }
-.ms-u { background: #0e68ab; color: #fff; }
-.ms-b { background: #150b00; color: #c8bfb0; border-color: #8a7d6e; }
-.ms-r { background: #d3202a; color: #fff; }
-.ms-g { background: #00733e; color: #fff; }
-.ms-c { background: #ccc2c0; color: #403d30; }
-.ms-x { background: #555; color: #fff; }
-.ms-n { background: #c0bfbc; color: #222; }
-.ms-generic { background: #444; color: #ccc; }
+.card-line > span { display: flex; align-items: center; gap: .4em; flex: 1; overflow: hidden; min-width: 0; }
+.card-line > span > b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
+.mana-cost { display: inline-flex; align-items: center; gap: 1px; flex-shrink: 0; font-size: 1.1em; }
 .card-line-actions { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
 .mini-stepper button { min-height: 2rem; width: 2.2rem; padding: .2rem; border-radius: 0; }
 .mini-stepper button:active:not(:disabled), .commander-star:active:not(:disabled) { filter: brightness(.85); transform: scale(.96); }
 .mini-stepper b { min-width: 2.3rem; text-align: center; }
 .add-list { max-height: 58vh; overflow: auto; }
-.add-row > span:not(.mana-cost) { display: grid; min-width: 0; flex: 1; }
-.add-row > span:not(.mana-cost) b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.add-row > span { display: grid; min-width: 0; flex: 1; }
+.add-row-name { display: flex; align-items: center; gap: .4em; overflow: hidden; }
+.add-row-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .add-row small { color: var(--muted); }
 .basic-block { margin-top: 1.5rem; }
 .deck-grid, .pool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: .85rem; }
