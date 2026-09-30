@@ -21,6 +21,10 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [commander, setCommander] = useState("");
   const [partner, setPartner] = useState("");
+  const [cmdQuery, setCmdQuery] = useState("");
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const [partnerQuery, setPartnerQuery] = useState("");
+  const [partnerOpen, setPartnerOpen] = useState(false);
   const deleteTriggers = useRef(new Map<string, HTMLButtonElement>());
   const load = useCallback(() => jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)), [profileId]);
   useEffect(() => { void load(); }, [load]);
@@ -31,17 +35,18 @@ export function DeckList({ profileId }: { profileId: string }) {
   const candidates = useMemo(() => (data ? commanderCandidates(data.cards, catalog) : []), [data, catalog]);
 
   function chooseCommander(name: string) {
-    setCommander(name);
-    // A second commander needs a first one, and the two must differ.
-    if (!name || name === partner) setPartner("");
+    setCommander(name); setCmdQuery(name); setCmdOpen(false);
+    if (!name || name === partner) { setPartner(""); setPartnerQuery(""); }
   }
+
+  function choosePartner(name: string) { setPartner(name); setPartnerQuery(name); setPartnerOpen(false); }
 
   async function create(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(""); const form = new FormData(event.currentTarget); const formEl = event.currentTarget;
     const commanders = [commander, partner].filter(Boolean);
     try {
       await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commanders }) });
-      formEl.reset(); setCommander(""); setPartner(""); await load();
+      formEl.reset(); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
   }
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
@@ -52,23 +57,25 @@ export function DeckList({ profileId }: { profileId: string }) {
   const hint = catalog.length === 0
     ? "Loading commanders…"
     : noCandidates
-      ? `No legendary creatures in ${data.profile.name}’s collection yet. You can still create a deck without a commander.`
-      : `Choose up to 2 different legendary creatures from ${data.profile.name}’s collection.`;
+      ? `No legendary creatures in ${data.profile.name}'s collection yet. You can still create a deck without a commander.`
+      : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
+  const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
+  const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
   return <main className="shell decks-page">
-    <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}’s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}’s decks</h1></div><span>{data.decks.length} total</span></header>
+    <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span></header>
     <form className="deck-create" onSubmit={create}>
       <label>Deck name<input name="name" required placeholder="New deck" /></label>
       <label>Commander (optional)
-        <select id="deck-commander" value={commander} onChange={(event) => chooseCommander(event.target.value)} disabled={!candidates.length} aria-describedby="commander-hint">
-          <option value="">No commander</option>
-          {candidates.map((name) => <option key={name} value={name}>{name}</option>)}
-        </select>
+        <div className="cmd-search">
+          <input type="text" value={cmdQuery} onChange={(e) => { setCmdQuery(e.target.value); setCommander(""); setCmdOpen(true); }} onFocus={() => setCmdOpen(true)} onBlur={() => setTimeout(() => setCmdOpen(false), 150)} placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} autoComplete="off" disabled={!candidates.length && catalog.length > 0} aria-describedby="commander-hint" />
+          {cmdOpen && candidates.length > 0 && <ul className="cmd-dropdown"><li onMouseDown={() => chooseCommander("")}>— No commander</li>{cmdMatches.map((name) => <li key={name} onMouseDown={() => chooseCommander(name)}>{name}</li>)}</ul>}
+        </div>
       </label>
       <label>Second commander (optional)
-        <select id="deck-commander-2" value={partner} onChange={(event) => setPartner(event.target.value)} disabled={!commander} aria-describedby="commander-hint">
-          <option value="">No second commander</option>
-          {candidates.filter((name) => name !== commander).map((name) => <option key={name} value={name}>{name}</option>)}
-        </select>
+        <div className="cmd-search">
+          <input type="text" value={partnerQuery} onChange={(e) => { setPartnerQuery(e.target.value); setPartner(""); setPartnerOpen(true); }} onFocus={() => setPartnerOpen(true)} onBlur={() => setTimeout(() => setPartnerOpen(false), 150)} placeholder="Search second commander…" autoComplete="off" disabled={!commander} aria-describedby="commander-hint" />
+          {partnerOpen && commander && <ul className="cmd-dropdown"><li onMouseDown={() => choosePartner("")}>— No second commander</li>{partnerMatches.map((name) => <li key={name} onMouseDown={() => choosePartner(name)}>{name}</li>)}</ul>}
+        </div>
       </label>
       <button className="primary" type="submit">Create deck</button>
       <p id="commander-hint" className="field-hint">{hint}</p>
