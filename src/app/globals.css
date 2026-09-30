@@ -172,7 +172,8 @@ h1, h2, h3, p { margin-top: 0; }
 .commander-with-analysis { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
 .commander-with-analysis > .deck-grid { flex: 0 0 auto; width: fit-content; }
 .commander-with-analysis > .deck-analysis { flex: 1; min-width: 0; }
-.deck-analysis { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start; }
+.deck-analysis { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+.analysis-chart-curve { grid-column: 1 / -1; }
 .analysis-chart { min-width: 0; }
 .analysis-chart-title { margin: 0 0 .4rem; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .analysis-chart-body { display: flex; gap: .75rem; align-items: center; }

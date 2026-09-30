@@ -135,7 +135,7 @@ function TypeChart({ slices }: { slices: Slice[] }) {
 const CMC_BUCKETS = ["0", "1", "2", "3", "4", "5", "6+"] as const;
 
 function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>> }) {
-  const W = 260, H = 160;
+  const W = 560, H = 160;
   const mt = 8, mb = 22, ml = 22, mr = 8;
   const pw = W - ml - mr, ph = H - mt - mb;
 
@@ -145,7 +145,7 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
   const pad = barW * 0.18;
 
   return (
-    <div className="analysis-chart">
+    <div className="analysis-chart analysis-chart-curve">
       <p className="analysis-chart-title">Mana curve</p>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
         {/* y gridlines */}
