@@ -30,9 +30,9 @@ export class CatalogNotFoundError extends Error {
   }
 }
 
-// Catalog has 7 columns; D1 caps a statement at 100 bound params, so a
-// multi-row INSERT may carry at most floor(100 / 7) = 14 rows.
-const D1_CATALOG_BATCH = 14;
+// Catalog has 8 columns; D1 caps a statement at 100 bound params, so a
+// multi-row INSERT may carry at most floor(100 / 8) = 12 rows.
+const D1_CATALOG_BATCH = 12;
 
 const CATALOG_COLUMNS = {
   name: catalogTable.name,
@@ -188,7 +188,7 @@ export async function deleteCatalogCard(
 
 /**
  * Replace the entire catalog with the given cards, validating first.
- * Chunked to respect the D1 100-bound-parameter limit (14 rows × 7 cols).
+ * Chunked to respect the D1 100-bound-parameter limit (12 rows × 8 cols).
  * Uses a delete-then-insert batch so a failure leaves the catalog untouched.
  */
 export async function replaceCatalog(
