@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getCatalog } from "./catalog";
+import { catalogSeedData } from "./catalog-data";
 import { parseIdentity, serializeIdentity } from "./color-identity";
 
 describe("catalog colorIdentity completeness", () => {
-  const cards = getCatalog();
+  const cards = catalogSeedData();
 
   it("has at least the full FRA catalog", () => {
     expect(cards.length).toBeGreaterThan(0);

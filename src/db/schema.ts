@@ -108,6 +108,29 @@ export const matchRelations = relations(matches, ({ one }) => ({
 }));
 
 // ---------------------------------------------------------------------------
+// Catalog — the card dataset, migrated out of the bundled data/catalog.json
+// so it becomes editable at runtime via the admin panel.
+// ---------------------------------------------------------------------------
+export const catalog = sqliteTable("Catalog", {
+  name:          text("name").primaryKey(),
+  qty:           integer("qty").notNull().default(1),
+  img:           text("img").notNull().default(""),
+  colors:        text("colors").notNull().default(""),
+  rarity:        text("rarity").notNull().default(""),
+  type:          text("type").notNull().default(""),
+  colorIdentity: text("colorIdentity").notNull().default(""),
+});
+
+// ---------------------------------------------------------------------------
+// SiteSetting — generic key/value store for admin-editable site settings.
+// ---------------------------------------------------------------------------
+export const siteSettings = sqliteTable("SiteSetting", {
+  key:       text("key").primaryKey(),
+  value:     text("value").notNull().default(""),
+  updatedAt: text("updatedAt").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+// ---------------------------------------------------------------------------
 // Inferred types
 // ---------------------------------------------------------------------------
 export type Profile        = typeof profiles.$inferSelect;
@@ -115,3 +138,5 @@ export type CollectionCard = typeof collectionCards.$inferSelect;
 export type Deck           = typeof decks.$inferSelect;
 export type DeckCard       = typeof deckCards.$inferSelect;
 export type Match          = typeof matches.$inferSelect;
+export type CatalogRow = typeof catalog.$inferSelect;
+export type SiteSetting = typeof siteSettings.$inferSelect;

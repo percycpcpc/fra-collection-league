@@ -1,53 +1,193 @@
-import catalogData from "../../data/catalog.json";
-import { parseIdentity, serializeIdentity } from "./color-identity";
+import { asc, eq } from "drizzle-orm";
+import { chunksOf } from "./chunks";
+import { getDb, type Db } from "./db";
+import { catalog as catalogTable } from "@/db/schema";
+import {
+  catalogSeedData,
+  parseCatalogCard,
+  validateCatalog,
+  type CatalogCard,
+} from "./catalog-data";
 
-export type CatalogCard = {
-  name: string;
-  qty: number;
-  img: string;
-  colors: string;
-  rarity: string;
-  type: string;
-  colorIdentity: string;
+// Re-export the pure, DB-free primitives so existing imports keep working.
+export { catalogSeedData, parseCatalogCard, validateCatalog };
+export type { CatalogCard };
+
+/** Raised when a create/rename would collide with an existing card name. */
+export class CatalogConflictError extends Error {
+  constructor(name: string) {
+    super(`A card named "${name}" already exists.`);
+    this.name = "CatalogConflictError";
+  }
+}
+
+/** Raised when an update/delete targets a card that does not exist. */
+export class CatalogNotFoundError extends Error {
+  constructor(name: string) {
+    super(`No card named "${name}" was found.`);
+    this.name = "CatalogNotFoundError";
+  }
+}
+
+// Catalog has 7 columns; D1 caps a statement at 100 bound params, so a
+// multi-row INSERT may carry at most floor(100 / 7) = 14 rows.
+const D1_CATALOG_BATCH = 14;
+
+const CATALOG_COLUMNS = {
+  name: catalogTable.name,
+  qty: catalogTable.qty,
+  img: catalogTable.img,
+  colors: catalogTable.colors,
+  rarity: catalogTable.rarity,
+  type: catalogTable.type,
+  colorIdentity: catalogTable.colorIdentity,
 };
 
-// 0-5 chars, WUBRG only, no repeated character.
-const IDENTITY_RE = /^(?!.*(.).*\1)[WUBRG]{0,5}$/;
+function toRow(card: CatalogCard) {
+  return {
+    name: card.name,
+    qty: card.qty,
+    img: card.img,
+    colors: card.colors,
+    rarity: card.rarity,
+    type: card.type,
+    colorIdentity: card.colorIdentity,
+  };
+}
 
 /**
- * Assert every entry carries a well-formed, canonical `colorIdentity` string.
- * Throws an Error naming the first offending card. Pure over its argument.
+ * Read the full catalog from the database, ordered by name.
+ * Runtime source of truth after the migration off the bundled JSON.
  */
-export function validateCatalog(cards: readonly CatalogCard[]): void {
-  for (const card of cards) {
-    const id = (card as { colorIdentity?: unknown }).colorIdentity;
-    const rawName = (card as { name?: unknown }).name;
-    const label = typeof rawName === "string" ? rawName : JSON.stringify(rawName);
-    if (typeof id !== "string") {
-      throw new Error(`Catalog card "${label}" has a missing or non-string colorIdentity.`);
-    }
-    if (!IDENTITY_RE.test(id)) {
-      throw new Error(`Catalog card "${label}" has a malformed colorIdentity: ${JSON.stringify(id)}.`);
-    }
-    if (id !== serializeIdentity(parseIdentity(id))) {
-      throw new Error(`Catalog card "${label}" colorIdentity is not canonical WUBRG order: ${JSON.stringify(id)}.`);
-    }
-  }
+export async function getCatalog(db: Db = getDb()): Promise<CatalogCard[]> {
+  return db
+    .select(CATALOG_COLUMNS)
+    .from(catalogTable)
+    .orderBy(asc(catalogTable.name));
 }
 
-let validated = false;
-
-export function getCatalog(): CatalogCard[] {
-  const cards = catalogData as CatalogCard[];
-  if (!validated) {
-    validateCatalog(cards);
-    validated = true;
-  }
-  return cards;
-}
-
-export function catalogNames(): Map<string, string> {
+/** Case-insensitive map of lowercased name -> canonical catalog name. */
+export async function catalogNames(
+  db: Db = getDb(),
+): Promise<Map<string, string>> {
+  const cards = await getCatalog(db);
   return new Map(
-    getCatalog().map((card) => [card.name.toLocaleLowerCase(), card.name]),
+    cards.map((card) => [card.name.toLocaleLowerCase(), card.name]),
   );
+}
+
+/** Fetch a single card by exact name, or null when absent. */
+export async function getCatalogCard(
+  name: string,
+  db: Db = getDb(),
+): Promise<CatalogCard | null> {
+  const rows = await db
+    .select(CATALOG_COLUMNS)
+    .from(catalogTable)
+    .where(eq(catalogTable.name, name))
+    .limit(1);
+  return rows[0] ?? null;
+}
+
+/**
+ * Create one card. Validates the card and rejects a name that already exists.
+ * @throws CatalogConflictError when the name is taken.
+ */
+export async function createCatalogCard(
+  card: CatalogCard,
+  db: Db = getDb(),
+): Promise<CatalogCard> {
+  validateCatalog([card]);
+  if (await getCatalogCard(card.name, db)) {
+    throw new CatalogConflictError(card.name);
+  }
+  try {
+    await db.insert(catalogTable).values(toRow(card));
+  } catch (cause) {
+    if (String(cause).includes("UNIQUE constraint failed")) {
+      throw new CatalogConflictError(card.name);
+    }
+    throw cause;
+  }
+  return card;
+}
+
+/**
+ * Update the card identified by `originalName`. Supports renaming (when
+ * `card.name` differs); a rename onto an existing name is rejected.
+ * @throws CatalogNotFoundError when the target card is absent.
+ * @throws CatalogConflictError when renaming onto an occupied name.
+ */
+export async function updateCatalogCard(
+  originalName: string,
+  card: CatalogCard,
+  db: Db = getDb(),
+): Promise<CatalogCard> {
+  validateCatalog([card]);
+  if (!(await getCatalogCard(originalName, db))) {
+    throw new CatalogNotFoundError(originalName);
+  }
+  const renaming = card.name !== originalName;
+  if (renaming && (await getCatalogCard(card.name, db))) {
+    throw new CatalogConflictError(card.name);
+  }
+  try {
+    await db
+      .update(catalogTable)
+      .set(toRow(card))
+      .where(eq(catalogTable.name, originalName));
+  } catch (cause) {
+    if (String(cause).includes("UNIQUE constraint failed")) {
+      throw new CatalogConflictError(card.name);
+    }
+    throw cause;
+  }
+  return card;
+}
+
+/**
+ * Delete the card with the given name.
+ * @throws CatalogNotFoundError when no such card exists.
+ */
+export async function deleteCatalogCard(
+  name: string,
+  db: Db = getDb(),
+): Promise<void> {
+  if (!(await getCatalogCard(name, db))) {
+    throw new CatalogNotFoundError(name);
+  }
+  await db.delete(catalogTable).where(eq(catalogTable.name, name));
+}
+
+/**
+ * Replace the entire catalog with the given cards, validating first.
+ * Chunked to respect the D1 100-bound-parameter limit (14 rows × 7 cols).
+ * Uses a delete-then-insert batch so a failure leaves the catalog untouched.
+ */
+export async function replaceCatalog(
+  cards: readonly CatalogCard[],
+  db: Db = getDb(),
+): Promise<number> {
+  validateCatalog(cards);
+  const statements = [
+    db.delete(catalogTable),
+    ...chunksOf([...cards], D1_CATALOG_BATCH).map((batch) =>
+      db.insert(catalogTable).values(batch.map(toRow)),
+    ),
+  ];
+  await db.batch(
+    statements as [
+      (typeof statements)[number],
+      ...(typeof statements)[number][],
+    ],
+  );
+  return cards.length;
+}
+
+/**
+ * Seed the catalog table from the bundled JSON. Replaces existing rows.
+ * Returns the number of rows written.
+ */
+export async function seedCatalog(db: Db = getDb()): Promise<number> {
+  return replaceCatalog(catalogSeedData(), db);
 }

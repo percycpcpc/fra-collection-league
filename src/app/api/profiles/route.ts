@@ -79,7 +79,9 @@ export async function POST(request: Request) {
   const createdAt = new Date().toISOString();
 
   const seededCards = seedCommons
-    ? getCatalog().filter((card) => card.rarity === "common" || card.rarity === "uncommon")
+    ? (await getCatalog(db)).filter(
+        (card) => card.rarity === "common" || card.rarity === "uncommon",
+      )
     : [];
   const statements = [
     db.insert(profiles).values({ id, name, iconCard, createdAt }),

@@ -45,7 +45,7 @@ export async function POST(request: Request, { params }: Context) {
     .then((r) => r[0] ?? null);
   if (!profile) return error("Profile not found.", 404);
 
-  const known = catalogNames();
+  const known = await catalogNames(db);
   const merged = new Map<string, { name: string; qty: number; known: boolean }>();
   for (const line of body.text.split(/\r?\n/)) {
     const parsed = parseLine(line);
