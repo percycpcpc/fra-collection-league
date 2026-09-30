@@ -1,9 +1,10 @@
+import { useState } from "react";
 import type { CatalogCard } from "@/lib/client";
 
 // ── Colors ─────────────────────────────────────────────────────────────────
 
 const SYMBOL_COLORS: Record<string, string> = {
-  W: "#ede8d5", U: "#4a9ed8", B: "#8b7355", R: "#e05c47", G: "#4cb86c", C: "#9ca3af",
+  W: "#ede8d5", U: "#4a9ed8", B: "#484848", R: "#e05c47", G: "#4cb86c", C: "#9ca3af",
 };
 const SYMBOL_ORDER = ["W", "U", "B", "R", "G", "C"] as const;
 
@@ -13,6 +14,12 @@ const TYPE_COLORS: Record<string, string> = {
   Planeswalker: "#F44336", Other: "#607D8B",
 };
 const TYPE_ORDER = ["Creature", "Instant", "Sorcery", "Enchantment", "Artifact", "Planeswalker", "Other"] as const;
+
+const CURVE_COLOR_ORDER = ["white", "blue", "black", "red", "green", "multi", "colorless"] as const;
+const CURVE_COLOR_MAP: Record<string, string> = {
+  white: "#ede8d5", blue: "#4a9ed8", black: "#484848",
+  red: "#e05c47", green: "#4cb86c", multi: "#c9a942", colorless: "#9ca3af",
+};
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -96,18 +103,16 @@ function Legend({ slices, total }: { slices: Slice[]; total: number }) {
 // ── Chart 1: Concentric double pie (card symbols outer, land mana inner) ────
 
 function ManaDistChart({ cardSymbols, landSymbols }: { cardSymbols: Slice[]; landSymbols: Slice[] }) {
-  const total = cardSymbols.reduce((s, d) => s + d.value, 0);
   return (
     <div className="analysis-chart">
       <p className="analysis-chart-title">Mana distribution</p>
       <div className="analysis-chart-body">
-        <svg width="170" height="170" viewBox="0 0 170 170" aria-hidden="true">
-          {ringPath(85, 85, 78, 57, cardSymbols)}
-          {ringPath(85, 85, 52, 30, landSymbols)}
-          <text x="85" y="89" textAnchor="middle" fontSize="9" fill="#9ca3af">land</text>
-          <text x="85" y="79" textAnchor="middle" fontSize="9" fill="#9ca3af">cost</text>
+        <svg width="170" height="186" viewBox="0 0 170 186" aria-hidden="true">
+          <text x="85" y="11" textAnchor="middle" fontSize="10" fill="#9ca3af">costs</text>
+          {ringPath(85, 101, 78, 57, cardSymbols)}
+          {ringPath(85, 101, 52, 30, landSymbols)}
+          <text x="85" y="105" textAnchor="middle" fontSize="10" fill="#9ca3af">land</text>
         </svg>
-        <Legend slices={cardSymbols} total={total} />
       </div>
     </div>
   );
@@ -116,16 +121,78 @@ function ManaDistChart({ cardSymbols, landSymbols }: { cardSymbols: Slice[]; lan
 // ── Chart 2: Card type pie ───────────────────────────────────────────────────
 
 function TypeChart({ slices }: { slices: Slice[] }) {
+  const [hovered, setHovered] = useState<string | null>(null);
   const total = slices.reduce((s, d) => s + d.value, 0);
+
+  const cx = 70, cy = 70, ro = 62, ri = 32;
+
+  // Pre-compute arc angles so we can use them for both paths and labels
+  const arcs: { sl: Slice; a1: number; a2: number }[] = [];
+  let a = -Math.PI / 2;
+  for (const sl of slices.filter(s => s.value > 0)) {
+    const sweep = (sl.value / total) * 2 * Math.PI;
+    arcs.push({ sl, a1: a, a2: a + sweep });
+    a += sweep;
+  }
+
+  const paths = arcs.map(({ sl, a1, a2 }) => {
+    const lg = a2 - a1 > Math.PI ? 1 : 0;
+    const c1 = [Math.cos(a1), Math.sin(a1)];
+    const c2 = [Math.cos(a2), Math.sin(a2)];
+    const d = [
+      `M${cx + ro * c1[0]} ${cy + ro * c1[1]}`,
+      `A${ro} ${ro} 0 ${lg} 1 ${cx + ro * c2[0]} ${cy + ro * c2[1]}`,
+      `L${cx + ri * c2[0]} ${cy + ri * c2[1]}`,
+      `A${ri} ${ri} 0 ${lg} 0 ${cx + ri * c1[0]} ${cy + ri * c1[1]}Z`,
+    ].join(" ");
+    return (
+      <path key={sl.label} d={d} fill={sl.color} stroke="#17191d" strokeWidth="1.5"
+        style={{ cursor: "default" }}
+        onMouseEnter={() => setHovered(sl.label)}
+        onMouseLeave={() => setHovered(null)}
+      />
+    );
+  });
+
+  const labelR = 78, elbowR = 72;
+  const labels = arcs.map(({ sl, a1, a2 }) => {
+    const sweep = a2 - a1;
+    if (sweep < 0.18) return null;
+    const mid = (a1 + a2) / 2;
+    const cos = Math.cos(mid), sin = Math.sin(mid);
+    const anchor = cos > 0.15 ? "start" : cos < -0.15 ? "end" : "middle";
+    // elbow: radial segment, then short horizontal tick
+    const ex = cx + elbowR * cos, ey = cy + elbowR * sin;
+    const tickLen = 5 * (cos >= 0 ? 1 : -1);
+    const tx = ex + tickLen, ty = ey;
+    return (
+      <g key={`lbl-${sl.label}`}>
+        <line x1={cx + (ro + 2) * cos} y1={cy + (ro + 2) * sin} x2={ex} y2={ey}
+          stroke="#4b5563" strokeWidth="0.8" />
+        <line x1={ex} y1={ey} x2={tx} y2={ty} stroke="#4b5563" strokeWidth="0.8" />
+        <text x={tx + (cos >= 0 ? 2 : -2)} y={ty + 3} textAnchor={anchor}
+          fontSize="7.5" fill="#d1d5db">{sl.label}</text>
+      </g>
+    );
+  });
+
+  const h = hovered ? slices.find(s => s.label === hovered) : null;
+
   return (
-    <div className="analysis-chart">
+    <div className="analysis-chart" style={{ overflow: "visible" }}>
       <p className="analysis-chart-title">Card types</p>
-      <div className="analysis-chart-body">
-        <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
-          {ringPath(70, 70, 62, 32, slices)}
-        </svg>
-        <Legend slices={slices} total={total} />
-      </div>
+      <svg width="186" height="186" viewBox="0 0 140 140" overflow="visible">
+        {paths}
+        {labels}
+        {h && (
+          <>
+            <text x="70" y="66" textAnchor="middle" fontSize="9" fill="#e2e8f0">{h.label}</text>
+            <text x="70" y="78" textAnchor="middle" fontSize="9" fill="#9ca3af">
+              {Math.round(h.value)} · {Math.round(h.value / total * 100)}%
+            </text>
+          </>
+        )}
+      </svg>
     </div>
   );
 }
@@ -158,21 +225,18 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
           const bw = barW - pad * 2;
           let yOffset = 0;
           const rects: React.ReactNode[] = [];
-          for (const type of TYPE_ORDER) {
-            const n = stacks[bucket]?.[type] ?? 0;
+          for (const color of CURVE_COLOR_ORDER) {
+            const n = stacks[bucket]?.[color] ?? 0;
             if (n === 0) continue;
             const bh = (n / maxTotal) * ph;
             const y = mt + ph - yOffset - bh;
-            rects.push(<rect key={type} x={x} y={y} width={bw} height={bh} fill={TYPE_COLORS[type]} />);
+            rects.push(<rect key={color} x={x} y={y} width={bw} height={bh} fill={CURVE_COLOR_MAP[color]} />);
             yOffset += bh;
           }
           const total = totals[bi];
           return (
             <g key={bucket}>
               {rects}
-              {total > 0 && (
-                <text x={x + bw / 2} y={mt + ph - yOffset - 3} textAnchor="middle" fontSize="9" fill="#e2e8f0">{total}</text>
-              )}
               <text x={x + bw / 2} y={H - mb + 14} textAnchor="middle" fontSize="10" fill="#9ca3af">{bucket}</text>
             </g>
           );
@@ -180,12 +244,6 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
         {/* y-axis label */}
         <text x={ml - 4} y={mt + ph} textAnchor="end" fontSize="9" fill="#4a5568">{maxTotal}</text>
       </svg>
-      <ul className="analysis-legend analysis-legend-row">
-        {TYPE_ORDER.map(t => (stacks["0"]?.[t] ?? 0) + (stacks["1"]?.[t] ?? 0) + (stacks["2"]?.[t] ?? 0) +
-          (stacks["3"]?.[t] ?? 0) + (stacks["4"]?.[t] ?? 0) + (stacks["5"]?.[t] ?? 0) + (stacks["6+"]?.[t] ?? 0) > 0 ? (
-          <li key={t}><span className="legend-swatch" style={{ background: TYPE_COLORS[t] }} /><span className="legend-label">{t}</span></li>
-        ) : null)}
-      </ul>
     </div>
   );
 }
@@ -232,7 +290,8 @@ export function DeckAnalysis({
     if (ct !== "Land") {
       const cmc = cost ? parseCMC(cost) : 0;
       const bucket = cmc >= 6 ? "6+" : String(cmc);
-      curveBuckets[bucket][ct] = (curveBuckets[bucket][ct] ?? 0) + qty;
+      const colorKey = entry.colors ?? "colorless";
+      curveBuckets[bucket][colorKey] = (curveBuckets[bucket][colorKey] ?? 0) + qty;
     }
   }
 
