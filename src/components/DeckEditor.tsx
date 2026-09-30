@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { CardImage } from "./CardImage";
+import { ManaCost } from "./ManaCost";
 import { jsonFetch, type CatalogCard, type CollectionCard, type DeckCard } from "@/lib/client";
 import { commanderCandidates } from "@/lib/commander-selection";
 import { BASIC_LANDS_GROUP, buildPoolGroups } from "@/lib/deck-pool";
@@ -198,8 +199,8 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
       </aside>
     </div> : <div className="editor-columns list-view">
       <section className="deck-contents"><div className="panel-title"><h2>Deck contents</h2><span>{total} cards · commander excluded</span></div>
-        {commanderNames.length > 0 && <section className="deck-group"><h3>{commanderNames.length > 1 ? "Commanders" : "Commander"} <small>{commanderNames.length}</small></h3>{commanderNames.map((cmd) => <div className="card-line" key={cmd}><span>{cmd}</span>{rowActions(cmd, deckMap.get(cmd.toLowerCase())?.qty || 0, ownedMap.get(cmd.toLowerCase())?.qty || 0)}</div>)}</section>}
-        {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3>{group} <small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3>{items.sort((a, b) => a.name.localeCompare(b.name)).map((card) => <div className={`card-line ${isCardOutOfIdentity(card.name, card.isBasic) ? "out-of-identity" : ""}`} key={card.name}><span>{card.name}{isCardOutOfIdentity(card.name, card.isBasic) && offColorBadge(card.name)}</span>{rowActions(card.name, card.qty, card.isBasic ? 99 : ownedMap.get(card.name.toLowerCase())?.qty || 0, card.isBasic)}</div>)}</section> : null)}
+        {commanderNames.length > 0 && <section className="deck-group"><h3>{commanderNames.length > 1 ? "Commanders" : "Commander"} <small>{commanderNames.length}</small></h3>{commanderNames.map((cmd) => <div className="card-line" key={cmd}><span>{cmd}</span><ManaCost cost={catalogMap.get(cmd.toLowerCase())?.manaCost || ""} />{rowActions(cmd, deckMap.get(cmd.toLowerCase())?.qty || 0, ownedMap.get(cmd.toLowerCase())?.qty || 0)}</div>)}</section>}
+        {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3>{group} <small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3>{items.sort((a, b) => a.name.localeCompare(b.name)).map((card) => <div className={`card-line ${isCardOutOfIdentity(card.name, card.isBasic) ? "out-of-identity" : ""}`} key={card.name}><span>{card.name}{isCardOutOfIdentity(card.name, card.isBasic) && offColorBadge(card.name)}</span><ManaCost cost={catalogMap.get(card.name.toLowerCase())?.manaCost || ""} />{rowActions(card.name, card.qty, card.isBasic ? 99 : ownedMap.get(card.name.toLowerCase())?.qty || 0, card.isBasic)}</div>)}</section> : null)}
       </section>
       <aside className="add-panel">{poolTitle("Add cards")}
         {emptyPool}

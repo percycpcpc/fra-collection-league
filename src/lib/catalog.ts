@@ -42,6 +42,7 @@ const CATALOG_COLUMNS = {
   rarity: catalogTable.rarity,
   type: catalogTable.type,
   colorIdentity: catalogTable.colorIdentity,
+  manaCost: catalogTable.manaCost,
 };
 
 function toRow(card: CatalogCard) {
@@ -53,6 +54,7 @@ function toRow(card: CatalogCard) {
     rarity: card.rarity,
     type: card.type,
     colorIdentity: card.colorIdentity,
+    manaCost: card.manaCost,
   };
 }
 
