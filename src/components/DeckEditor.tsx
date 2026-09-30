@@ -53,7 +53,7 @@ function GalleryCard({ name, catalog, qty, owned, cap, star, onQty, onCommander,
         <CommanderStar name={name} state={star} onToggle={onCommander} />
       </div></div>
     </div>
-    <div className="card-meta"><strong title={name}>{name}</strong>{catalog && <span className={`rarity-gem rarity-${catalog.rarity.toLowerCase()}`}>{catalog.rarity}</span>}</div>
+    <div className="card-meta"><strong title={name}>{name}</strong>{catalog && <span className={`rarity-gem rarity-${catalog.rarity.toLowerCase()}`}>{catalog.rarity[0].toUpperCase()}</span>}</div>
   </article>;
 }
 
