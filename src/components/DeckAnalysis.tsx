@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import type { CatalogCard } from "@/lib/client";
 
 // ── Colors ─────────────────────────────────────────────────────────────────
@@ -43,7 +43,13 @@ function parseCMC(cost: string): number {
   for (const [, sym] of front.matchAll(/\{([^}]+)\}/g)) {
     if (sym === "X") continue;
     if (/^\d+$/.test(sym)) { n += parseInt(sym); continue; }
-    n += sym.includes("/") ? Math.max(...sym.split("/").filter(p => /^\d+$/.test(p)).map(Number), 1) : 1;
+    if (sym.includes("/")) {
+      // Hybrid like {2/W} contributes its highest numeric side, or 1 for pure colored hybrids.
+      const nums = sym.split("/").filter(p => /^\d+$/.test(p)).map(Number);
+      n += nums.length > 0 ? Math.max(...nums) : 1;
+      continue;
+    }
+    n += 1;
   }
   return n;
 }
@@ -126,14 +132,17 @@ function TypeChart({ slices }: { slices: Slice[] }) {
 
   const cx = 70, cy = 70, ro = 62, ri = 32;
 
-  // Pre-compute arc angles so we can use them for both paths and labels
-  const arcs: { sl: Slice; a1: number; a2: number }[] = [];
-  let a = -Math.PI / 2;
-  for (const sl of slices.filter(s => s.value > 0)) {
-    const sweep = (sl.value / total) * 2 * Math.PI;
-    arcs.push({ sl, a1: a, a2: a + sweep });
-    a += sweep;
-  }
+  // Pre-compute arc angles once so hover state changes don't re-tally.
+  const arcs = useMemo(() => {
+    const out: { sl: Slice; a1: number; a2: number }[] = [];
+    let a = -Math.PI / 2;
+    for (const sl of slices.filter(s => s.value > 0)) {
+      const sweep = (sl.value / total) * 2 * Math.PI;
+      out.push({ sl, a1: a, a2: a + sweep });
+      a += sweep;
+    }
+    return out;
+  }, [slices, total]);
 
   const paths = arcs.map(({ sl, a1, a2 }) => {
     const lg = a2 - a1 > Math.PI ? 1 : 0;
@@ -147,30 +156,62 @@ function TypeChart({ slices }: { slices: Slice[] }) {
     ].join(" ");
     return (
       <path key={sl.label} d={d} fill={sl.color} stroke="#17191d" strokeWidth="1.5"
-        style={{ cursor: "default" }}
+        tabIndex={0}
+        role="img"
+        aria-label={`${sl.label}: ${Math.round(sl.value)} (${Math.round(sl.value / total * 100)}%)`}
+        style={{ cursor: "default", outline: "none" }}
         onMouseEnter={() => setHovered(sl.label)}
         onMouseLeave={() => setHovered(null)}
+        onFocus={() => setHovered(sl.label)}
+        onBlur={() => setHovered(null)}
       />
     );
   });
 
-  const labelR = 78, elbowR = 72;
-  const labels = arcs.map(({ sl, a1, a2 }) => {
-    const sweep = a2 - a1;
-    if (sweep < 0.18) return null;
-    const mid = (a1 + a2) / 2;
-    const cos = Math.cos(mid), sin = Math.sin(mid);
-    const anchor = cos > 0.15 ? "start" : cos < -0.15 ? "end" : "middle";
-    // elbow: radial segment, then short horizontal tick
-    const ex = cx + elbowR * cos, ey = cy + elbowR * sin;
-    const tickLen = 5 * (cos >= 0 ? 1 : -1);
-    const tx = ex + tickLen, ty = ey;
+  // Elbow leader lines with per-side y-deconfliction. In the top/bottom dead
+  // zone (|cos| < 0.15) we use a middle-anchored label with no horizontal tick.
+  // For left/right labels, we sort by y within each side and enforce a minimum
+  // vertical gap so adjacent small slices don't stack their labels on top of
+  // each other.
+  const elbowR = 72, tickLen = 5, MIN_GAP = 9;
+  const labelData = arcs
+    .filter(({ a1, a2 }) => a2 - a1 >= 0.18)
+    .map(({ sl, a1, a2 }) => {
+      const mid = (a1 + a2) / 2;
+      const cos = Math.cos(mid), sin = Math.sin(mid);
+      const middleZone = Math.abs(cos) < 0.15;
+      return {
+        sl, cos, sin, middleZone,
+        anchorX: cx + (ro + 2) * cos,
+        anchorY: cy + (ro + 2) * sin,
+        ex: cx + elbowR * cos,
+        ey: cy + elbowR * sin,
+      };
+    });
+
+  // Deconflict left and right sides independently.
+  for (const side of [-1, 1] as const) {
+    const group = labelData
+      .filter(l => !l.middleZone && (side === 1 ? l.cos >= 0 : l.cos < 0))
+      .sort((a, b) => a.ey - b.ey);
+    for (let i = 1; i < group.length; i++) {
+      const gap = group[i].ey - group[i - 1].ey;
+      if (gap < MIN_GAP) group[i].ey = group[i - 1].ey + MIN_GAP;
+    }
+  }
+
+  const labels = labelData.map(({ sl, cos, sin, middleZone, anchorX, anchorY, ex, ey }) => {
+    const anchor = middleZone ? "middle" : cos > 0 ? "start" : "end";
+    const tx = middleZone ? ex : ex + tickLen * (cos >= 0 ? 1 : -1);
+    const textX = middleZone ? tx : tx + (cos >= 0 ? 2 : -2);
     return (
       <g key={`lbl-${sl.label}`}>
-        <line x1={cx + (ro + 2) * cos} y1={cy + (ro + 2) * sin} x2={ex} y2={ey}
+        <line x1={anchorX} y1={anchorY} x2={ex} y2={ey}
           stroke="#4b5563" strokeWidth="0.8" />
-        <line x1={ex} y1={ey} x2={tx} y2={ty} stroke="#4b5563" strokeWidth="0.8" />
-        <text x={tx + (cos >= 0 ? 2 : -2)} y={ty + 3} textAnchor={anchor}
+        {!middleZone && (
+          <line x1={ex} y1={ey} x2={tx} y2={ey} stroke="#4b5563" strokeWidth="0.8" />
+        )}
+        <text x={textX} y={ey + (middleZone ? (sin < 0 ? -3 : 8) : 3)} textAnchor={anchor}
           fontSize="7.5" fill="#d1d5db">{sl.label}</text>
       </g>
     );
@@ -181,7 +222,7 @@ function TypeChart({ slices }: { slices: Slice[] }) {
   return (
     <div className="analysis-chart">
       <p className="analysis-chart-title">Card types</p>
-      <svg width="186" height="186" viewBox="0 0 140 140" overflow="visible" aria-hidden="true">
+      <svg width="186" height="186" viewBox="0 0 140 140" overflow="visible" role="img" aria-label="Card type distribution">
         {paths}
         {labels}
         {h && (
@@ -240,8 +281,9 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
             </g>
           );
         })}
-        {/* y-axis label */}
-        <text x={ml - 4} y={mt + ph} textAnchor="end" fontSize="9" fill="#4a5568">{maxTotal}</text>
+        {/* y-axis labels */}
+        <text x={ml - 4} y={mt + 4} textAnchor="end" fontSize="9" fill="#4a5568">{maxTotal}</text>
+        <text x={ml - 4} y={mt + ph} textAnchor="end" fontSize="9" fill="#4a5568">0</text>
       </svg>
     </div>
   );
@@ -249,7 +291,7 @@ function CurveChart({ stacks }: { stacks: Record<string, Record<string, number>>
 
 // ── Main export ──────────────────────────────────────────────────────────────
 
-export function DeckAnalysis({
+function DeckAnalysisImpl({
   cards,
   commanderNames,
   catalogMap,
@@ -258,50 +300,57 @@ export function DeckAnalysis({
   commanderNames: string[];
   catalogMap: Map<string, CatalogCard>;
 }) {
-  const commanderSet = new Set(commanderNames.map(n => n.toLowerCase()));
-  const all = [...commanderNames.map(n => ({ name: n, qty: 1 })), ...cards.filter(c => !commanderSet.has(c.name.toLowerCase()))];
+  const { cardSymSlices, landSymSlices, typeSlices, curveBuckets } = useMemo(() => {
+    const commanderSet = new Set(commanderNames.map(n => n.toLowerCase()));
+    const all = [
+      ...commanderNames.map(n => ({ name: n, qty: 1 })),
+      ...cards.filter(c => !commanderSet.has(c.name.toLowerCase())),
+    ];
 
-  const cardSymCounts: Record<string, number> = {};
-  const landSymCounts: Record<string, number> = {};
-  const typeCounts: Record<string, number> = {};
-  const curveBuckets: Record<string, Record<string, number>> = {};
-  for (const b of CMC_BUCKETS) curveBuckets[b] = {};
+    const cardSymCounts: Record<string, number> = {};
+    const landSymCounts: Record<string, number> = {};
+    const typeCounts: Record<string, number> = {};
+    const curveBuckets: Record<string, Record<string, number>> = {};
+    for (const b of CMC_BUCKETS) curveBuckets[b] = {};
 
-  for (const { name, qty } of all) {
-    const entry = catalogMap.get(name.toLowerCase());
-    if (!entry) continue;
-    const ct = cardType(entry.type ?? "");
-    typeCounts[ct] = (typeCounts[ct] ?? 0) + qty;
+    for (const { name, qty } of all) {
+      const entry = catalogMap.get(name.toLowerCase());
+      if (!entry) continue;
+      const ct = cardType(entry.type ?? "");
+      typeCounts[ct] = (typeCounts[ct] ?? 0) + qty;
 
-    if (ct === "Land") {
-      for (const ch of entry.colorIdentity ?? "") {
-        if (SYMBOL_COLORS[ch]) landSymCounts[ch] = (landSymCounts[ch] ?? 0) + qty;
+      if (ct === "Land") {
+        for (const ch of entry.colorIdentity ?? "") {
+          if (SYMBOL_COLORS[ch]) landSymCounts[ch] = (landSymCounts[ch] ?? 0) + qty;
+        }
+        continue; // Lands skip mana curve and card symbols
       }
-      continue; // Lands skip mana curve and card symbols
+
+      const cost = entry.manaCost ?? "";
+      if (cost) {
+        for (const [sym, cnt] of Object.entries(tallySymbols(cost))) {
+          cardSymCounts[sym] = (cardSymCounts[sym] ?? 0) + (cnt ?? 0) * qty;
+        }
+      }
+
+      const cmc = cost ? parseCMC(cost) : 0;
+      const bucket = cmc >= 6 ? "6+" : String(cmc);
+      const colorKey = entry.colors ?? "colorless";
+      curveBuckets[bucket][colorKey] = (curveBuckets[bucket][colorKey] ?? 0) + qty;
     }
 
-    const cost = entry.manaCost ?? "";
-    if (cost) {
-      for (const [sym, cnt] of Object.entries(tallySymbols(cost))) {
-        cardSymCounts[sym] = (cardSymCounts[sym] ?? 0) + (cnt ?? 0) * qty;
-      }
-    }
+    const cardSymSlices = SYMBOL_ORDER.filter(s => (cardSymCounts[s] ?? 0) > 0)
+      .map(s => ({ label: s, value: cardSymCounts[s], color: SYMBOL_COLORS[s] }));
 
-    const cmc = cost ? parseCMC(cost) : 0;
-    const bucket = cmc >= 6 ? "6+" : String(cmc);
-    const colorKey = entry.colors ?? "colorless";
-    curveBuckets[bucket][colorKey] = (curveBuckets[bucket][colorKey] ?? 0) + qty;
-  }
+    const landSymSlices = SYMBOL_ORDER.filter(s => (landSymCounts[s] ?? 0) > 0)
+      .map(s => ({ label: s, value: landSymCounts[s], color: SYMBOL_COLORS[s] }));
 
-  const cardSymSlices = SYMBOL_ORDER.filter(s => (cardSymCounts[s] ?? 0) > 0)
-    .map(s => ({ label: s, value: cardSymCounts[s], color: SYMBOL_COLORS[s] }));
+    const typeSlices = [...TYPE_ORDER, "Land" as const]
+      .filter(t => (typeCounts[t] ?? 0) > 0)
+      .map(t => ({ label: t, value: typeCounts[t], color: TYPE_COLORS[t] ?? TYPE_COLORS.Other }));
 
-  const landSymSlices = SYMBOL_ORDER.filter(s => (landSymCounts[s] ?? 0) > 0)
-    .map(s => ({ label: s, value: landSymCounts[s], color: SYMBOL_COLORS[s] }));
-
-  const typeSlices = [...TYPE_ORDER, "Land" as const]
-    .filter(t => (typeCounts[t] ?? 0) > 0)
-    .map(t => ({ label: t, value: typeCounts[t], color: TYPE_COLORS[t] ?? TYPE_COLORS.Other }));
+    return { cardSymSlices, landSymSlices, typeSlices, curveBuckets };
+  }, [cards, commanderNames, catalogMap]);
 
   return (
     <div className="deck-analysis">
@@ -311,3 +360,5 @@ export function DeckAnalysis({
     </div>
   );
 }
+
+export const DeckAnalysis = memo(DeckAnalysisImpl);
