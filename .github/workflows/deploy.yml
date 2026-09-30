@@ -28,9 +28,14 @@ jobs:
       CF_D1_ID: ${{ vars.CF_D1_ID }}
       CF_D1_PREVIEW_NAME: ${{ vars.CF_D1_PREVIEW_NAME }}
       CF_D1_PREVIEW_ID: ${{ vars.CF_D1_PREVIEW_ID }}
+      # Whether this run targets production (main) or preview (any other branch).
+      # Kept as a separate flag so the value selections below never rely on an
+      # empty string as a ternary operand — in GitHub Actions expressions `''`
+      # is falsy, so `X && '' || '--preview'` wrongly yields '--preview' even on
+      # main. Compare against this explicit boolean instead.
+      IS_PRODUCTION: ${{ github.ref_name == 'main' }}
       # Migrations target the database bound to the Worker being deployed.
       MIGRATE_D1_ID: ${{ github.ref_name == 'main' && secrets.D1_DATABASE_ID || vars.CF_D1_PREVIEW_ID }}
-      DEPLOY_FLAGS: ${{ github.ref_name == 'main' && '' || '--preview' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -47,5 +52,40 @@ jobs:
         run: npm test
       - name: Apply D1 migrations
         run: npx cf d1 migrations apply "$MIGRATE_D1_ID" --dir drizzle
-      - name: Build & deploy
-        run: npm run deploy:vinext -- $DEPLOY_FLAGS
+      # cf deploy always enables strict mode for typed cloudflare.config.ts
+      # projects. Synchronize the Dashboard-controlled setting first so strict
+      # validation sees the same value as cloudflare.config.ts. This is needed
+      # because cf currently has no observability/settings sync command.
+      - name: Enable Worker observability
+        env:
+          WORKER_NAME: ${{ env.CF_WORKER_NAME }}
+        run: |
+          worker_name="${WORKER_NAME:-fra-collection-league}"
+          if [ "$IS_PRODUCTION" != "true" ]; then
+            worker_name="${worker_name}-preview"
+          fi
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+          http_code="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            --request PATCH \
+            --url "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/workers/scripts/${worker_name}/script-settings" \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            --header "Content-Type: application/json" \
+            --data '{"observability":{"enabled":true}}')"
+          if [ "$http_code" = "404" ]; then
+            echo "Worker $worker_name does not exist yet; the deployment will create it."
+            exit 0
+          fi
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            cat "$response_file"
+            exit 1
+          fi
+          jq --exit-status '.success == true' "$response_file" >/dev/null
+      - name: Build & deploy (production)
+        if: env.IS_PRODUCTION == 'true'
+        run: npm run deploy:vinext
+      - name: Build & deploy (preview)
+        if: env.IS_PRODUCTION != 'true'
+        run: npm run deploy:vinext -- --preview
