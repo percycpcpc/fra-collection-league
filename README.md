@@ -7,6 +7,26 @@ A friendly, login-free registry for tracking Reality Fracture card collections a
 - **Framework**: Next.js (App Router) via [vinext](https://vinext.dev) on Cloudflare Workers
 - **Database**: Cloudflare D1 (SQLite) via Drizzle ORM
 - **Deployment**: Cloudflare Workers + CI/CD via GitHub Actions
+- **Tests**: Vitest + fast-check (property-based)
+
+## Deck builder: commander color identity
+
+The deck builder enforces the Commander subset rule. Each card in `data/catalog.json` carries a `colorIdentity` string (canonical WUBRG, empty string for colorless). When a deck has a commander selected (up to two, for partners), the "Your collection" / "Add cards" list only shows cards whose color identity is a subset of the commander(s) identity. Colorless cards and basic lands stay available under any commander. Cards already in the deck that fall outside the commander's colors remain visible but are flagged and cannot have their quantity increased.
+
+The comparison rules live in two pure, unit-tested modules:
+
+- `src/lib/color-identity.ts` — parse / serialize / subset / union over WUBRG sets.
+- `src/lib/deck-identity.ts` — commander resolution, legality, out-of-identity, and selection-list membership.
+
+### Refreshing catalog color identity
+
+`colorIdentity` is authored at build time from [Scryfall](https://scryfall.com/sets/fra), never fetched at request time (the Workers runtime has no request-time network/fs for this). To regenerate after catalog changes:
+
+```bash
+node scripts/enrich-catalog.mjs
+```
+
+The script fetches the Reality Fracture block from Scryfall, writes a canonical `colorIdentity` into every `data/catalog.json` entry, cross-checks each value, and aborts without writing if any card has no Scryfall match. `getCatalog()` also validates the bundled data on first access and throws (naming the card) if any `colorIdentity` is missing or malformed.
 
 ## Local development
 
@@ -22,6 +42,14 @@ npm run dev
 ```
 
 Open the local URL printed by Vite (by default `http://localhost:5173`).
+
+## Tests
+
+```bash
+npm test        # vitest --run (single pass, no watch)
+```
+
+Pure logic (color identity, commander resolution, filtering) is covered by Vitest unit tests plus fast-check property tests (100 iterations each). `tsc --noEmit` type-checks the project but does not catch the Workers/D1 runtime constraints — see `.kiro/steering` for those.
 
 ## Environment variables
 
