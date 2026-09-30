@@ -1,5 +1,4 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
+import catalogData from "../../data/catalog.json";
 
 export type CatalogCard = {
   name: string;
@@ -10,17 +9,12 @@ export type CatalogCard = {
   type: string;
 };
 
-let cache: CatalogCard[] | undefined;
-
-export async function getCatalog() {
-  if (!cache) {
-    const file = path.join(process.cwd(), "data", "catalog.json");
-    cache = JSON.parse(await readFile(file, "utf8")) as CatalogCard[];
-  }
-  return cache;
+export function getCatalog(): CatalogCard[] {
+  return catalogData as CatalogCard[];
 }
 
-export async function catalogNames() {
-  const catalog = await getCatalog();
-  return new Map(catalog.map((card) => [card.name.toLocaleLowerCase(), card.name]));
+export function catalogNames(): Map<string, string> {
+  return new Map(
+    getCatalog().map((card) => [card.name.toLocaleLowerCase(), card.name]),
+  );
 }

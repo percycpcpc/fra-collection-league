@@ -3,21 +3,35 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "vite preview",
+    "deploy:vinext": "vinext-cloudflare deploy",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "cf d1 migrations apply '1e0f90ff-b12e-4368-bd07-fdb4b4160984' --local --dir drizzle",
+    "db:migrate:remote": "cf d1 migrations apply '1e0f90ff-b12e-4368-bd07-fdb4b4160984' --dir drizzle"
   },
   "dependencies": {
-    "@prisma/client": "^6.6.0",
+    "@vinext/cloudflare": "^1.0.0",
+    "drizzle-orm": "0.44.7",
     "next": "^15.5.0",
-    "prisma": "^6.6.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-server-dom-webpack": "^19.3.0",
+    "vinext": "^1.0.0"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^2.0.0-beta.sha-ad79608dd",
+    "@cloudflare/workers-types": "^5.20260929.1",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.7.0"
-  }
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.35",
+    "cf": "^1.0.0-beta.5",
+    "drizzle-kit": "0.31.11",
+    "typescript": "^5.7.0",
+    "vite": "^8.3.0"
+  },
+  "type": "module"
 }

@@ -1,0 +1,15 @@
+import { bindings, defineConfig, defineWorker } from "cf/config";
+
+export default defineConfig({
+  worker: defineWorker({
+    name: "fra-collection-league",
+    entrypoint: "vinext/server/fetch-handler",
+    compatibilityDate: "2026-09-29",
+    compatibilityFlags: ["nodejs_compat"],
+    assets: { notFoundHandling: "none" },
+    env: {
+      ASSETS: bindings.assets(),
+      DB: bindings.d1({ name: "fra-db-prod-20260930" }),
+    },
+  }),
+});

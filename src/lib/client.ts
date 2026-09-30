@@ -5,7 +5,7 @@ export type DeckCard = { id: string; deckId: string; name: string; qty: number; 
 
 export async function jsonFetch<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
-  const data = await response.json();
+  const data = await response.json() as T & { error?: string };
   if (!response.ok) throw new Error(data.error || "Request failed.");
   return data as T;
 }

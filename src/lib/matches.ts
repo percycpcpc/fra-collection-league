@@ -5,7 +5,7 @@ export type MatchWithPlayers = {
   winnerDeckId: string | null;
   loserDeckId: string | null;
   note: string | null;
-  createdAt: Date;
+  createdAt: string;
   winner: { name: string; iconCard: string | null };
   loser: { name: string; iconCard: string | null };
 };
@@ -27,5 +27,11 @@ export function matchResponse(match: MatchWithPlayers, deckNames: Map<string, st
 }
 
 export function matchDeckIds(matches: MatchWithPlayers[]) {
-  return [...new Set(matches.flatMap((match) => [match.winnerDeckId, match.loserDeckId]).filter((id): id is string => Boolean(id)))];
+  return [
+    ...new Set(
+      matches
+        .flatMap((m) => [m.winnerDeckId, m.loserDeckId])
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ];
 }
