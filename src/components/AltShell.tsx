@@ -7,7 +7,7 @@ export type AltPlayer = { id: string; name: string; cardCount?: number };
 export type AltNav = "collection" | "decks" | "analytics" | "matches" | "home";
 
 export function AltShell({ children, title, subtitle, topRight, activeNav, players, playerId, nowPlaying, onToggleStyle }: {
-  children: ReactNode; title: string; subtitle?: string; topRight?: ReactNode; activeNav: AltNav;
+  children: ReactNode; title: ReactNode; subtitle?: string; topRight?: ReactNode; activeNav: AltNav;
   players: AltPlayer[]; playerId?: string; nowPlaying?: ReactNode; onToggleStyle: () => void;
 }) {
   const currentId = playerId ?? players[0]?.id;
@@ -27,7 +27,7 @@ export function AltShell({ children, title, subtitle, topRight, activeNav, playe
     </aside>
     <main className="alt-main">
       <header className="alt-topbar"><div className="alt-topbar-spacer" />{topRight}<button className="alt-pill alt-style-toggle" type="button" onClick={onToggleStyle} aria-label="Switch to Classic UI">Classic</button></header>
-      <div className="alt-greeting"><h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div>
+      <div className="alt-greeting">{typeof title === "string" ? <h1>{title}</h1> : title}{subtitle && <p>{subtitle}</p>}</div>
       {children}
       <div className="alt-footer-space" />
     </main>

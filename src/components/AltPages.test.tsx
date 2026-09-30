@@ -27,7 +27,11 @@ describe("alternate player pages SSR smoke", () => {
     expect(html).toContain("Percy&#x27;s decks"); expect(html).toContain("Azorius"); expect(html).toContain("Ajani");
   });
   it("renders AltDeckEditor", () => {
-    const html = renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" players={[player]} deckName="Azorius" cards={[{ id: "c1", deckId: "d1", name: "Ajani", qty: 1, isBasic: false }]} catalog={[{ name: "Ajani", qty: 1, img: "/a.jpg", colors: "white", rarity: "rare", type: "Creature", colorIdentity: "w" }]} commander={<span>Ajani</span>} onQty={noop} onToggleStyle={noop} />);
-    expect(html).toContain("Azorius"); expect(html).toContain("Commander"); expect(html).toContain("Creatures");
+    const ajani = { id: "c1", profileId: "p1", name: "Ajani", qty: 2, owned: true };
+    const html = renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" players={[player]} deckName="Azorius" cards={[]} collection={[ajani]} poolGroups={[{ group: "White", entries: [{ card: ajani, offColor: false }] }]} basics={[]} hiddenPoolCount={0} search="" showOffColor={false} viewMode="images" status="Saved" error="" commanderNames={["Ajani"]} eligibleCommanderNames={["Ajani"]} hasCommanderIdentity catalog={[{ name: "Ajani", qty: 1, img: "/a.jpg", colors: "white", rarity: "rare", type: "Legendary Creature", colorIdentity: "w" }]} onSearch={noop} onShowOffColor={noop} onViewMode={noop} onQty={noop} onCommander={noop} onRename={noop} onToggleStyle={noop} isOffColor={() => false} />);
+    expect(html).toContain("Azorius");
+    expect(html).toContain("alt-deck-commander-card"); expect(html).toContain("/a.jpg"); expect(html).toContain("Ajani");
+    expect(html).toContain("alt-deck-workspace"); expect(html).toContain("Deck contents"); expect(html).toContain("Your collection");
+    expect(html).toContain("Your deck is empty"); expect(html).toContain("Color identity: no conflicts");
   });
 });
