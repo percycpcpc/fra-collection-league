@@ -1,11 +1,10 @@
 // Developer-run, authoring-time enrichment. NOT part of the request-time runtime.
 // Fetches the FRA set from Scryfall, matches each catalog entry by name, and
-// writes a canonical WUBRG `colorIdentity` string into data/catalog.json.
+// writes colorIdentity, colors, type, and manaCost into data/catalog.json.
 //
 // Run: node scripts/enrich-catalog.mjs
 //
-// Aborts without writing if any catalog entry has no Scryfall match (Req 1.6),
-// and cross-checks each written string against the source color_identity array.
+// Aborts without writing if any catalog entry has no Scryfall match.
 
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
@@ -14,14 +13,37 @@ import { dirname, resolve } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CATALOG_PATH = resolve(__dirname, "../data/catalog.json");
 const WUBRG_ORDER = ["W", "U", "B", "R", "G"];
+const COLOR_NAMES = { W: "white", U: "blue", B: "black", R: "red", G: "green" };
 
 function serializeIdentity(arr) {
   const set = new Set((arr || []).map((c) => String(c).toUpperCase()));
   return WUBRG_ORDER.filter((c) => set.has(c)).join("");
 }
 
-// The catalog spans the Reality Fracture block: the main set (fra) and its
-// Commander companion (frc). We index color identity by card name across both.
+// Derive the single "colors" bucket used by the mana curve chart.
+function serializeColors(arr) {
+  if (!arr || arr.length === 0) return "colorless";
+  if (arr.length > 1) return "multi";
+  return COLOR_NAMES[arr[0].toUpperCase()] ?? "colorless";
+}
+
+// Build a normalised record from a Scryfall card object.
+function buildRecord(card) {
+  // For DFCs, mana_cost lives on card_faces; join with " // " matching parseCMC/tallySymbols convention.
+  const faces = Array.isArray(card.card_faces) ? card.card_faces : [];
+  const manaCost = faces.length
+    ? faces.map((f) => f.mana_cost || "").filter(Boolean).join(" // ")
+    : (card.mana_cost || "");
+
+  return {
+    colorIdentity: card.color_identity || [],
+    colors: card.colors || [],
+    // type_line already includes both faces separated by " // " for DFCs.
+    type: card.type_line || "",
+    manaCost,
+  };
+}
+
 const FRA_QUERY = "(set:fra or set:frc)";
 
 async function fetchJson(url) {
@@ -34,37 +56,34 @@ async function fetchJson(url) {
 }
 
 function indexCard(byName, card) {
-  const ci = card.color_identity || [];
-  byName.set(card.name.toLowerCase(), ci);
+  const record = buildRecord(card);
+  byName.set(card.name.toLowerCase(), record);
   if (card.name.includes("//")) {
-    for (const part of card.name.split("//")) byName.set(part.trim().toLowerCase(), ci);
+    for (const part of card.name.split("//")) byName.set(part.trim().toLowerCase(), record);
   }
   if (Array.isArray(card.card_faces)) {
-    for (const face of card.card_faces) if (face.name) byName.set(face.name.toLowerCase(), ci);
+    for (const face of card.card_faces) if (face.name) byName.set(face.name.toLowerCase(), record);
   }
 }
 
 async function fetchAllFraCards() {
-  const byName = new Map(); // lowercased name -> color_identity array
-  let url =
-    `https://api.scryfall.com/cards/search?q=${encodeURIComponent(FRA_QUERY)}&unique=cards&format=json`;
+  const byName = new Map(); // lowercased name -> record
+  let url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(FRA_QUERY)}&unique=cards&format=json`;
   while (url) {
     const page = await fetchJson(url);
     if (!page) break;
     for (const card of page.data) indexCard(byName, card);
     url = page.has_more ? page.next_page : null;
-    if (url) await new Promise((r) => setTimeout(r, 120)); // be polite to the API
+    if (url) await new Promise((r) => setTimeout(r, 120));
   }
   return byName;
 }
 
-// Exact-name fallback for any catalog entry not present in the FRA-block search.
-// Uses the card's authoritative color_identity from Scryfall (Req 1.4).
 async function fetchExact(name) {
   const url = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}&format=json`;
   const card = await fetchJson(url);
   await new Promise((r) => setTimeout(r, 120));
-  return card && card.object === "card" ? card.color_identity || [] : undefined;
+  return card && card.object === "card" ? buildRecord(card) : undefined;
 }
 
 async function main() {
@@ -77,28 +96,37 @@ async function main() {
   const enriched = [];
   for (const entry of catalog) {
     const key = entry.name.toLowerCase();
-    let ci = byName.get(key);
-    if (ci === undefined && key.includes("//")) {
-      ci = byName.get(key.split("//")[0].trim());
+    let record = byName.get(key);
+    if (record === undefined && key.includes("//")) {
+      record = byName.get(key.split("//")[0].trim());
     }
-    if (ci === undefined) {
-      // Fall back to an exact Scryfall lookup for cards outside the FRA-block search.
-      ci = await fetchExact(entry.name);
-      if (ci !== undefined) console.log(`  (exact fallback) ${entry.name} -> [${ci.join(",")}]`);
+    if (record === undefined) {
+      record = await fetchExact(entry.name);
+      if (record !== undefined) console.log(`  (exact fallback) ${entry.name}`);
     }
-    if (ci === undefined) {
+    if (record === undefined) {
       unmatched.push(entry.name);
       enriched.push(entry);
       continue;
     }
-    const colorIdentity = serializeIdentity(ci);
-    // Cross-check: re-parse the written string, confirm set-equality with source.
+
+    const colorIdentity = serializeIdentity(record.colorIdentity);
+    // Cross-check colorIdentity round-trip.
     const written = new Set(colorIdentity.split("").filter(Boolean));
-    const source = new Set(ci.map((c) => String(c).toUpperCase()).filter((c) => WUBRG_ORDER.includes(c)));
+    const source = new Set(
+      record.colorIdentity.map((c) => String(c).toUpperCase()).filter((c) => WUBRG_ORDER.includes(c))
+    );
     if (written.size !== source.size || [...source].some((c) => !written.has(c))) {
       throw new Error(`Cross-check failed for "${entry.name}": ${JSON.stringify([...source])} vs ${colorIdentity}`);
     }
-    enriched.push({ ...entry, colorIdentity });
+
+    enriched.push({
+      ...entry,
+      colorIdentity,
+      colors: serializeColors(record.colors),
+      type: record.type,
+      manaCost: record.manaCost,
+    });
   }
 
   if (unmatched.length) {
@@ -108,7 +136,7 @@ async function main() {
   }
 
   await writeFile(CATALOG_PATH, JSON.stringify(enriched, null, 2) + "\n", "utf8");
-  console.log(`Enriched ${enriched.length} catalog entries with colorIdentity.`);
+  console.log(`Enriched ${enriched.length} catalog entries (colorIdentity, colors, type, manaCost).`);
 }
 
 main().catch((err) => {
