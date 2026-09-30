@@ -169,6 +169,18 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-card-actions .mini-stepper b { display: grid; place-items: center; min-width: 2rem; background: #0d0e10ee; border-block: 1px solid var(--line); }
 .commander-star { flex: 0 0 2.2rem; width: 2.2rem; min-height: 2rem; padding: .15rem; border-radius: 3px; color: #cbc6ba; background: #17191dee; font-size: 1.15rem; line-height: 1; }
 .commander-star.active { color: var(--gold-2); border-color: var(--gold); background: #3a2f17; }
+.commander-with-analysis { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+.deck-analysis { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start; }
+.analysis-chart { min-width: 200px; }
+.analysis-chart-title { margin: 0 0 .5rem; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.analysis-chart-body { display: flex; gap: 1rem; align-items: center; }
+.analysis-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; font-size: .78rem; }
+.analysis-legend li { display: grid; grid-template-columns: 10px 2rem 1.6rem 2.2rem; align-items: center; gap: .3rem; }
+.legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.legend-label { font-weight: 700; }
+.legend-count { text-align: right; color: var(--muted); }
+.legend-pct { text-align: right; color: var(--muted); }
+.chart-empty { font-size: .8rem; color: var(--muted); }
 .deck-card-tile .card-meta { align-items: center; }
 .deck-card-tile .rarity-gem { flex: 0 0 auto; }
 .deck-card-tile .card-meta strong { min-width: 0; }
