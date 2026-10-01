@@ -7,6 +7,7 @@ import { PlayerAvatar } from "./PlayerAvatar";
 import { AltCollectionView } from "./AltCollectionView";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
+import { refreshLeaguePlayers } from "./useLeaguePlayers";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
@@ -97,7 +98,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   async function rename(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!profile) return;
     const form = new FormData(event.currentTarget); const name = String(form.get("name") || "");
-    try { const data = await jsonFetch<{ profile: ProfileData["profile"] }>(`/api/profiles/${profileId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) }); setProfile(data.profile); }
+    try { const data = await jsonFetch<{ profile: ProfileData["profile"] }>(`/api/profiles/${profileId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) }); setProfile(data.profile); refreshLeaguePlayers().catch(() => undefined); }
     catch (cause) { setMessage(cause instanceof Error ? cause.message : "Rename failed."); }
   }
 
@@ -106,12 +107,13 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     try {
       const data = await jsonFetch<{ profile: ProfileData["profile"] }>(`/api/profiles/${profileId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ iconCard }) });
       setProfile(data.profile); setIconPickerOpen(false); setIconSearch(""); setStatus("saved");
+      refreshLeaguePlayers().catch(() => undefined);
     } catch (cause) { setStatus("error"); setMessage(cause instanceof Error ? cause.message : "Icon save failed."); }
   }
 
   async function runImport() {
     setMessage("");
-    try { const result = await jsonFetch<{ added: number; updated: number; unknown: string[] }>(`/api/profiles/${profileId}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: importText }) }); setImportText(""); setMessage(`Imported ${result.added} new and updated ${result.updated}.${result.unknown.length ? ` Unknown: ${result.unknown.join(", ")}` : ""}`); await load(); }
+    try { const result = await jsonFetch<{ added: number; updated: number; unknown: string[] }>(`/api/profiles/${profileId}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: importText }) }); setImportText(""); setMessage(`Imported ${result.added} new and updated ${result.updated}.${result.unknown.length ? ` Unknown: ${result.unknown.join(", ")}` : ""}`); refreshLeaguePlayers().catch(() => undefined); await load(); }
     catch (cause) { setMessage(cause instanceof Error ? cause.message : "Import failed."); }
   }
 

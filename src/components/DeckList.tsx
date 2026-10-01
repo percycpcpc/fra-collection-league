@@ -9,7 +9,7 @@ import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identi
 import { AltDeckList } from "./AltDeckList";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { useLeaguePlayers } from "./useLeaguePlayers";
+import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
 
 type Data = { profile: { name: string }; cards: CollectionCard[]; decks: DeckSummary[] };
 
@@ -64,11 +64,12 @@ export function DeckList({ profileId }: { profileId: string }) {
     const commanders = [commander, partner].filter(Boolean);
     try {
       await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commanders }) });
+      refreshLeaguePlayers().catch(() => undefined);
       formEl.reset(); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
   }
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
-  async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
+  async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
   if (!data) return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
   const noCandidates = catalog.length > 0 && candidates.length === 0;
@@ -79,7 +80,7 @@ export function DeckList({ profileId }: { profileId: string }) {
       : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
-  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} onToggleStyle={toggle} createForm={<form className="alt-create-inline" onSubmit={create}><input name="name" required placeholder="New deck" /><button className="alt-pill alt-primary" type="submit">+ Create deck</button></form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete? <button type="button" onClick={() => void remove(deck.id)}>Confirm</button><button type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button className="alt-pill alt-danger" type="button" onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
+  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-create-inline" onSubmit={create}><input name="name" required placeholder="New deck" /><button className="alt-pill alt-primary" type="submit">+ Create deck</button></form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete? <button type="button" onClick={() => void remove(deck.id)}>Confirm</button><button type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button className="alt-pill alt-danger" type="button" onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
   return <main className="shell decks-page">
     <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
     <form className="deck-create" onSubmit={create}>

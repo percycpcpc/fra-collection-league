@@ -11,8 +11,10 @@ export type LeaguePlayer = AltPlayer & {
 };
 
 let cachedPlayers: LeaguePlayer[] | null = null;
+let cachedAt = 0;
 let inFlight: Promise<LeaguePlayer[]> | null = null;
 const listeners = new Set<() => void>();
+const CACHE_TTL_MS = 60_000;
 
 function emitChange() {
   listeners.forEach((listener) => listener());
@@ -28,14 +30,21 @@ function getSnapshot() {
 }
 
 function requestPlayers(force: boolean) {
-  if (inFlight) return inFlight;
-  if (!force && cachedPlayers) return Promise.resolve(cachedPlayers);
+  if (inFlight) {
+    if (!force) return inFlight;
+    return inFlight.then(
+      () => requestPlayers(true),
+      () => requestPlayers(true),
+    );
+  }
+  if (!force && cachedPlayers && Date.now() - cachedAt < CACHE_TTL_MS) return Promise.resolve(cachedPlayers);
 
   inFlight = jsonFetch<{ profiles: LeaguePlayer[] }>("/api/profiles")
     .then(({ profiles }) => {
       cachedPlayers = profiles.map(({ id, name, cardCount, iconCard, createdAt, deckCount }) => ({
         id, name, cardCount, iconCard, createdAt, deckCount,
       }));
+      cachedAt = Date.now();
       emitChange();
       return cachedPlayers;
     })
@@ -67,6 +76,7 @@ export function useLeaguePlayers(currentProfile?: AltPlayer) {
 
 export function resetLeaguePlayersCacheForTests() {
   cachedPlayers = null;
+  cachedAt = 0;
   inFlight = null;
   listeners.clear();
 }
