@@ -18,6 +18,7 @@ import {
   isOutOfIdentity as isOutOfIdentityCard,
 } from "@/lib/deck-identity";
 import { AltDeckEditor } from "./AltDeckEditor";
+import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -159,7 +160,10 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     storeCollapsed(next);
   }
 
-  if (!profile || !deck) return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
+  if (!profile || !deck) {
+    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading deck…"}</p></div></AltShell>;
+    return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
+  }
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));
   const total = deck.cards.reduce((sum, card) => sum + card.qty, 0); const groups: Record<string, DeckCard[]> = { Creatures: [], Other: [], Lands: [] };
   deck.cards.forEach((card) => { const type = catalogMap.get(card.name.toLowerCase())?.type.toLowerCase() || ""; groups[type.includes("land") || card.isBasic ? "Lands" : type.includes("creature") ? "Creatures" : "Other"].push(card); });
