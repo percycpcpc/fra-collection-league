@@ -9,7 +9,6 @@ import { AltShell } from "./AltShell";
 import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type Player = { id: string; name: string; iconCard: string | null; ownedCards: number; ownedQty: number; byRarity: Record<"common" | "uncommon" | "rare" | "mythic", number>; completionPct: number };
 type Card = { name: string; rarity: string; colors: string; img: string; owners: number; totalQty: number };
@@ -21,7 +20,6 @@ export function AnalyticsDashboard() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "owners", direction: "desc" });
-  const { players: sidebarPlayers } = useLeaguePlayers();
   const load = useCallback(() => { setError(""); return jsonFetch<{ players: Player[]; cards: Card[] }>("/api/analytics").then(setData).catch((cause) => setError(cause.message)); }, []);
   useEffect(() => { void load(); }, [load]);
 
@@ -34,10 +32,10 @@ export function AnalyticsDashboard() {
   function heading(key: SortKey, label: string) { return <button className="sort-button" type="button" onClick={() => toggleSort(key)}>{label} {sort.key === key ? (sort.direction === "desc" ? "↓" : "↑") : ""}</button>; }
 
   if (!data) {
-    if (style === "alt") return <AltShell title={error ? "Analytics unavailable" : "Loading analytics…"} activeNav="analytics" players={sidebarPlayers} onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load analytics" : "Loading analytics"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Calculating league collection coverage."}</AltPageState></AltShell>;
+    if (style === "alt") return <AltShell title={error ? "Analytics unavailable" : "Loading analytics…"} activeNav="analytics" onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load analytics" : "Loading analytics"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Calculating league collection coverage."}</AltPageState></AltShell>;
     return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></main>;
   }
-  if (style === "alt") return <AltAnalytics players={players} sidebarPlayers={sidebarPlayers} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;
+  if (style === "alt") return <AltAnalytics players={players} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;
   return <main className="shell analytics-page">
     <header className="page-heading"><div><Link className="back-link" href="/">← Players</Link><div className="eyebrow">League overview</div><h1>Analytics</h1></div><span>{data.players.length} players</span><UiStyleToggle onToggle={toggle} /></header>
     {data.players.length === 0 ? <div className="empty"><h2>No player data yet</h2><p>Create a profile to begin tracking collection coverage.</p></div> : <>

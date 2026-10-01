@@ -3,7 +3,6 @@
 import { FormEvent, KeyboardEvent, useMemo, useState } from "react";
 import { cardImage, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { AltShell } from "./AltShell";
-import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type Profile = { id: string; name: string; iconCard: string | null };
 const GROUPS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"] as const;
@@ -50,7 +49,6 @@ export type AltCollectionViewProps = {
 
 export function AltCollectionView({ profile, catalog, cards, importText, message, status, search, selectedName, importOpen, unsyncedCount = 0, onImportTextChange, onSearchChange, onSelectedNameChange, onImportOpenChange, onImport, importing = false, onToggleStyle, onRename, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const [renaming, setRenaming] = useState(false);
-  const { players } = useLeaguePlayers(profile);
 
   const collectionMap = useMemo(() => new Map(cards.map((card) => [card.name.toLowerCase(), card])), [cards]);
   const groups = useMemo(() => {
@@ -65,7 +63,6 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
   const completion = catalog.length ? Math.round((ownedCount / catalog.length) * 100) : 0;
   const selected = catalog.find((card) => card.name === selectedName) || null;
   const selectedEntry = selected ? collectionMap.get(selected.name.toLowerCase()) : undefined;
-  const shellPlayers = players;
 
   function toggle(card: CatalogCard) {
     const entry = collectionMap.get(card.name.toLowerCase());
@@ -91,7 +88,7 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
 
   const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><div className="alt-stepper alt-collection-quantity" role="group" aria-label={`Quantity for ${selected.name}`}><button type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, Math.max(0, (selectedEntry?.qty || 0) - 1))} aria-label={`Decrease ${selected.name} quantity`}>−</button><b>{selectedEntry?.qty || 0}</b><button type="button" onClick={() => setQuantity(selected, (selectedEntry?.qty || 0) + 1)} aria-label={`Increase ${selected.name} quantity`}>+</button></div><button className="alt-remove-quantity" type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, 0)} aria-label={`Remove ${selected.name} from collection`}>Remove</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
-  return <AltShell title={title} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
+  return <AltShell title={title} subtitle="Reality Fracture league · season 1" activeNav="collection" player={{ id: profile.id, name: profile.name, iconCard: profile.iconCard }} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
         <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => onSearchChange(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>
         <div className="alt-owned-counter">Owned <b>{ownedCount} / {catalog.length}</b></div>
         <button className="alt-pill alt-outline" type="button" onClick={() => onImportOpenChange(!importOpen)} aria-expanded={importOpen}>Import &amp; merge</button>

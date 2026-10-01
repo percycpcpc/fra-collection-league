@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState, type ReactNode } from "react";
 import { jsonFetch, type CatalogCard } from "@/lib/client";
-import { AltShell, type AltPlayer } from "./AltShell";
-import { useLeaguePlayers } from "./useLeaguePlayers";
+import { AltShell } from "./AltShell";
 import { useUiStyle, type UiStyle } from "./useUiStyle";
 
 type Session = { enabled: boolean; authenticated: boolean };
@@ -31,17 +30,16 @@ const TEXT_FIELDS: { key: keyof CatalogCard; label: string }[] = [
 ];
 
 /** Classic renders the admin page bare; Alt wraps the same content in AltShell chrome. */
-export function AdminFrame({ style, players, onToggleStyle, children }: { style: UiStyle; players: AltPlayer[]; onToggleStyle: () => void; children: ReactNode }) {
+export function AdminFrame({ style, onToggleStyle, children }: { style: UiStyle; onToggleStyle: () => void; children: ReactNode }) {
   if (style !== "alt") return <main className="admin">{children}</main>;
-  return <AltShell title="Admin panel" subtitle="Catalog and league settings" activeNav="admin" players={players} onToggleStyle={onToggleStyle}>
+  return <AltShell title="Admin panel" subtitle="Catalog and league settings" activeNav="admin" onToggleStyle={onToggleStyle}>
     <div className="admin alt-admin">{children}</div>
   </AltShell>;
 }
 
 export function AdminPanel() {
   const { style, toggle } = useUiStyle();
-  const { players } = useLeaguePlayers();
-  const frame = (children: ReactNode) => <AdminFrame style={style} players={players} onToggleStyle={toggle}>{children}</AdminFrame>;
+  const frame = (children: ReactNode) => <AdminFrame style={style} onToggleStyle={toggle}>{children}</AdminFrame>;
   const [session, setSession] = useState<Session | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

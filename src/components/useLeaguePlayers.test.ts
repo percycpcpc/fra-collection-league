@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const { jsonFetch } = vi.hoisted(() => ({ jsonFetch: vi.fn() }));
 vi.mock("@/lib/client", () => ({ jsonFetch }));
 
-import { loadLeaguePlayers, refreshLeaguePlayers, resetLeaguePlayersCacheForTests } from "./useLeaguePlayers";
+import { getLeagueState, loadLeaguePlayers, refreshLeaguePlayers, resetLeaguePlayersCacheForTests } from "./useLeaguePlayers";
 
 describe("league players cache", () => {
   beforeEach(() => {
@@ -63,5 +63,27 @@ describe("league players cache", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("reports loading, then load failure, then ready after a retry", async () => {
+    expect(getLeagueState().status).toBe("loading");
+    jsonFetch.mockRejectedValueOnce(new Error("Network down"));
+    await expect(loadLeaguePlayers()).rejects.toThrow("Network down");
+    expect(getLeagueState()).toEqual({ players: null, status: "error", error: "Network down" });
+
+    jsonFetch.mockResolvedValueOnce({ profiles: [] });
+    const retry = refreshLeaguePlayers();
+    expect(getLeagueState().status).toBe("loading");
+    await retry;
+    expect(getLeagueState()).toEqual({ players: [], status: "ready", error: "" });
+  });
+
+  it("keeps the last good list when a later refresh fails", async () => {
+    jsonFetch.mockResolvedValueOnce({ profiles: [{ id: "p1", name: "Percy", iconCard: null, createdAt: "2026-01-01", cardCount: 1, deckCount: 0 }] });
+    await loadLeaguePlayers();
+    jsonFetch.mockRejectedValueOnce(new Error("Flaky"));
+    await expect(refreshLeaguePlayers()).rejects.toThrow("Flaky");
+    expect(getLeagueState().status).toBe("ready");
+    expect(getLeagueState().players).toEqual([expect.objectContaining({ id: "p1" })]);
   });
 });

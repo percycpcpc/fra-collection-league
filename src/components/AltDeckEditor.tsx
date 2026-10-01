@@ -5,12 +5,12 @@ import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState, type Re
 import { CardImage } from "./CardImage";
 import { ManaCost } from "./ManaCost";
 import { DeckAnalysis } from "./DeckAnalysis";
-import { AltShell, type AltPlayer } from "./AltShell";
+import { AltShell } from "./AltShell";
 import type { CatalogCard, CollectionCard, DeckCard } from "@/lib/client";
 import { BASIC_LANDS_GROUP, type PoolGroup } from "@/lib/deck-pool";
 
 export type AltDeckViewMode = "images" | "list";
-type Props = { initialCollapsedGroups?: string[]; profileId: string; profileName: string; players: AltPlayer[]; deckName: string; renameDraft: string; cards: DeckCard[]; catalog: CatalogCard[]; collection: CollectionCard[]; poolGroups: PoolGroup<CollectionCard>[]; basics: string[]; hiddenPoolCount: number; search: string; showOffColor: boolean; viewMode: AltDeckViewMode; status?: string; error?: string; commanderNames: string[]; eligibleCommanderNames: string[]; hasCommanderIdentity: boolean; onSearch: (value: string) => void; onRenameDraft: (value: string) => void; onShowOffColor: (value: boolean) => void; onViewMode: (mode: AltDeckViewMode) => void; onQty: (name: string, qty: number) => void; onCommander: (name: string) => void; onRename: (name: string) => void; onToggleStyle: () => void; isOffColor: (name: string, isBasic: boolean) => boolean };
+type Props = { initialCollapsedGroups?: string[]; profileId: string; profileName: string; profileIcon?: string | null; deckName: string; renameDraft: string; cards: DeckCard[]; catalog: CatalogCard[]; collection: CollectionCard[]; poolGroups: PoolGroup<CollectionCard>[]; basics: string[]; hiddenPoolCount: number; search: string; showOffColor: boolean; viewMode: AltDeckViewMode; status?: string; error?: string; commanderNames: string[]; eligibleCommanderNames: string[]; hasCommanderIdentity: boolean; onSearch: (value: string) => void; onRenameDraft: (value: string) => void; onShowOffColor: (value: boolean) => void; onViewMode: (mode: AltDeckViewMode) => void; onQty: (name: string, qty: number) => void; onCommander: (name: string) => void; onRename: (name: string) => void; onToggleStyle: () => void; isOffColor: (name: string, isBasic: boolean) => boolean };
 const COLOR_CLASS: Record<string, string> = { White: "white", Blue: "blue", Black: "black", Red: "red", Green: "green", Colorless: "colorless", Multicolor: "multicolor" };
 /** Shared with the Classic editor so collapsed pool groups survive a style switch. */
 export const ALT_COLLAPSED_STORAGE_KEY = "fra-deck-collapsed";
@@ -32,7 +32,7 @@ function AltPoolGroup({ title, dot, count, collapsed, onToggle, children }: { ti
 }
 
 export function AltDeckEditor(props: Props) {
-  const { profileId, profileName, players, deckName, renameDraft, cards, catalog, collection, poolGroups, basics, hiddenPoolCount, search, showOffColor, viewMode, status, error, commanderNames, eligibleCommanderNames, hasCommanderIdentity, onSearch, onRenameDraft, onShowOffColor, onViewMode, onQty, onCommander, onRename, onToggleStyle, isOffColor, initialCollapsedGroups } = props;
+  const { profileId, profileName, profileIcon = null, deckName, renameDraft, cards, catalog, collection, poolGroups, basics, hiddenPoolCount, search, showOffColor, viewMode, status, error, commanderNames, eligibleCommanderNames, hasCommanderIdentity, onSearch, onRenameDraft, onShowOffColor, onViewMode, onQty, onCommander, onRename, onToggleStyle, isOffColor, initialCollapsedGroups } = props;
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set(initialCollapsedGroups));
   const [commanderOpen, setCommanderOpen] = useState(false); const [commanderSearch, setCommanderSearch] = useState(""); const [renaming, setRenaming] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null); const dialogRef = useRef<HTMLDivElement>(null); const commanderButtonRef = useRef<HTMLButtonElement>(null);
@@ -80,7 +80,7 @@ export function AltDeckEditor(props: Props) {
   // Like Classic, image mode mounts the deck analysis beside the commanders.
   const showAnalysis = viewMode === "images" && (commanderNames.length > 0 || cards.length > 0);
 
-  return <div className="alt-deck-editor" ref={rootRef}><AltShell title={title} subtitle={`${profileName} · ${total} cards · commander excluded`} activeNav="decks" playerId={profileId} players={players} onToggleStyle={onToggleStyle} topRight={topRight}>
+  return <div className="alt-deck-editor" ref={rootRef}><AltShell title={title} subtitle={`${profileName} · ${total} cards · commander excluded`} activeNav="decks" player={{ id: profileId, name: profileName, iconCard: profileIcon }} onToggleStyle={onToggleStyle} topRight={topRight}>
     {showAnalysis ? <div className="alt-deck-overview">{commanderSection}<section className="alt-deck-analysis" aria-label="Deck analysis"><div className="alt-section-head"><h2>Deck analysis</h2><span>Mana · types · curve</span></div><DeckAnalysis cards={cards} commanderNames={commanderNames} catalogMap={catalogMap} /></section></div> : commanderSection}
     {status && <p className="alt-deck-save-state" role="status">{status}</p>}{error && <p className="alt-notice error" role="alert">{error}</p>}
     <nav className="alt-deck-jumps" aria-label="Deck editor sections"><a href="#deck-contents">Deck contents</a><a href="#your-collection">Your collection</a></nav>

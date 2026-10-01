@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useRef, useState, type Reac
 import { CardImage } from "./CardImage";
 import { ManaCost } from "./ManaCost";
 import { DeckAnalysis } from "./DeckAnalysis";
-import { jsonFetch, type CatalogCard, type CollectionCard, type DeckCard } from "@/lib/client";
+import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard, type DeckCard } from "@/lib/client";
 import { commanderCandidates } from "@/lib/commander-selection";
 import { BASIC_LANDS_GROUP, buildPoolGroups } from "@/lib/deck-pool";
 import {
@@ -18,14 +18,12 @@ import {
   isOutOfIdentity as isOutOfIdentityCard,
 } from "@/lib/deck-identity";
 import { AltDeckEditor } from "./AltDeckEditor";
-import { AltShell } from "./AltShell";
-import { AltPageState } from "./AltPageState";
+import { AltPlayerPageState } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { useLeaguePlayers } from "./useLeaguePlayers";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
 
-type ProfileData = { profile: { name: string }; cards: CollectionCard[] };
+type ProfileData = { profile: { id: string; name: string; iconCard?: string | null }; cards: CollectionCard[] };
 type DeckData = { deck: { id: string; name: string; commander: string | null }; cards: DeckCard[] };
 type ViewMode = "images" | "list";
 const VIEW_STORAGE_KEY = "fra-deck-view";
@@ -80,7 +78,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   const deckQueue = useRef<LatestWriteQueue<{ name: string; commander: string | null }> | null>(null);
   const cardQueue = useRef<LatestWriteQueue<{ name: string; qty: number }> | null>(null);
   const saveFailedRef = useRef(false);
-  const { players } = useLeaguePlayers(profile ? { id: profileId, name: profile.profile.name } : undefined);
+  const [notFound, setNotFound] = useState(false);
   // Collapsed pool groups (persisted), and whether off-color cards are shown.
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [showOffColor, setShowOffColor] = useState(false);
@@ -98,7 +96,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     observer.observe(header);
     return () => observer.disconnect();
   }, [loaded]);
-  const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setRenameDraft(d.deck.name); setCatalog(c); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); } }, [profileId, deckId]);
+  const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setRenameDraft(d.deck.name); setCatalog(c); setNotFound(false); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); setNotFound(isNotFound(cause, `/api/profiles/${profileId}`)); } }, [profileId, deckId]);
   useEffect(() => { void load(); }, [load]);
   const queueChanged = () => queueMicrotask(() => {
     const pending = deckQueue.current?.isPending() || cardQueue.current?.isPending();
@@ -181,8 +179,9 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     storeCollapsed(next);
   }
 
-  if (!profile || !deck) {
-    if (style === "alt") return <AltShell title={error ? "Deck unavailable" : "Loading deck…"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load this deck" : "Loading deck"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Fetching the deck, collection, and card catalog."}</AltPageState></AltShell>;
+  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
+  if (!profile || !deck || (style === "alt" && profile.profile.id !== profileId)) {
+    if (style === "alt") return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading deck", loadingDetail: "Fetching the deck, collection, and card catalog.", unavailable: "Deck unavailable", failed: "We couldn't load this deck" }} error={error} notFound={notFound} onRetry={() => { setError(""); setNotFound(false); void load(); }} onToggleStyle={toggle} />;
     return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
   }
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));
@@ -220,7 +219,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   const emptyPool = pool.groups.length === 0 && <p className="muted pool-empty">{search.trim() ? "No owned cards match your search." : pool.hiddenCount ? "Every other owned card is outside the commander's colors." : "No owned cards yet."}</p>;
 
   if (style === "alt") return <AltDeckEditor
-    profileId={profileId} profileName={profile.profile.name} players={players}
+    profileId={profileId} profileName={profile.profile.name} profileIcon={profile.profile.iconCard ?? null}
     deckName={deck.deck.name} renameDraft={renameDraft} cards={deck.cards} catalog={catalog} collection={profile.cards}
     poolGroups={pool.groups} basics={basics} hiddenPoolCount={pool.hiddenCount} search={search}
     showOffColor={showOffColor} viewMode={viewMode} status={status} error={error}

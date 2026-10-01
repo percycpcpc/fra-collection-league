@@ -5,12 +5,11 @@ import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "re
 import { CardImage } from "./CardImage";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltCollectionView } from "./AltCollectionView";
-import { AltShell } from "./AltShell";
-import { AltPageState } from "./AltPageState";
+import { AltPlayerPageState } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
-import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
+import { refreshLeaguePlayers } from "./useLeaguePlayers";
+import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
 import { MutationLock } from "@/lib/mutation-lock";
 
@@ -42,7 +41,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [importing, setImporting] = useState(false);
   const [pendingEdits, setPendingEdits] = useState<PendingEdits>({});
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
-  const { players } = useLeaguePlayers(profile ?? undefined);
+  const [loadError, setLoadError] = useState<{ message: string; notFound: boolean } | null>(null);
   const saveQueue = useRef<LatestWriteQueue<{ name: string; qty: number; owned: boolean }> | null>(null);
   const importLock = useRef(new MutationLock());
   const storageKey = `fra-pending-${profileId}`;
@@ -75,9 +74,10 @@ export function CollectionManager({ profileId }: { profileId: string }) {
         loaded = [...recovered.values()];
       }
       setPendingEdits(edits);
-      setProfile(data.profile); setCards(loaded); setCatalog(cat);
+      setProfile(data.profile); setCards(loaded); setCatalog(cat); setLoadError(null);
     } catch (cause) {
-      setMessage(cause instanceof Error ? cause.message : "Could not load collection.");
+      const text = cause instanceof Error ? cause.message : "Could not load collection.";
+      setMessage(text); setLoadError({ message: text, notFound: isNotFound(cause, `/api/profiles/${profileId}`) });
       if (throwOnError) throw cause;
     } finally { setLoading(false); }
   }, [profileId, readPending]);
@@ -189,8 +189,9 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   async function copyOwned() { await navigator.clipboard.writeText(exportText()); setMessage("Owned list copied."); }
   function download() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([exportText()], { type: "text/plain" })); link.download = `${profile?.name || "collection"}-FRA.txt`; link.click(); URL.revokeObjectURL(link.href); }
 
-  if (!profile) {
-    if (uiStyle === "alt") return <AltShell title={loading ? "Loading collection…" : "Collection unavailable"} activeNav="collection" playerId={profileId} players={players} onToggleStyle={toggleUiStyle}><AltPageState title={loading ? "Loading collection" : "We couldn't load this collection"} busy={loading} onRetry={loading ? undefined : () => void load()}>{loading ? "Fetching the player and card catalog." : message}</AltPageState></AltShell>;
+  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
+  if (!profile || (uiStyle === "alt" && profile.id !== profileId)) {
+    if (uiStyle === "alt") return <AltPlayerPageState profileId={profileId} activeNav="collection" copy={{ loading: "Loading collection", loadingDetail: "Fetching the player and card catalog.", unavailable: "Collection unavailable", failed: "We couldn't load this collection" }} error={loading ? undefined : loadError?.message} notFound={!loading && loadError?.notFound} onRetry={() => void load()} onToggleStyle={toggleUiStyle} />;
     return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
   }
   if (uiStyle === "alt") return <AltCollectionView

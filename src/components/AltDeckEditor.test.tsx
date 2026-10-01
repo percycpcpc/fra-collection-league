@@ -14,7 +14,7 @@ const charm: CollectionCard = { id: "c2", profileId: "p1", name: "Dawn Charm", q
 const deck: DeckCard[] = [{ id: "d1", deckId: "deck", name: "Dawn Charm", qty: 1, isBasic: false }, { id: "d2", deckId: "deck", name: "Plains", qty: 7, isBasic: true }];
 
 function render(overrides: Partial<Parameters<typeof AltDeckEditor>[0]> = {}) {
-  return renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" players={[]} deckName="Azorius" renameDraft="Azorius" cards={deck} catalog={catalog} collection={[ajani, charm]}
+  return renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" deckName="Azorius" renameDraft="Azorius" cards={deck} catalog={catalog} collection={[ajani, charm]}
     poolGroups={[{ group: "White", entries: [{ card: ajani, offColor: false }, { card: charm, offColor: false }] }]} basics={["Plains"]} hiddenPoolCount={0} search="" showOffColor={false}
     viewMode="images" commanderNames={["Ajani"]} eligibleCommanderNames={["Ajani"]} hasCommanderIdentity onSearch={noop} onRenameDraft={noop} onShowOffColor={noop} onViewMode={noop} onQty={noop}
     onCommander={noop} onRename={noop} onToggleStyle={noop} isOffColor={() => false} {...overrides} />);

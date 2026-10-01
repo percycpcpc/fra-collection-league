@@ -2,19 +2,18 @@
 
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { jsonFetch, type CatalogCard, type CollectionCard, type DeckSummary } from "@/lib/client";
+import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard, type DeckSummary } from "@/lib/client";
 import { commanderCandidates } from "@/lib/commander-selection";
 import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
 import { AltCommanderField, AltDeckList } from "./AltDeckList";
-import { AltShell } from "./AltShell";
-import { AltPageState } from "./AltPageState";
+import { AltPlayerPageState } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
+import { refreshLeaguePlayers } from "./useLeaguePlayers";
 import { MutationLock } from "@/lib/mutation-lock";
 
-type Data = { profile: { name: string }; cards: CollectionCard[]; decks: DeckSummary[] };
+type Data = { profile: { id: string; name: string; iconCard?: string | null }; cards: CollectionCard[]; decks: DeckSummary[] };
 
 function commanderLabel(stored: string | null) {
   const names = parseCommanderNames(stored);
@@ -37,10 +36,10 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [partnerQuery, setPartnerQuery] = useState("");
   const [partnerOpen, setPartnerOpen] = useState(false);
-  const { players } = useLeaguePlayers(data ? { id: profileId, name: data.profile.name } : undefined);
+  const [notFound, setNotFound] = useState(false);
   const deleteTriggers = useRef(new Map<string, HTMLButtonElement>());
   const createLock = useRef(new MutationLock());
-  const load = useCallback(() => { setLoading(true); setError(""); return jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)).finally(() => setLoading(false)); }, [profileId]);
+  const load = useCallback(() => { setLoading(true); setError(""); return jsonFetch<Data>(`/api/profiles/${profileId}`).then((result) => { setData(result); setNotFound(false); }).catch((cause) => { setError(cause.message); setNotFound(isNotFound(cause, `/api/profiles/${profileId}`)); }).finally(() => setLoading(false)); }, [profileId]);
   useEffect(() => { void load(); }, [load]);
   // The catalog carries card types, needed to find legendary creatures. Cached for an hour by the API.
   useEffect(() => { jsonFetch<CatalogCard[]>("/api/catalog").then(setCatalog).catch((cause) => setError(cause.message)); }, []);
@@ -81,8 +80,9 @@ export function DeckList({ profileId }: { profileId: string }) {
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
-  if (!data) {
-    if (style === "alt") return <AltShell title={loading ? "Loading decks…" : "Decks unavailable"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={loading ? "Loading decks" : "We couldn't load these decks"} busy={loading} onRetry={loading ? undefined : () => void load()}>{loading ? "Fetching this player's decks." : error}</AltPageState></AltShell>;
+  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
+  if (!data || (style === "alt" && data.profile.id !== profileId)) {
+    if (style === "alt") return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading decks", loadingDetail: "Fetching this player's decks.", unavailable: "Decks unavailable", failed: "We couldn't load these decks" }} error={loading ? undefined : error} notFound={!loading && notFound} onRetry={() => void load()} onToggleStyle={toggle} />;
     return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
   }
   const noCandidates = catalog.length > 0 && candidates.length === 0;
@@ -93,7 +93,7 @@ export function DeckList({ profileId }: { profileId: string }) {
       : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
-  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-deck-create" onSubmit={create}>
+  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} profileIcon={data.profile.iconCard ?? null} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-deck-create" onSubmit={create}>
     <label className="alt-commander-field"><span>Deck name</span><input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
     <AltCommanderField label="Commander (optional)" query={cmdQuery} open={cmdOpen && candidates.length > 0} options={cmdMatches} clearLabel="— No commander" placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} disabled={!candidates.length && catalog.length > 0} describedBy="alt-commander-hint" onQuery={(value) => { setCmdQuery(value); setCommander(""); setCmdOpen(true); }} onOpen={setCmdOpen} onChoose={chooseCommander} />
     <AltCommanderField label="Second commander (optional)" query={partnerQuery} open={partnerOpen} options={partnerMatches} clearLabel="— No second commander" placeholder="Search second commander…" disabled={!commander} describedBy="alt-commander-hint" onQuery={(value) => { setPartnerQuery(value); setPartner(""); setPartnerOpen(true); }} onOpen={setPartnerOpen} onChoose={choosePartner} />
