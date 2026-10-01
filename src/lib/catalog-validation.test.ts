@@ -10,6 +10,7 @@ function card(overrides: Partial<CatalogCard>): CatalogCard {
     rarity: "common",
     type: "Creature",
     colorIdentity: "",
+    manaCost: "",
     ...overrides,
   };
 }

@@ -13,12 +13,13 @@ export type CatalogCard = {
   rarity: string;
   type: string;
   colorIdentity: string;
+  manaCost: string;
 };
 
 // 0-5 chars, WUBRG only, no repeated character.
 const IDENTITY_RE = /^(?!.*(.).*\1)[WUBRG]{0,5}$/;
 
-const STRING_FIELDS = ["name", "img", "colors", "rarity", "type", "colorIdentity"] as const;
+const STRING_FIELDS = ["name", "img", "colors", "rarity", "type", "colorIdentity", "manaCost"] as const;
 
 /**
  * Coerce and validate an untrusted object into a CatalogCard. Missing optional

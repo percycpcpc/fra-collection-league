@@ -5,9 +5,9 @@ import { AltCollectionView } from "./AltCollectionView";
 import type { CatalogCard, CollectionCard } from "@/lib/client";
 
 const catalog: CatalogCard[] = [
-  { name: "Ajani Resolute", qty: 1, img: "https://example.com/a.jpg", rarity: "rare", colors: "white", type: "Creature", colorIdentity: "w" },
-  { name: "Countersculpt", qty: 1, img: "https://example.com/b.jpg", rarity: "uncommon", colors: "blue", type: "Instant", colorIdentity: "u" },
-  { name: "Aerid Konstrari", qty: 1, img: "https://example.com/c.jpg", rarity: "mythic", colors: "green, blue", type: "Creature", colorIdentity: "gu" },
+  { name: "Ajani Resolute", qty: 1, img: "https://example.com/a.jpg", rarity: "rare", colors: "white", type: "Creature", colorIdentity: "w", manaCost: "" },
+  { name: "Countersculpt", qty: 1, img: "https://example.com/b.jpg", rarity: "uncommon", colors: "blue", type: "Instant", colorIdentity: "u", manaCost: "" },
+  { name: "Aerid Konstrari", qty: 1, img: "https://example.com/c.jpg", rarity: "mythic", colors: "green, blue", type: "Creature", colorIdentity: "gu", manaCost: "" },
 ];
 const cards: CollectionCard[] = [
   { id: "c1", profileId: "p1", name: "Ajani Resolute", qty: 2, owned: true },

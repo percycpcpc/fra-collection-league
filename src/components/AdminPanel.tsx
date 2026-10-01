@@ -15,6 +15,7 @@ const EMPTY_CARD: CatalogCard = {
   rarity: "common",
   type: "",
   colorIdentity: "",
+  manaCost: "",
 };
 
 const TEXT_FIELDS: { key: keyof CatalogCard; label: string }[] = [
