@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { jsonFetch } from "@/lib/client";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltAnalytics } from "./AltAnalytics";
+import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -30,7 +31,10 @@ export function AnalyticsDashboard() {
   function toggleSort(key: SortKey) { setSort((current) => ({ key, direction: current.key === key && current.direction === "desc" ? "asc" : "desc" })); }
   function heading(key: SortKey, label: string) { return <button className="sort-button" type="button" onClick={() => toggleSort(key)}>{label} {sort.key === key ? (sort.direction === "desc" ? "↓" : "↑") : ""}</button>; }
 
-  if (!data) return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></main>;
+  if (!data) {
+    if (style === "alt") return <AltShell title="Loading…" activeNav="analytics" players={sidebarPlayers} onToggleStyle={toggle}><div className="alt-section"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></div></AltShell>;
+    return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></main>;
+  }
   if (style === "alt") return <AltAnalytics players={players} sidebarPlayers={sidebarPlayers} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;
   return <main className="shell analytics-page">
     <header className="page-heading"><div><Link className="back-link" href="/">← Players</Link><div className="eyebrow">League overview</div><h1>Analytics</h1></div><span>{data.players.length} players</span><UiStyleToggle onToggle={toggle} /></header>

@@ -6,6 +6,7 @@ import { jsonFetch } from "@/lib/client";
 import { MatchList, type MatchRecord } from "./MatchList";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltMatches } from "./AltMatches";
+import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -20,7 +21,10 @@ export function ProfileMatches({ profileId }: { profileId: string }) {
   // The matches endpoint also returns the profile name, so one request suffices.
   const load = useCallback(async () => { const result = await jsonFetch<MatchData>(`/api/profiles/${profileId}/matches`); setData(result); }, [profileId]);
   useEffect(() => { load().catch((cause) => setError(cause.message)); }, [load]);
-  if (!data) return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading match record…"}</p></main>;
+  if (!data) {
+    if (style === "alt") return <AltShell title="Loading…" activeNav="matches" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className={error ? "error-banner" : "muted"}>{error || "Loading match record…"}</p></div></AltShell>;
+    return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading match record…"}</p></main>;
+  }
   const name = data.profile.name;
   if (style === "alt") return <AltMatches playerId={profileId} playerName={name} players={players} matches={data.matches} wins={data.record.wins} losses={data.record.losses} recordForm={<Link className="alt-pill alt-primary" href="/matches">Open match recorder</Link>} onToggleStyle={toggle} />;
   return <main className="shell profile-matches"><header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {name}&apos;s collection</Link><div className="eyebrow">Player record</div><h1>{name}&apos;s matches</h1></div><div className="record-score"><strong>{data.record.wins}–{data.record.losses}</strong><span>W–L</span></div><UiStyleToggle onToggle={toggle} /></header>

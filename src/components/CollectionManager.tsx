@@ -5,9 +5,10 @@ import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "re
 import { CardImage } from "./CardImage";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltCollectionView } from "./AltCollectionView";
+import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { refreshLeaguePlayers } from "./useLeaguePlayers";
+import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
@@ -32,6 +33,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
+  const { players } = useLeaguePlayers(profile ?? undefined);
   const saveCount = useRef(0);
   const storageKey = `fra-pending-${profileId}`;
 
@@ -123,7 +125,10 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   async function copyOwned() { await navigator.clipboard.writeText(exportText()); setMessage("Owned list copied."); }
   function download() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([exportText()], { type: "text/plain" })); link.download = `${profile?.name || "collection"}-FRA.txt`; link.click(); URL.revokeObjectURL(link.href); }
 
-  if (!profile) return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
+  if (!profile) {
+    if (uiStyle === "alt") return <AltShell title="Loading…" activeNav="collection" playerId={profileId} players={players} onToggleStyle={toggleUiStyle}><div className="alt-section"><p className="muted">{message || "Loading collection…"}</p></div></AltShell>;
+    return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
+  }
   if (uiStyle === "alt") return <AltCollectionView
     profile={profile}
     catalog={catalog}

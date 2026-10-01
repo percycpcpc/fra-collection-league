@@ -7,6 +7,7 @@ import { commanderCandidates } from "@/lib/commander-selection";
 import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
 import { AltDeckList } from "./AltDeckList";
+import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
@@ -71,7 +72,10 @@ export function DeckList({ profileId }: { profileId: string }) {
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
-  if (!data) return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
+  if (!data) {
+    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading decks…"}</p></div></AltShell>;
+    return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
+  }
   const noCandidates = catalog.length > 0 && candidates.length === 0;
   const hint = catalog.length === 0
     ? "Loading commanders…"
