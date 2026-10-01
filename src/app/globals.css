@@ -608,6 +608,7 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-now-actions > span { padding: 7px 15px; border-radius: 9999px; color: var(--fra-alt-muted); background: var(--fra-alt-interactive); font-size: 11px; font-weight: 700; }
 .alt-now-actions > span.on { color: #000; background: var(--fra-alt-accent); }
 .alt-now-actions button { display: grid; width: 48px; min-height: 48px; padding: 0; place-items: center; border: 0; border-radius: 50%; color: #000; background: var(--fra-alt-accent); box-shadow: 0 8px 20px rgba(0,0,0,.5); font-size: 19px; font-weight: 700; }
+.alt-tabbar { display: none; }
 @media (max-width: 895px) {
   .alt-sidebar { display: none; }
   .alt-main { margin-left: 0; }
@@ -615,6 +616,10 @@ h1, h2, h3, p { margin-top: 0; }
   .alt-search { flex: 1 1 240px; width: auto; }
   .alt-owned-counter { margin-left: 0; }
   .alt-section, .alt-greeting { padding-inline: 16px; }
+  .alt-tabbar { position: fixed; z-index: 55; inset: auto 0 0 0; display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--fra-alt-surface); border-top: 1px solid #282828; }
+  .alt-tabbar a { display: flex; min-height: 44px; align-items: center; justify-content: center; flex-direction: column; color: var(--fra-alt-muted); font-size: 11px; font-weight: 700; text-align: center; text-decoration: none; }
+  .alt-tabbar a.active { color: #fff; box-shadow: inset 0 2px var(--fra-alt-accent); }
+  .alt-has-nowbar .alt-nowbar { bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (hover: none) { .alt-card-toggle { opacity: 1; transform: none; } }
 
@@ -654,6 +659,10 @@ h1, h2, h3, p { margin-top: 0; }
 /* Alternate deck editor. Keep the collection page's accepted primitives unchanged. */
 .alt-ui-root:not(.alt-has-nowbar) .alt-sidebar { bottom: 0; }
 .alt-ui-root:not(.alt-has-nowbar) .alt-footer-space { height: 32px; }
+@media (max-width: 895px) {
+  /* Mobile: clear the fixed 64px tab bar on all Alt pages. Placed after the 32px rule above with matching specificity so it wins at mobile widths. */
+  .alt-footer-space, .alt-ui-root:not(.alt-has-nowbar) .alt-footer-space { height: calc(128px + 64px + env(safe-area-inset-bottom, 0px)); }
+}
 .alt-deck-editor .alt-style-toggle { border: 1px solid #555; color: var(--fra-alt-muted); background: transparent; }
 .alt-deck-editor .alt-greeting { padding-bottom: 12px; }
 .alt-deck-editor .alt-deck-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
