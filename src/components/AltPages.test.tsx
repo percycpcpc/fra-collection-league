@@ -11,8 +11,8 @@ const player = { id: "p1", name: "Percy", iconCard: null, cardCount: 12, deckCou
 
 describe("alternate player pages SSR smoke", () => {
   it("renders AltPlayersDirectory", () => {
-    const html = renderToStaticMarkup(<AltPlayersDirectory players={[player]} createForm={<button>New</button>} onToggleStyle={noop} />);
-    expect(html).toContain("Choose your player"); expect(html).toContain("Percy"); expect(html).toContain("Classic");
+    const html = renderToStaticMarkup(<AltPlayersDirectory players={[player]} sidebarPlayers={[{ id: "p2", name: "Alex" }]} createForm={<button>New</button>} onToggleStyle={noop} />);
+    expect(html).toContain("Choose your player"); expect(html).toContain("Percy"); expect(html).toContain("Alex"); expect(html).toContain("Classic");
   });
   it("renders AltAnalytics", () => {
     const html = renderToStaticMarkup(<AltAnalytics players={[{ ...player, ownedCards: 12, ownedQty: 14, byRarity: { common: 4, uncommon: 4, rare: 3, mythic: 1 }, completionPct: 5 }]} cards={[{ name: "Ajani", rarity: "rare", colors: "white", img: "/a.jpg", owners: 1, totalQty: 2 }]} search="" onSearch={noop} onToggleStyle={noop} />);

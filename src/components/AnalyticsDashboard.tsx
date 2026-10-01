@@ -7,6 +7,7 @@ import { PlayerAvatar } from "./PlayerAvatar";
 import { AltAnalytics } from "./AltAnalytics";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
+import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type Player = { id: string; name: string; iconCard: string | null; ownedCards: number; ownedQty: number; byRarity: Record<"common" | "uncommon" | "rare" | "mythic", number>; completionPct: number };
 type Card = { name: string; rarity: string; colors: string; img: string; owners: number; totalQty: number };
@@ -18,6 +19,7 @@ export function AnalyticsDashboard() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "owners", direction: "desc" });
+  const { players: sidebarPlayers } = useLeaguePlayers();
   useEffect(() => { jsonFetch<{ players: Player[]; cards: Card[] }>("/api/analytics").then(setData).catch((cause) => setError(cause.message)); }, []);
 
   const cards = useMemo(() => (data?.cards ?? []).filter((card) => card.name.toLowerCase().includes(search.toLowerCase())).sort((a, b) => {
@@ -29,7 +31,7 @@ export function AnalyticsDashboard() {
   function heading(key: SortKey, label: string) { return <button className="sort-button" type="button" onClick={() => toggleSort(key)}>{label} {sort.key === key ? (sort.direction === "desc" ? "↓" : "↑") : ""}</button>; }
 
   if (!data) return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></main>;
-  if (style === "alt") return <AltAnalytics players={players} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;
+  if (style === "alt") return <AltAnalytics players={players} sidebarPlayers={sidebarPlayers} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;
   return <main className="shell analytics-page">
     <header className="page-heading"><div><Link className="back-link" href="/">← Players</Link><div className="eyebrow">League overview</div><h1>Analytics</h1></div><span>{data.players.length} players</span><UiStyleToggle onToggle={toggle} /></header>
     {data.players.length === 0 ? <div className="empty"><h2>No player data yet</h2><p>Create a profile to begin tracking collection coverage.</p></div> : <>

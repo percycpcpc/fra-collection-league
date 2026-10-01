@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { cardImage, jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
+import { useMemo, useState } from "react";
+import { cardImage, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { AltShell } from "./AltShell";
+import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type Profile = { id: string; name: string; iconCard: string | null };
-type ProfileSummary = Profile & { cardCount: number; deckCount: number };
-
 const GROUPS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"] as const;
 const GROUP_COLORS: Record<(typeof GROUPS)[number], string> = {
   White: "#f8f6e8", Blue: "#539df5", Black: "#8a8a9a", Red: "#f3727f",
@@ -38,13 +37,7 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
   const [search, setSearch] = useState("");
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
-  const [profiles, setProfiles] = useState<ProfileSummary[]>([]);
-
-  useEffect(() => {
-    jsonFetch<{ profiles: ProfileSummary[] }>("/api/profiles")
-      .then((data) => setProfiles(data.profiles))
-      .catch(() => setProfiles([]));
-  }, []);
+  const { players } = useLeaguePlayers(profile);
 
   const collectionMap = useMemo(() => new Map(cards.map((card) => [card.name.toLowerCase(), card])), [cards]);
   const groups = useMemo(() => {
@@ -59,13 +52,13 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
   const completion = catalog.length ? Math.round((ownedCount / catalog.length) * 100) : 0;
   const selected = catalog.find((card) => card.name === selectedName) || null;
   const selectedEntry = selected ? collectionMap.get(selected.name.toLowerCase()) : undefined;
+  const shellPlayers = players;
 
   function toggle(card: CatalogCard) {
     const entry = collectionMap.get(card.name.toLowerCase());
     onSaveCard(card.name, entry ? { owned: !entry.owned } : { qty: 1, owned: true });
   }
 
-  const shellPlayers = profiles.length ? profiles : [{ ...profile, cardCount: ownedCount, deckCount: 0 }];
   const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><span>Qty ×{selectedEntry?.qty || 0}</span><span>In deck</span><button type="button" onClick={() => toggle(selected)} aria-label={`Toggle owned status for ${selected.name}`}>{selectedEntry?.owned ? "✓" : "+"}</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
   return <AltShell title={`${profile.name}'s collection`} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
