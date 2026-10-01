@@ -6,6 +6,9 @@ import { jsonFetch, type CatalogCard, type CollectionCard, type DeckSummary } fr
 import { commanderCandidates } from "@/lib/commander-selection";
 import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
+import { AltDeckList } from "./AltDeckList";
+import { UiStyleToggle } from "./UiStyleToggle";
+import { useUiStyle } from "./useUiStyle";
 
 type Data = { profile: { name: string }; cards: CollectionCard[]; decks: DeckSummary[] };
 
@@ -16,6 +19,7 @@ function commanderLabel(stored: string | null) {
 }
 
 export function DeckList({ profileId }: { profileId: string }) {
+  const { style, toggle } = useUiStyle();
   const [data, setData] = useState<Data | null>(null);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [error, setError] = useState("");
@@ -73,8 +77,9 @@ export function DeckList({ profileId }: { profileId: string }) {
       : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
+  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={[{ id: profileId, name: data.profile.name }]} decks={data.decks} banners={banners} onToggleStyle={toggle} createForm={<form className="alt-create-inline" onSubmit={create}><input name="name" required placeholder="New deck" /><button className="alt-pill alt-primary" type="submit">+ Create deck</button></form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete? <button type="button" onClick={() => void remove(deck.id)}>Confirm</button><button type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button className="alt-pill alt-danger" type="button" onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
   return <main className="shell decks-page">
-    <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span></header>
+    <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
     <form className="deck-create" onSubmit={create}>
       <label>Deck name<input name="name" required placeholder="New deck" /></label>
       <label>Commander (optional)

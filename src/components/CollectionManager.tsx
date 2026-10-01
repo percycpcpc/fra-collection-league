@@ -4,6 +4,9 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardImage } from "./CardImage";
 import { PlayerAvatar } from "./PlayerAvatar";
+import { AltCollectionView } from "./AltCollectionView";
+import { UiStyleToggle } from "./UiStyleToggle";
+import { useUiStyle } from "./useUiStyle";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
@@ -27,6 +30,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [importText, setImportText] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
+  const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const saveCount = useRef(0);
   const storageKey = `fra-pending-${profileId}`;
 
@@ -118,10 +122,22 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   function download() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([exportText()], { type: "text/plain" })); link.download = `${profile?.name || "collection"}-FRA.txt`; link.click(); URL.revokeObjectURL(link.href); }
 
   if (!profile) return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
+  if (uiStyle === "alt") return <AltCollectionView
+    profile={profile}
+    catalog={catalog}
+    cards={cards}
+    importText={importText}
+    message={message}
+    status={status}
+    onImportTextChange={setImportText}
+    onImport={() => void runImport()}
+    onToggleStyle={toggleUiStyle}
+    onSaveCard={(name, patch) => void saveCard(name, patch)}
+  />;
   return <main className="collection-page">
     <header className="workspace-header">
       <div className="profile-heading"><button className="avatar-edit" type="button" onClick={() => setIconPickerOpen((open) => !open)} aria-expanded={iconPickerOpen} aria-controls="icon-picker" aria-label="Edit profile icon"><PlayerAvatar name={profile.name} iconCard={profile.iconCard} size={44} /></button><div><Link className="back-link" href="/">← Players</Link><form className="inline-title" onSubmit={rename}><input aria-label="Profile name" name="name" defaultValue={profile.name} key={profile.name} /><button type="submit">Rename</button></form></div></div>
-      <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="button-link" href="/analytics">Analytics</Link><Link className="button-link" href={`/p/${profileId}/matches`}>Matches →</Link><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link></div>
+      <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="button-link" href="/analytics">Analytics</Link><Link className="button-link" href={`/p/${profileId}/matches`}>Matches →</Link><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link><UiStyleToggle onToggle={toggleUiStyle} /></div>
     </header>
     {iconPickerOpen && <section className="icon-picker" id="icon-picker" aria-label="Choose profile icon"><div className="icon-picker-tools"><strong>Choose an icon</strong><input type="search" placeholder="Search owned cards" value={iconSearch} onChange={(event) => setIconSearch(event.target.value)} autoFocus /></div><div className="icon-picker-grid"><button className="icon-choice initial-choice" type="button" onClick={() => void setIcon(null)}><PlayerAvatar name={profile.name} iconCard={null} size={90} /><span>Use initial</span></button>{ownedIconCards.map((card) => <div className={`icon-choice ${profile.iconCard === card.name ? "selected" : ""}`} key={card.name}><CardImage name={card.name} catalog={card} onClick={() => void setIcon(card.name)} ariaLabel={`Use ${card.name} as profile icon`} /><span title={card.name}>{card.name}</span></div>)}</div>{ownedIconCards.length === 0 && <p className="muted">No owned cards match that search.</p>}</section>}
     <section className="collection-tools">
