@@ -1,3 +1,4 @@
+@import './mana-symbols.css';
 :root { --bg: #0d0e10; --panel: #17191d; --panel-2: #202329; --line: #343840; --text: #f1eee6; --muted: #a7a9ae; --gold: #d8ad57; --gold-2: #f0ce85; --red: #d96464; --green: #7ec58d; color-scheme: dark; }
 * { box-sizing: border-box; }
 html { background: var(--bg); }
@@ -136,14 +137,19 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-group h3, .basic-block h3 { color: var(--gold); font-size: .84rem; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: .45rem; margin-bottom: .25rem; }
 .deck-group h3 small, .basic-block h3 small { float: right; color: var(--muted); letter-spacing: 0; text-transform: none; }
 .card-line, .add-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3rem; padding: .35rem .25rem; border-bottom: 1px solid #26292f; }
-.card-line > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-line > span { display: flex; align-items: center; gap: .4em; flex: 1; overflow: hidden; min-width: 0; }
+.card-line > span > b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
+.mana-cost { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 1.1em; }
+.mana-face { display: inline-flex; align-items: center; gap: 1px; }
+.mana-sep { font-size: .7em; color: var(--muted); padding: 0 2px; }
 .card-line-actions { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
 .mini-stepper button { min-height: 2rem; width: 2.2rem; padding: .2rem; border-radius: 0; }
 .mini-stepper button:active:not(:disabled), .commander-star:active:not(:disabled) { filter: brightness(.85); transform: scale(.96); }
 .mini-stepper b { min-width: 2.3rem; text-align: center; }
 .add-list { max-height: 58vh; overflow: auto; }
-.add-row > span { display: grid; min-width: 0; }
-.add-row > span b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.add-row > span { display: grid; min-width: 0; flex: 1; }
+.add-row-name { display: flex; align-items: center; gap: .4em; overflow: hidden; }
+.add-row-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .add-row small { color: var(--muted); }
 .basic-block { margin-top: 1.5rem; }
 .deck-grid, .pool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: .85rem; }
@@ -163,6 +169,14 @@ h1, h2, h3, p { margin-top: 0; }
 .deck-card-actions .mini-stepper b { display: grid; place-items: center; min-width: 2rem; background: #0d0e10ee; border-block: 1px solid var(--line); }
 .commander-star { flex: 0 0 2.2rem; width: 2.2rem; min-height: 2rem; padding: .15rem; border-radius: 3px; color: #cbc6ba; background: #17191dee; font-size: 1.15rem; line-height: 1; }
 .commander-star.active { color: var(--gold-2); border-color: var(--gold); background: #3a2f17; }
+.commander-with-analysis { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+.commander-with-analysis > .deck-grid { flex: 0 0 auto; width: fit-content; }
+.commander-with-analysis > .deck-analysis { flex: 1; min-width: 0; }
+.deck-analysis { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; overflow: visible; }
+.analysis-chart-curve { grid-column: 1 / -1; }
+.analysis-chart { min-width: 0; overflow: visible; }
+.analysis-chart-title { margin: 0 0 .4rem; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.analysis-chart-body { display: flex; gap: .75rem; align-items: center; }
 .deck-card-tile .card-meta { align-items: center; }
 .deck-card-tile .rarity-gem { flex: 0 0 auto; }
 .deck-card-tile .card-meta strong { min-width: 0; }

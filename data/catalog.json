@@ -6,7 +6,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Aerid Konstrari",
@@ -15,7 +16,8 @@
     "type": "Legendary Creature — Elder Sphinx",
     "img": "https://mythicspoiler.com/fra/cards/aeridkonstrari.jpg",
     "qty": 1,
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{1}{R}{G}{G}"
   },
   {
     "name": "Afterthought Sentry",
@@ -24,7 +26,8 @@
     "colors": "colorless",
     "rarity": "common",
     "type": "Artifact Creature — Gargoyle",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{2}"
   },
   {
     "name": "Ajani Resolute",
@@ -33,7 +36,8 @@
     "colors": "white",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Ajani",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Ajani Unrelenting",
@@ -42,7 +46,8 @@
     "type": "Legendary Planeswalker — Ajani",
     "img": "https://mythicspoiler.com/fra/cards/ajaniunrelenting.jpg",
     "qty": 1,
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}{R}"
   },
   {
     "name": "Ajani's Anguish",
@@ -51,7 +56,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Enchantment",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{X}{R}"
   },
   {
     "name": "Apex Witchstalker",
@@ -60,7 +66,8 @@
     "type": "Creature — Wolf",
     "img": "https://mythicspoiler.com/fra/cards/apexwitchstalker.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{4}{B}{B}"
   },
   {
     "name": "Arcane Amphisbaena",
@@ -69,7 +76,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Creature — Snake",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Archive Arbiter",
@@ -78,7 +86,8 @@
     "colors": "colorless",
     "rarity": "uncommon",
     "type": "Artifact Creature — Sphinx",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{6}"
   },
   {
     "name": "Arni, Humble Scribe",
@@ -87,7 +96,8 @@
     "type": "Legendary Creature — Human Wizard",
     "img": "https://mythicspoiler.com/fra/cards/arnihumblescribe.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Arni, Renowned Champion",
@@ -96,7 +106,8 @@
     "type": "Legendary Creature — Human Berserker",
     "img": "https://mythicspoiler.com/fra/cards/arnirenownedchampion.jpg",
     "qty": 1,
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{3}{R}"
   },
   {
     "name": "Artifist Acumen",
@@ -105,7 +116,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{R}"
   },
   {
     "name": "Avatar of Burgeoning Echoes",
@@ -114,7 +126,8 @@
     "type": "Creature — Avatar",
     "img": "https://mythicspoiler.com/fra/cards/avatarofburgeoningechoes.jpg",
     "qty": 1,
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": "{G}{U}"
   },
   {
     "name": "Awaken the Inferno",
@@ -123,7 +136,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}"
   },
   {
     "name": "Bestial Incursion",
@@ -132,7 +146,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}"
   },
   {
     "name": "Blazing Crescendo",
@@ -141,7 +156,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Blessed Ghoul",
@@ -150,7 +166,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Zombie Cleric",
-    "colorIdentity": "WB"
+    "colorIdentity": "WB",
+    "manaCost": "{W/B}"
   },
   {
     "name": "Bloodline Recollector // Ancestral Craving",
@@ -159,7 +176,8 @@
     "type": "Creature — Vampire Warlock // Instant",
     "img": "https://cards.scryfall.io/normal/front/4/f/4fcc913e-f736-460a-b24b-022fa2e861b9.jpg?1788329264",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B} // {B}"
   },
   {
     "name": "Bloombrute",
@@ -168,7 +186,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Plant Elemental",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{2}{G}{W}"
   },
   {
     "name": "Blossom-Blessed Angel // Seed Suture",
@@ -177,7 +196,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Angel Cleric // Sorcery",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{3}{W} // {G/W}"
   },
   {
     "name": "Break Under Pressure",
@@ -186,7 +206,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/breakunderpressure.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Budding Insurgent",
@@ -195,7 +216,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Creature — Dryad Scout",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Campus Crier",
@@ -204,7 +226,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Creature — Human Advisor",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Carnivorous Cultivator // Enroot",
@@ -213,7 +236,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Creature — Elf Warlock // Sorcery",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G} // {G}"
   },
   {
     "name": "Cast Away Doubt",
@@ -222,7 +246,8 @@
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/castawaydoubt.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Chandra's Emberling",
@@ -231,7 +256,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Creature — Gremlin Elemental",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Chandra, Chill of Compliance",
@@ -240,7 +266,8 @@
     "colors": "blue",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Chandra",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}{U}"
   },
   {
     "name": "Chandra, Torch of Defiance",
@@ -249,7 +276,8 @@
     "colors": "red",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Chandra",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}{R}"
   },
   {
     "name": "Charge the Sanctum",
@@ -258,7 +286,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": "{2}{R/W}"
   },
   {
     "name": "Clash of Elements",
@@ -267,7 +296,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "UR"
+    "colorIdentity": "UR",
+    "manaCost": "{1}{U}{R}"
   },
   {
     "name": "Codie, Ravenous Codex",
@@ -276,7 +306,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Legendary Artifact Creature — Book Construct",
-    "colorIdentity": "WUBRG"
+    "colorIdentity": "WUBRG",
+    "manaCost": "{3}"
   },
   {
     "name": "Command the Stage",
@@ -285,7 +316,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Compel Brutality",
@@ -294,7 +326,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Countersculpt",
@@ -303,7 +336,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/countersculpt.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{U}{U}"
   },
   {
     "name": "Craftwork Crusher",
@@ -312,7 +346,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Artifact Creature — Boar Construct",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{3}{R}{R}{G}{G}"
   },
   {
     "name": "Craterclaw Colossus",
@@ -321,7 +356,8 @@
     "colors": "red",
     "rarity": "mythic",
     "type": "Artifact Creature — Beast Construct",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}{R}{R}"
   },
   {
     "name": "Cruel Calculations",
@@ -330,7 +366,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Cryotheory Adept",
@@ -339,7 +376,8 @@
     "type": "Creature — Human Wizard",
     "img": "https://mythicspoiler.com/fra/cards/cryotheoryadept.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Curse-Marred Demon",
@@ -348,7 +386,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Creature — Demon",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}{R}"
   },
   {
     "name": "Danitha, Spear of Agony",
@@ -357,7 +396,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Knight",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Danitha, Sword of Hope",
@@ -366,7 +406,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Knight",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Dark Matter Manipulator",
@@ -375,7 +416,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Creature — Human Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{B}"
   },
   {
     "name": "Darklight Phoenix",
@@ -384,7 +426,8 @@
     "colors": "black",
     "rarity": "mythic",
     "type": "Creature — Phoenix",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}"
   },
   {
     "name": "Dedicated Commons",
@@ -393,7 +436,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": ""
   },
   {
     "name": "Denzilore Fatehold",
@@ -402,7 +446,8 @@
     "colors": "multi",
     "rarity": "mythic",
     "type": "Legendary Creature — Elder Sphinx",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{1}{W}{U}{U}"
   },
   {
     "name": "Deserted Beach",
@@ -411,7 +456,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": ""
   },
   {
     "name": "Desperate Futurescribe",
@@ -420,7 +466,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Kor Scout",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{2}{W}{U}"
   },
   {
     "name": "Diviner of Victory // Unwind History",
@@ -429,7 +476,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Creature — Dwarf Wizard // Sorcery",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{U} // {1}{U}"
   },
   {
     "name": "Divining Duelist",
@@ -438,7 +486,8 @@
     "type": "Creature — Merfolk Wizard",
     "img": "https://mythicspoiler.com/fra/cards/diviningduelist.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Draconic Visitor",
@@ -447,7 +496,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Creature — Dragon",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{3}{R}{R}"
   },
   {
     "name": "Eardrum Rattler",
@@ -456,7 +506,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Creature — Human Bard",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Edgar, Ancient Bloodlord",
@@ -465,7 +516,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Legendary Creature — Vampire Noble",
-    "colorIdentity": "WB"
+    "colorIdentity": "WB",
+    "manaCost": "{W}{B}"
   },
   {
     "name": "Edgar, Moonlit Sovereign",
@@ -474,7 +526,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Werewolf Noble",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}{G}"
   },
   {
     "name": "Emergency Phytomedic // Seed Suture",
@@ -483,7 +536,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Dryad Cleric // Sorcery",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{G/W} // {G/W}"
   },
   {
     "name": "Emrakul, the Exigent Doom",
@@ -492,7 +546,8 @@
     "colors": "colorless",
     "rarity": "mythic",
     "type": "Legendary Creature — Eldrazi",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{10}"
   },
   {
     "name": "Enlightened Confidant",
@@ -501,7 +556,8 @@
     "colors": "white",
     "rarity": "mythic",
     "type": "Creature — Kor Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Entrust the Spark",
@@ -510,7 +566,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": "{3}{G}{U}"
   },
   {
     "name": "Essence Burn",
@@ -519,7 +576,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Extended Absence",
@@ -528,7 +586,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/extendedabsence.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}"
   },
   {
     "name": "Extrapolate the Impossible",
@@ -537,7 +596,8 @@
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/extrapolatetheimpossiblef.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Eye of Jace",
@@ -546,7 +606,8 @@
     "colors": "colorless",
     "rarity": "uncommon",
     "type": "Artifact",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{1}"
   },
   {
     "name": "Face Yourself",
@@ -555,7 +616,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{5}{R}{R}"
   },
   {
     "name": "Fatehold Annex",
@@ -564,7 +626,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": ""
   },
   {
     "name": "Fatehold Charm",
@@ -573,7 +636,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{W}{U}"
   },
   {
     "name": "Fatehold Chronologist // Peer Review",
@@ -582,7 +646,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Bird Wizard // Sorcery",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{1}{W/U} // {2}{W/U}"
   },
   {
     "name": "Fateshaper Aspirant",
@@ -591,7 +656,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Creature — Rhino Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{4}{W}"
   },
   {
     "name": "Fblthp, Impossibly Lost",
@@ -600,7 +666,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Homunculus",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Fblthp, Knows the Way",
@@ -609,7 +676,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Homunculus Scout",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{X}{G}{G}"
   },
   {
     "name": "Ferocity of the Hunt",
@@ -618,7 +686,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Enchantment — Aura",
-    "colorIdentity": "BG"
+    "colorIdentity": "BG",
+    "manaCost": "{1}{B/G}"
   },
   {
     "name": "Flickering Hound",
@@ -627,7 +696,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Creature — Dog",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{3}{W}"
   },
   {
     "name": "Flourishing Grapple",
@@ -636,7 +706,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{G}"
   },
   {
     "name": "Forest",
@@ -645,7 +716,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Basic Land — Forest",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": ""
   },
   {
     "name": "Formidable Commons",
@@ -654,7 +726,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "BG"
+    "colorIdentity": "BG",
+    "manaCost": ""
   },
   {
     "name": "Frostbite Pyromental",
@@ -663,7 +736,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Creature — Elemental",
-    "colorIdentity": "UR"
+    "colorIdentity": "UR",
+    "manaCost": "{U}{R}{R}"
   },
   {
     "name": "Fulminous Forte",
@@ -672,7 +746,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Gallia, the Merrymaker",
@@ -681,7 +756,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Satyr",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Gallia, Tragic Host",
@@ -690,7 +766,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Zombie Satyr",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Gardenize",
@@ -699,7 +776,8 @@
     "type": "Enchantment",
     "img": "https://mythicspoiler.com/fra/cards/gardenizef.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}{G}"
   },
   {
     "name": "Garruk, Curse Breaker",
@@ -708,7 +786,8 @@
     "colors": "green",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Garruk",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}{G}"
   },
   {
     "name": "Garruk, Veiled Butcher",
@@ -717,7 +796,8 @@
     "colors": "black",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Garruk",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}{B}"
   },
   {
     "name": "Geist of Saint Thalia",
@@ -726,7 +806,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Spirit Cleric",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Generous Revival",
@@ -735,7 +816,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Germinate Recruits",
@@ -744,7 +826,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Instant",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Ghalta the Immovable",
@@ -753,7 +836,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Elder Dinosaur",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{8}{W}"
   },
   {
     "name": "Ghalta the Unstoppable",
@@ -762,7 +846,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Elder Dinosaur",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{8}{G}"
   },
   {
     "name": "Gideon the Oathless",
@@ -771,7 +856,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Legendary Creature — Human Mercenary",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Gideon's Memorial",
@@ -780,7 +866,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Legendary Artifact",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Graft Surgeon",
@@ -789,7 +876,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Creature — Human Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Greenhouse Propagator",
@@ -798,7 +886,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Creature — Cat Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Grim Repriser",
@@ -807,7 +896,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Zombie Bard",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{B}{R}"
   },
   {
     "name": "Guiding Hydra",
@@ -816,7 +906,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Creature — Hydra Horror",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{X}{W}"
   },
   {
     "name": "Hall of Echoes",
@@ -825,7 +916,8 @@
     "colors": "colorless",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": ""
   },
   {
     "name": "Hallway Heckler // Vicious Verse",
@@ -834,7 +926,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Elemental Sorcerer // Sorcery",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{2}{R} // {B/R}"
   },
   {
     "name": "Hapatra, the Desert Fang",
@@ -843,7 +936,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Cleric",
-    "colorIdentity": "BG"
+    "colorIdentity": "BG",
+    "manaCost": "{2}{B}{B}{G}"
   },
   {
     "name": "Hapatra, the Desert Frost",
@@ -852,7 +946,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Wizard",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{3}{U}"
   },
   {
     "name": "Haunted Ridge",
@@ -861,7 +956,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": ""
   },
   {
     "name": "Heartstring Puller",
@@ -870,7 +966,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Creature — Elf Sorcerer",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{3}{R}"
   },
   {
     "name": "Heartwood Crafter // Soul Tether",
@@ -879,7 +976,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Elf Artificer // Sorcery",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{G} // {2}{R/G}"
   },
   {
     "name": "Hexhaven Battalion",
@@ -888,7 +986,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{4}{W}{W}"
   },
   {
     "name": "Hexhaven Dueling Arena",
@@ -897,7 +996,8 @@
     "colors": "colorless",
     "rarity": "uncommon",
     "type": "Land",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": ""
   },
   {
     "name": "Hexhaven Invigorator",
@@ -906,7 +1006,8 @@
     "colors": "green",
     "rarity": "mythic",
     "type": "Creature — Chimera Horror",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{G}{G}{G}{G}"
   },
   {
     "name": "Hungering Puppetbeast",
@@ -915,7 +1016,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Artifact Creature — Beast Construct",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}{G}"
   },
   {
     "name": "Hunter's Axe",
@@ -924,7 +1026,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Artifact — Equipment",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{G}"
   },
   {
     "name": "Icy Reception",
@@ -933,7 +1036,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/icyreception.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Identity Echo",
@@ -942,7 +1046,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Enchantment",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Infinite Coursework",
@@ -951,7 +1056,8 @@
     "type": "Enchantment — Aura",
     "img": "https://mythicspoiler.com/fra/cards/infinitecourseworkf.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Ingris Stingerquill",
@@ -960,7 +1066,8 @@
     "colors": "multi",
     "rarity": "mythic",
     "type": "Legendary Creature — Elder Sphinx",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{B}{R}{R}"
   },
   {
     "name": "Innovative Commons",
@@ -969,7 +1076,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "UR"
+    "colorIdentity": "UR",
+    "manaCost": ""
   },
   {
     "name": "Inspired Tethermage",
@@ -978,7 +1086,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Creature — Elf Warrior",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Island",
@@ -987,7 +1096,8 @@
     "colors": "blue",
     "rarity": "common",
     "type": "Basic Land — Island",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": ""
   },
   {
     "name": "Jace's Machinations",
@@ -996,7 +1106,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Instant",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Jace, Reality Sculptor",
@@ -1005,7 +1116,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Legendary Planeswalker — Jace",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{3}{U}{U}"
   },
   {
     "name": "Jiang Yanggu, Alone",
@@ -1014,7 +1126,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Berserker",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}"
   },
   {
     "name": "Jiang Yanggu, Never Alone",
@@ -1023,7 +1136,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}"
   },
   {
     "name": "Karn, Argent Defender",
@@ -1032,7 +1146,8 @@
     "colors": "colorless",
     "rarity": "rare",
     "type": "Legendary Artifact Creature — Golem",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{2}"
   },
   {
     "name": "Karn, Gilded Guardian",
@@ -1041,7 +1156,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Legendary Artifact Creature — Golem",
-    "colorIdentity": "WUBRG"
+    "colorIdentity": "WUBRG",
+    "manaCost": "{2/W}{2/U}{2/B}{2/R}{2/G}"
   },
   {
     "name": "Keeper of the Quiet Hour",
@@ -1050,7 +1166,8 @@
     "colors": "colorless",
     "rarity": "common",
     "type": "Artifact Creature — Chimera",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{3}"
   },
   {
     "name": "Kindred Judgment",
@@ -1059,7 +1176,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{5}{W}{W}"
   },
   {
     "name": "Kiora of Fire and Ashes",
@@ -1068,7 +1186,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Merfolk Noble",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}{R}"
   },
   {
     "name": "Kiora of Salt and Sand",
@@ -1077,7 +1196,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Legendary Creature — Merfolk Noble",
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": "{1}{G}{U}"
   },
   {
     "name": "Konstrari Annex",
@@ -1086,7 +1206,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": ""
   },
   {
     "name": "Konstrari Charm",
@@ -1095,7 +1216,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{R}{G}"
   },
   {
     "name": "Konstrari Improviser // Soul Tether",
@@ -1104,7 +1226,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Human Artificer // Sorcery",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{1}{R/G} // {2}{R/G}"
   },
   {
     "name": "Koth of the Homestead",
@@ -1113,7 +1236,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Citizen",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Koth, the Geomancer",
@@ -1122,7 +1246,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Warrior",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Kwia Vigorbloom",
@@ -1131,7 +1256,8 @@
     "colors": "multi",
     "rarity": "mythic",
     "type": "Legendary Creature — Elder Sphinx",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{3}{G}{W}{W}"
   },
   {
     "name": "Last Gasp",
@@ -1140,7 +1266,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Lich's Relic",
@@ -1149,7 +1276,8 @@
     "type": "Artifact — Equipment",
     "img": "https://mythicspoiler.com/fra/cards/lichsrelicf.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{B}"
   },
   {
     "name": "Liliana the Faultless",
@@ -1158,7 +1286,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Legendary Creature — Human Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{W}"
   },
   {
     "name": "Liliana the Repentant",
@@ -1167,7 +1296,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Legendary Creature — Human Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Living Library",
@@ -1176,7 +1306,8 @@
     "colors": "colorless",
     "rarity": "common",
     "type": "Artifact Creature — Book Illusion",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{2}"
   },
   {
     "name": "Loot, the Anomaly",
@@ -1185,7 +1316,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Beast Horror",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Loot, the Nexus",
@@ -1194,7 +1326,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Beast Noble",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Loyal Tutor",
@@ -1203,7 +1336,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Instant",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{W}"
   },
   {
     "name": "Lyra, Archangel of Dawn",
@@ -1212,7 +1346,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Legendary Creature — Angel Knight",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Lyra, Tolarian Archangel",
@@ -1221,7 +1356,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Legendary Creature — Angel Wizard",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}{U}"
   },
   {
     "name": "Mabel, Bitter Recluse",
@@ -1230,7 +1366,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Mouse Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{B}"
   },
   {
     "name": "Mabel, Valley Hero",
@@ -1239,7 +1376,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Legendary Creature — Mouse Soldier",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": "{1}{R}{W}"
   },
   {
     "name": "Marwyn, the Clearcutter",
@@ -1248,7 +1386,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Elf Warrior",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{R}"
   },
   {
     "name": "Marwyn, the Preserver",
@@ -1257,7 +1396,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Elf Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Massacre Girl, Most Wanted",
@@ -1266,7 +1406,8 @@
     "type": "Legendary Creature — Human Assassin",
     "img": "https://mythicspoiler.com/fra/cards/massacregirlmostwantedf.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{4}{B}"
   },
   {
     "name": "Master of Barbs",
@@ -1275,7 +1416,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Creature — Lizard Bard",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Medic's Kitesail",
@@ -1284,7 +1426,8 @@
     "colors": "colorless",
     "rarity": "common",
     "type": "Artifact — Equipment",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{2}"
   },
   {
     "name": "Memory Trap",
@@ -1293,7 +1436,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Enchantment",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Meticulous Commons",
@@ -1302,7 +1446,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "WB"
+    "colorIdentity": "WB",
+    "manaCost": ""
   },
   {
     "name": "Mind Meanderer",
@@ -1311,7 +1456,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Bird Fish Illusion",
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": "{3}{G}{U}{U}"
   },
   {
     "name": "Mindseeker Oculus",
@@ -1320,7 +1466,8 @@
     "colors": "blue",
     "rarity": "common",
     "type": "Creature — Homunculus",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Mountain",
@@ -1329,7 +1476,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Basic Land — Mountain",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": ""
   },
   {
     "name": "Multiply by Zero",
@@ -1338,7 +1486,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/multiplybyzero.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Murmuring Volume",
@@ -1347,7 +1496,8 @@
     "colors": "colorless",
     "rarity": "common",
     "type": "Artifact — Book",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{3}"
   },
   {
     "name": "No Admittance",
@@ -1356,7 +1506,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Null Summoner",
@@ -1365,7 +1516,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Creature — Human Warlock",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{2}{U}{B}"
   },
   {
     "name": "Omnipresence",
@@ -1374,7 +1526,8 @@
     "colors": "green",
     "rarity": "mythic",
     "type": "Enchantment",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{5}{G}{G}{G}"
   },
   {
     "name": "Overgrown Farmland",
@@ -1383,7 +1536,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": ""
   },
   {
     "name": "Overwrite the Multiverse",
@@ -1392,7 +1546,8 @@
     "colors": "black",
     "rarity": "mythic",
     "type": "Sorcery",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{4}{B}{B}"
   },
   {
     "name": "Paradox Shaper // Omit Variables",
@@ -1401,7 +1556,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Octopus Wizard // Sorcery",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{1}{U/B} // {U/B}"
   },
   {
     "name": "Perfected Theory",
@@ -1410,7 +1566,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/perfectedtheory.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{U}"
   },
   {
     "name": "Pia, Aether Ascetic",
@@ -1419,7 +1576,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Pia, Determined Rebuilder",
@@ -1428,7 +1586,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Artificer",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Plains",
@@ -1437,7 +1596,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Basic Land — Plains",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": ""
   },
   {
     "name": "Plan for All Outcomes",
@@ -1446,7 +1606,8 @@
     "type": "Enchantment",
     "img": "https://mythicspoiler.com/fra/cards/planforalloutcomes.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{3}{U}"
   },
   {
     "name": "Pompous Battlemage // Improvised Act",
@@ -1455,7 +1616,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Creature — Goblin Sorcerer // Sorcery",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{R} // {R}"
   },
   {
     "name": "Precise Redaction",
@@ -1464,7 +1626,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Predictive Preparations",
@@ -1473,7 +1636,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Primal Witchstalker",
@@ -1482,7 +1646,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Wolf",
-    "colorIdentity": "BG"
+    "colorIdentity": "BG",
+    "manaCost": "{1}{B}{G}"
   },
   {
     "name": "Proctor of Potential",
@@ -1491,7 +1656,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Creature — Human Cleric",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{W}{U}"
   },
   {
     "name": "Proft, Consulting Detective",
@@ -1500,7 +1666,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Detective",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Proft, Sinister Mastermind",
@@ -1509,7 +1676,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Rogue",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Prophesied End",
@@ -1518,7 +1686,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Protege's Awakening",
@@ -1527,7 +1696,8 @@
     "type": "Sorcery",
     "img": "https://mythicspoiler.com/fra/cards/protegesawakening.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{3}{U}"
   },
   {
     "name": "Prudent Fateseer // Peer Review",
@@ -1536,7 +1706,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Dwarf Wizard // Sorcery",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{1}{W/U}{W/U} // {2}{W/U}"
   },
   {
     "name": "Puppet Crafting",
@@ -1545,7 +1716,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Enchantment — Aura",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Pyre Rhymer // Molten Tide",
@@ -1554,7 +1726,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Creature — Elemental Sorcerer // Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}{R} // {R}"
   },
   {
     "name": "Radiant Summit",
@@ -1563,7 +1736,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land — Mountain Plains",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": ""
   },
   {
     "name": "Rampart Hunter",
@@ -1572,7 +1746,8 @@
     "type": "Creature — Horror",
     "img": "https://mythicspoiler.com/fra/cards/ramparthunterf.jpg",
     "qty": 1,
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}"
   },
   {
     "name": "Rank Rat",
@@ -1581,7 +1756,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Creature — Zombie Rat",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Recursive Recruitment",
@@ -1590,7 +1766,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{2}{U}{B}"
   },
   {
     "name": "Refute Destiny",
@@ -1599,7 +1776,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Repurposed Enforcer",
@@ -1608,7 +1786,8 @@
     "colors": "white",
     "rarity": "rare",
     "type": "Creature — Human Soldier",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Rescue Girl, First Responder",
@@ -1617,7 +1796,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Restore with Empathy",
@@ -1626,7 +1806,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/restorewithempathy.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Return to the Light Realms",
@@ -1635,7 +1816,8 @@
     "colors": "white",
     "rarity": "mythic",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{7}{W}{W}"
   },
   {
     "name": "Rewrite Regrets",
@@ -1644,7 +1826,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}"
   },
   {
     "name": "Rise of the Deathbringer",
@@ -1653,7 +1836,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Instant",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{4}{B}"
   },
   {
     "name": "Rockfall Vale",
@@ -1662,7 +1846,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": ""
   },
   {
     "name": "Roiling Canopy",
@@ -1671,7 +1856,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": ""
   },
   {
     "name": "Room of Refuge",
@@ -1680,7 +1866,8 @@
     "type": "Land",
     "img": "https://mythicspoiler.com/fra/cards/roomofrefuge.jpg",
     "qty": 1,
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": ""
   },
   {
     "name": "Ruric Thar, Biomagus",
@@ -1689,7 +1876,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Ogre Crab Wizard",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{4}{U}{U}"
   },
   {
     "name": "Ruric Thar, Magecrusher",
@@ -1698,7 +1886,8 @@
     "type": "Legendary Creature — Ogre Warrior",
     "img": "https://mythicspoiler.com/fra/cards/rurictharmagecrusherf.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{5}{G}{G}"
   },
   {
     "name": "Saheeli, Consul of Oversight",
@@ -1707,7 +1896,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Advisor",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{3}{W}{W}"
   },
   {
     "name": "Saheeli, Jewel of Avishkar",
@@ -1716,7 +1906,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Artificer",
-    "colorIdentity": "UR"
+    "colorIdentity": "UR",
+    "manaCost": "{2}{U}{R}"
   },
   {
     "name": "Samut, Hazoret's Champion",
@@ -1725,7 +1916,8 @@
     "colors": "red",
     "rarity": "rare",
     "type": "Legendary Creature — Human Warrior Cleric",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Samut, Tyrant of Naktamun",
@@ -1734,7 +1926,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Legendary Creature — Human Wizard",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Sanctum Lurker",
@@ -1743,7 +1936,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Creature — Horror",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Screeching Soulbreaker",
@@ -1752,7 +1946,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Creature — Siren Bard",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Seasoned Cryomancer",
@@ -1761,7 +1956,8 @@
     "colors": "blue",
     "rarity": "mythic",
     "type": "Creature — Human Wizard",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}{U}"
   },
   {
     "name": "Semester Foreseer // Peer Review",
@@ -1770,7 +1966,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Human Wizard // Sorcery",
-    "colorIdentity": "WU"
+    "colorIdentity": "WU",
+    "manaCost": "{3}{U} // {2}{W/U}"
   },
   {
     "name": "Shatterwing Pegasus",
@@ -1779,7 +1976,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Creature — Pegasus",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Shipwreck Marsh",
@@ -1788,7 +1986,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Land",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": ""
   },
   {
     "name": "Silence the Echo",
@@ -1797,7 +1996,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Simulacrum Shaper",
@@ -1806,7 +2006,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Creature — Elf Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}{G}"
   },
   {
     "name": "Skilled Battlecarver",
@@ -1815,7 +2016,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Creature — Human Warrior",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Solarium Sentry",
@@ -1824,7 +2026,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Creature — Cat Soldier",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{G}{W}"
   },
   {
     "name": "Solitary Cell",
@@ -1833,7 +2036,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Artifact",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": "{R}{W}"
   },
   {
     "name": "Solve for Disappointment",
@@ -1842,7 +2046,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Something Worth Saving",
@@ -1851,7 +2056,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Sphinx of False Conclusions",
@@ -1860,7 +2066,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Creature — Sphinx Illusion",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}{U}"
   },
   {
     "name": "Sphinx's Approach",
@@ -1869,7 +2076,8 @@
     "colors": "blue",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}{U}"
   },
   {
     "name": "Steel Hellkite",
@@ -1878,7 +2086,8 @@
     "colors": "colorless",
     "rarity": "rare",
     "type": "Artifact Creature — Dragon",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{6}"
   },
   {
     "name": "Stingcaster Mage",
@@ -1887,7 +2096,8 @@
     "colors": "red",
     "rarity": "mythic",
     "type": "Creature — Human Wizard",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Stingerquill Annex",
@@ -1896,7 +2106,8 @@
     "type": "Land",
     "img": "https://mythicspoiler.com/fra/cards/stingerquillannex.jpg",
     "qty": 1,
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": ""
   },
   {
     "name": "Stingerquill Charm",
@@ -1905,7 +2116,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{B}{R}"
   },
   {
     "name": "Stingerquill Voxmancer // Vicious Verse",
@@ -1914,7 +2126,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Goblin Sorcerer // Sorcery",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{B/R} // {B/R}"
   },
   {
     "name": "Stinging Vitriol",
@@ -1923,7 +2136,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{B}{R}"
   },
   {
     "name": "Sureshot Sower",
@@ -1932,7 +2146,8 @@
     "colors": "green",
     "rarity": "common",
     "type": "Creature — Human Archer",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Surgical Precision",
@@ -1941,7 +2156,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Surveillance Phantasm",
@@ -1950,7 +2166,8 @@
     "type": "Creature — Bird Illusion",
     "img": "https://mythicspoiler.com/fra/cards/surveillancephantasm.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Swamp",
@@ -1959,7 +2176,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Basic Land — Swamp",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": ""
   },
   {
     "name": "Tam's Resistance",
@@ -1968,7 +2186,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Sorcery",
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": "{1}{G/U}"
   },
   {
     "name": "Tam, the Possibility",
@@ -1977,7 +2196,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Legendary Creature — Gorgon Wizard",
-    "colorIdentity": "WUBRG"
+    "colorIdentity": "WUBRG",
+    "manaCost": "{1}{G}{U}"
   },
   {
     "name": "Tarmogoyf",
@@ -1986,7 +2206,8 @@
     "colors": "green",
     "rarity": "mythic",
     "type": "Creature — Lhurgoyf",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Tenured Tethermage",
@@ -1995,7 +2216,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Creature — Human Artificer",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{1}{R}{G}"
   },
   {
     "name": "Terminal Criticism",
@@ -2004,7 +2226,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Tether Technician",
@@ -2013,7 +2236,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Creature — Minotaur Artificer",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}"
   },
   {
     "name": "Tethermage's Advantage",
@@ -2022,7 +2246,8 @@
     "type": "Instant",
     "img": "https://mythicspoiler.com/fra/cards/tethermagesadvantage.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{G}"
   },
   {
     "name": "Tetsuko Umezawa, Fugitive",
@@ -2031,7 +2256,8 @@
     "type": "Legendary Creature — Human Rogue",
     "img": "https://mythicspoiler.com/fra/cards/tetsukoumezawafugitivef.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Tetsuko Umezawa, Pursuer",
@@ -2040,7 +2266,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Mercenary",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{3}{R}"
   },
   {
     "name": "Teyo, Diamondblade Mage",
@@ -2049,7 +2276,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{3}{B}"
   },
   {
     "name": "Teyo, Lightshield Expert",
@@ -2058,7 +2286,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Thalia, the Survivor",
@@ -2067,7 +2296,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Soldier",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{3}{W}"
   },
   {
     "name": "The Echoverse Fulcrum",
@@ -2076,7 +2306,8 @@
     "colors": "colorless",
     "rarity": "mythic",
     "type": "Legendary Artifact",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{2}"
   },
   {
     "name": "The Theorist, Jace Beleren",
@@ -2085,7 +2316,8 @@
     "colors": "blue",
     "rarity": "mythic",
     "type": "Legendary Planeswalker — Jace",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}{U}"
   },
   {
     "name": "Theoretical Necromancer",
@@ -2094,7 +2326,8 @@
     "colors": "black",
     "rarity": "common",
     "type": "Creature — Vampire Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Theorist's Proxy",
@@ -2103,7 +2336,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Creature — Illusion",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{1}{U}"
   },
   {
     "name": "Theorist's Sanctum",
@@ -2112,7 +2346,8 @@
     "type": "Land — Island",
     "img": "https://mythicspoiler.com/fra/cards/theoristssanctum.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": ""
   },
   {
     "name": "Theorix Annex",
@@ -2121,7 +2356,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": ""
   },
   {
     "name": "Theorix Charm",
@@ -2130,7 +2366,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{U}{B}"
   },
   {
     "name": "Theorix Metamage // Omit Variables",
@@ -2139,7 +2376,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Shade Wizard // Sorcery",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{2}{U/B} // {U/B}"
   },
   {
     "name": "Tinybones, Pocket Nuisance",
@@ -2148,7 +2386,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Skeleton Rogue",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Titanbones, Towering Heart",
@@ -2157,7 +2396,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Skeleton Druid",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{3}{G}"
   },
   {
     "name": "Tomik, Izzet Sparkmage",
@@ -2166,7 +2406,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Wizard",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Tomik, Orzhov Lawmage",
@@ -2175,7 +2416,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Advisor",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Transformative Commons",
@@ -2184,7 +2426,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "UG"
+    "colorIdentity": "UG",
+    "manaCost": ""
   },
   {
     "name": "Traxos, Academy Guardian",
@@ -2193,7 +2436,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Artifact Creature — Dragon Construct",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{3}{U}"
   },
   {
     "name": "Traxos, Scourge Eternal",
@@ -2202,7 +2446,8 @@
     "colors": "colorless",
     "rarity": "uncommon",
     "type": "Legendary Artifact Creature — Dragon Construct",
-    "colorIdentity": ""
+    "colorIdentity": "",
+    "manaCost": "{4}"
   },
   {
     "name": "Twinned Vision",
@@ -2211,7 +2456,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "UR"
+    "colorIdentity": "UR",
+    "manaCost": "{1}{U/R}"
   },
   {
     "name": "Twisted Fates",
@@ -2220,7 +2466,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Sorcery",
-    "colorIdentity": "WB"
+    "colorIdentity": "WB",
+    "manaCost": "{2}{W}{W}{B}"
   },
   {
     "name": "Uldaros Theorix",
@@ -2229,7 +2476,8 @@
     "colors": "multi",
     "rarity": "mythic",
     "type": "Legendary Creature — Elder Sphinx",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{3}{U}{B}{B}"
   },
   {
     "name": "Undulating Witness",
@@ -2238,7 +2486,8 @@
     "type": "Creature — Serpent",
     "img": "https://mythicspoiler.com/fra/cards/undulatingwitness.jpg",
     "qty": 1,
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{4}{U}"
   },
   {
     "name": "Unflinching Hortimancer",
@@ -2247,7 +2496,8 @@
     "colors": "white",
     "rarity": "common",
     "type": "Creature — Human Cleric",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{1}{W}"
   },
   {
     "name": "Unsummon",
@@ -2256,7 +2506,8 @@
     "colors": "blue",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{U}"
   },
   {
     "name": "Variable Chaser // Arc of Fortune",
@@ -2265,7 +2516,8 @@
     "colors": "blue",
     "rarity": "rare",
     "type": "Creature — Human Wizard // Sorcery",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U} // {2}{U}"
   },
   {
     "name": "Verdant Kraken",
@@ -2274,7 +2526,8 @@
     "colors": "green",
     "rarity": "rare",
     "type": "Creature — Plant Kraken",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{4}{G}{G}{G}"
   },
   {
     "name": "Vigorbloom Annex",
@@ -2283,7 +2536,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Land",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": ""
   },
   {
     "name": "Vigorbloom Charm",
@@ -2292,7 +2546,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{G}{W}"
   },
   {
     "name": "Vigorbloom Vanguard // Seed Suture",
@@ -2301,7 +2556,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Troll Druid // Sorcery",
-    "colorIdentity": "WG"
+    "colorIdentity": "WG",
+    "manaCost": "{1}{G/W} // {G/W}"
   },
   {
     "name": "Vindictive Triumph",
@@ -2310,7 +2566,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Instant",
-    "colorIdentity": "WB"
+    "colorIdentity": "WB",
+    "manaCost": "{W}{B}{B}"
   },
   {
     "name": "Vinelasher Adept",
@@ -2319,7 +2576,8 @@
     "type": "Creature — Rhino Soldier",
     "img": "https://mythicspoiler.com/fra/cards/vinelasheradept.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{4}{G}{G}"
   },
   {
     "name": "Violent Echoes",
@@ -2328,7 +2586,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}{R}"
   },
   {
     "name": "Void Extrapolator // Omit Variables",
@@ -2337,7 +2596,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Aetherborn Warlock // Sorcery",
-    "colorIdentity": "UB"
+    "colorIdentity": "UB",
+    "manaCost": "{1}{B} // {U/B}"
   },
   {
     "name": "Vraska's Final Mercy",
@@ -2346,7 +2606,8 @@
     "colors": "black",
     "rarity": "rare",
     "type": "Sorcery",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{B}{B}"
   },
   {
     "name": "Vraska, Soul of Stone",
@@ -2355,7 +2616,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Legendary Creature — Gorgon Wizard",
-    "colorIdentity": "WUR"
+    "colorIdentity": "WUR",
+    "manaCost": "{U}{R}{W}"
   },
   {
     "name": "Vraska, the Cutting Glare",
@@ -2364,7 +2626,8 @@
     "colors": "multi",
     "rarity": "rare",
     "type": "Legendary Creature — Gorgon Assassin",
-    "colorIdentity": "BG"
+    "colorIdentity": "BG",
+    "manaCost": "{B}{B}{G}"
   },
   {
     "name": "Warrior's Blades",
@@ -2373,7 +2636,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Artifact — Equipment",
-    "colorIdentity": "WR"
+    "colorIdentity": "WR",
+    "manaCost": "{2}{R}{W}"
   },
   {
     "name": "Way of the Cryomancer",
@@ -2382,7 +2646,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{2}{U}"
   },
   {
     "name": "Way of the Deathbringer",
@@ -2391,7 +2656,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Way of the Healer",
@@ -2400,7 +2666,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{3}{W}"
   },
   {
     "name": "Way of the Mentor",
@@ -2409,7 +2676,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Way of the Mind Sculptor",
@@ -2418,7 +2686,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{4}{U}"
   },
   {
     "name": "Way of the Necromancer",
@@ -2427,7 +2696,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{1}{B}"
   },
   {
     "name": "Way of the Paradox",
@@ -2436,7 +2706,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{2}{G}"
   },
   {
     "name": "Way of the Pyromancer",
@@ -2445,7 +2716,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{1}{R}"
   },
   {
     "name": "Way of the Warlord",
@@ -2454,7 +2726,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Way of the Wildspeaker",
@@ -2463,7 +2736,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Enchantment",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{4}{G}"
   },
   {
     "name": "Whiplash Wordsmith // Vicious Verse",
@@ -2472,7 +2746,8 @@
     "colors": "multi",
     "rarity": "common",
     "type": "Creature — Vampire Sorcerer // Sorcery",
-    "colorIdentity": "BR"
+    "colorIdentity": "BR",
+    "manaCost": "{3}{B/R} // {B/R}"
   },
   {
     "name": "Winter, Team Player",
@@ -2481,7 +2756,8 @@
     "colors": "red",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Warrior",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{4}{R}"
   },
   {
     "name": "Winter, Tormented Loner",
@@ -2490,7 +2766,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Warlock",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{2}{B}"
   },
   {
     "name": "Woodwork Prodigy // Soul Tether",
@@ -2499,7 +2776,8 @@
     "colors": "multi",
     "rarity": "uncommon",
     "type": "Creature — Cat Druid // Sorcery",
-    "colorIdentity": "RG"
+    "colorIdentity": "RG",
+    "manaCost": "{2}{R/G} // {2}{R/G}"
   },
   {
     "name": "Wrath of the Bloodmane",
@@ -2508,7 +2786,8 @@
     "colors": "red",
     "rarity": "common",
     "type": "Instant",
-    "colorIdentity": "R"
+    "colorIdentity": "R",
+    "manaCost": "{2}{R}"
   },
   {
     "name": "Wrecking Gecko",
@@ -2517,7 +2796,8 @@
     "type": "Artifact Creature — Lizard Construct",
     "img": "https://mythicspoiler.com/fra/cards/wreckinggecko.jpg",
     "qty": 1,
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{4}{G}"
   },
   {
     "name": "Yargle, Glutton of Urborg",
@@ -2526,7 +2806,8 @@
     "colors": "black",
     "rarity": "uncommon",
     "type": "Legendary Creature — Frog Spirit",
-    "colorIdentity": "B"
+    "colorIdentity": "B",
+    "manaCost": "{4}{B}"
   },
   {
     "name": "Yargle, Goliath of Otaria",
@@ -2535,7 +2816,8 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Frog Spirit",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{4}{U}"
   },
   {
     "name": "Yoshimaru, Beloved Companion",
@@ -2544,7 +2826,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Dog",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Yoshimaru, Scrappy Stray",
@@ -2553,7 +2836,8 @@
     "colors": "green",
     "rarity": "uncommon",
     "type": "Legendary Creature — Dog",
-    "colorIdentity": "G"
+    "colorIdentity": "G",
+    "manaCost": "{1}{G}"
   },
   {
     "name": "Your Fate Ends Here",
@@ -2562,7 +2846,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Instant",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{2}{W}"
   },
   {
     "name": "Yuriko, Blade of the Mighty",
@@ -2571,7 +2856,8 @@
     "colors": "white",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Samurai",
-    "colorIdentity": "W"
+    "colorIdentity": "W",
+    "manaCost": "{3}{W}"
   },
   {
     "name": "Yuriko, Hope from the Shadows",
@@ -2580,6 +2866,7 @@
     "colors": "blue",
     "rarity": "uncommon",
     "type": "Legendary Creature — Human Ninja",
-    "colorIdentity": "U"
+    "colorIdentity": "U",
+    "manaCost": "{U}"
   }
 ]
