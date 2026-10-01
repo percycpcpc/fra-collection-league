@@ -7,6 +7,7 @@ import { MatchList, type MatchRecord } from "./MatchList";
 import { AltMatches } from "./AltMatches";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
+import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type Profile = { id: string; name: string };
 
@@ -19,6 +20,7 @@ export function MatchesDashboard() {
   const [winnerDecks, setWinnerDecks] = useState<DeckSummary[]>([]);
   const [loserDecks, setLoserDecks] = useState<DeckSummary[]>([]);
   const [error, setError] = useState("");
+  const { players: sidebarPlayers } = useLeaguePlayers();
   const loadMatches = useCallback(async () => { const data = await jsonFetch<{ matches: MatchRecord[] }>("/api/matches"); setMatches(data.matches); }, []);
   useEffect(() => { Promise.all([jsonFetch<{ profiles: Profile[] }>("/api/profiles?counts=0"), loadMatches()]).then(([data]) => setProfiles(data.profiles)).catch((cause) => setError(cause.message)); }, [loadMatches]);
   useEffect(() => { if (!winnerId) { setWinnerDecks([]); return; } jsonFetch<{ decks: DeckSummary[] }>(`/api/profiles/${winnerId}/decks`).then((data) => setWinnerDecks(data.decks)).catch((cause) => setError(cause.message)); }, [winnerId]);
@@ -31,7 +33,7 @@ export function MatchesDashboard() {
   }
 
   const recordForm = profiles.length < 2 ? <p className="notice">Create at least two players before recording a match.</p> : <form className="match-form" onSubmit={submit}><label>Winner<select required value={winnerId} onChange={(event) => setWinnerId(event.target.value)}><option value="">Select winner</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><label>Winner deck<select name="winnerDeckId" defaultValue="" key={winnerId}><option value="">No deck</option>{winnerDecks.map((deck) => <option value={deck.id} key={deck.id}>{deck.name}</option>)}</select></label><span className="versus">VS</span><label>Loser<select required value={loserId} onChange={(event) => setLoserId(event.target.value)}><option value="">Select loser</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><label>Loser deck<select name="loserDeckId" defaultValue="" key={loserId}><option value="">No deck</option>{loserDecks.map((deck) => <option value={deck.id} key={deck.id}>{deck.name}</option>)}</select></label><label className="match-note">Note (optional)<input name="note" maxLength={200} placeholder="A close game…" /></label><button className="primary" type="submit" disabled={!winnerId || !loserId || winnerId === loserId}>Record match</button></form>;
-  if (style === "alt") return <AltMatches playerId={winnerId || profiles[0]?.id || ""} playerName="League" players={profiles} matches={matches} wins={0} losses={0} recordForm={recordForm} onToggleStyle={toggle} />;
+  if (style === "alt") return <AltMatches playerId={winnerId || profiles[0]?.id || ""} playerName="League" players={sidebarPlayers} matches={matches} wins={0} losses={0} recordForm={recordForm} onToggleStyle={toggle} />;
   return <main className="shell matches-page"><header className="page-heading"><div><Link className="back-link" href="/">← Players</Link><div className="eyebrow">League play</div><h1>Matches</h1></div><span>{matches.length} recent</span><UiStyleToggle onToggle={toggle} /></header>
     <section className="data-section"><h2>Record a match</h2>{recordForm}{error && <p className="error-banner">{error}</p>}</section>
     <section className="data-section"><h2>Recent matches</h2><MatchList matches={matches} onDeleted={loadMatches} /></section></main>;

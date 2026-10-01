@@ -20,6 +20,7 @@ import {
 import { AltDeckEditor } from "./AltDeckEditor";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
+import { useLeaguePlayers } from "./useLeaguePlayers";
 
 type ProfileData = { profile: { name: string }; cards: CollectionCard[] };
 type DeckData = { deck: { id: string; name: string; commander: string | null }; cards: DeckCard[] };
@@ -73,6 +74,7 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
   const { style, toggle } = useUiStyle();
   const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images"); const saves = useRef(0);
+  const { players } = useLeaguePlayers(profile ? { id: profileId, name: profile.profile.name } : undefined);
   // Collapsed pool groups (persisted), and whether off-color cards are shown.
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [showOffColor, setShowOffColor] = useState(false);
@@ -193,7 +195,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   const emptyPool = pool.groups.length === 0 && <p className="muted pool-empty">{search.trim() ? "No owned cards match your search." : pool.hiddenCount ? "Every other owned card is outside the commander's colors." : "No owned cards yet."}</p>;
 
   if (style === "alt") return <AltDeckEditor
-    profileId={profileId} profileName={profile.profile.name} players={[{ id: profileId, name: profile.profile.name }]}
+    profileId={profileId} profileName={profile.profile.name} players={players}
     deckName={deck.deck.name} cards={deck.cards} catalog={catalog} collection={profile.cards}
     poolGroups={pool.groups} basics={basics} hiddenPoolCount={pool.hiddenCount} search={search}
     showOffColor={showOffColor} viewMode={viewMode} status={status} error={error}
