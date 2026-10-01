@@ -32,5 +32,9 @@ export function AltShell({ children, title, subtitle, topRight, activeNav, playe
       <div className="alt-footer-space" />
     </main>
     {nowPlaying && <footer className="alt-nowbar">{nowPlaying}</footer>}
+    <nav className="alt-tabbar" aria-label="League navigation (mobile)">{nav.map((item) => {
+      const isActive = activeNav === item.id;
+      return <Link className={isActive ? "active" : ""} href={item.href} key={item.id} aria-current={isActive ? "page" : undefined}>{item.label}</Link>;
+    })}</nav>
   </div>;
 }
