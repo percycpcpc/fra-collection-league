@@ -4,11 +4,7 @@ import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { jsonFetch } from "@/lib/client";
 import type { AltPlayer } from "./AltShell";
 
-export type LeaguePlayer = AltPlayer & {
-  iconCard: string | null;
-  createdAt: string;
-  deckCount: number;
-};
+export type LeaguePlayer = { id: string; name: string; cardCount: number; iconCard: string | null; createdAt: string; deckCount: number; };
 
 let cachedPlayers: LeaguePlayer[] | null = null;
 let cachedAt = 0;
@@ -29,7 +25,7 @@ function getSnapshot() {
   return cachedPlayers;
 }
 
-function requestPlayers(force: boolean) {
+function requestPlayers(force: boolean): Promise<LeaguePlayer[]> {
   if (inFlight) {
     if (!force) return inFlight;
     return inFlight.then(

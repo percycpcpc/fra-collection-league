@@ -7,13 +7,11 @@ import { PlayerAvatar } from "./PlayerAvatar";
 import { AltPlayersDirectory } from "./AltPlayersDirectory";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
-import { loadLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
-
-type Profile = { id: string; name: string; iconCard: string | null; cardCount: number; deckCount: number };
+import { loadLeaguePlayers, useLeaguePlayers, type LeaguePlayer } from "./useLeaguePlayers";
 
 export function ProfilesDirectory() {
   const { style, toggle } = useUiStyle();
-  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [profiles, setProfiles] = useState<LeaguePlayer[]>([]);
   const [name, setName] = useState("");
   const [seedCommons, setSeedCommons] = useState(true);
   const [error, setError] = useState("");
@@ -39,7 +37,7 @@ export function ProfilesDirectory() {
     window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus());
   }
 
-  async function remove(profile: Profile) {
+  async function remove(profile: LeaguePlayer) {
     closeConfirm(profile.id); setError("");
     try {
       await jsonFetch(`/api/profiles/${profile.id}`, { method: "DELETE" });
