@@ -17,6 +17,16 @@ describe("alternate player pages SSR smoke", () => {
     expect(html).toContain('aria-label="Mobile league navigation. Player links target Percy"');
     expect(html).toContain("Player links: Percy");
     expect(html.match(/aria-current="page"/g)).toHaveLength(2);
+    expect(html).toContain('href="/p/p1/decks"');
+    expect(html).toContain('href="/matches"');
+    expect(html).not.toContain('href="/p/p1/matches"');
+  });
+  it("does not silently choose the first player on league pages", () => {
+    const html = renderToStaticMarkup(<AltShell title="League analytics" activeNav="analytics" players={[player]} onToggleStyle={noop}><p>Stats</p></AltShell>);
+    expect(html).toContain('href="/matches"');
+    expect(html).not.toContain('href="/p/p1/decks"');
+    expect(html).not.toContain('href="/p/p1/matches"');
+    expect(html).toContain("League navigation");
   });
   it("renders AltPlayersDirectory", () => {
     const html = renderToStaticMarkup(<AltPlayersDirectory players={[player]} sidebarPlayers={[{ id: "p2", name: "Alex" }]} createForm={<button>New</button>} onToggleStyle={noop} />);

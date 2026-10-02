@@ -1,23 +1,53 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 
 export type AltPlayer = { id: string; name: string; cardCount?: number };
 export type AltNav = "collection" | "decks" | "analytics" | "matches" | "home" | "admin";
+
+const PLAYER_CONTEXT_KEY = "fra-alt-player-context";
+const PLAYER_CONTEXT_EVENT = "fra-alt-player-context-change";
+
+function subscribeToPlayerContext(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  window.addEventListener(PLAYER_CONTEXT_EVENT, onChange);
+  return () => {
+    window.removeEventListener("storage", onChange);
+    window.removeEventListener(PLAYER_CONTEXT_EVENT, onChange);
+  };
+}
+
+function getPlayerContext() {
+  try { return window.localStorage.getItem(PLAYER_CONTEXT_KEY); }
+  catch { return null; }
+}
+
+function usePlayerContext(playerId?: string) {
+  const storedId = useSyncExternalStore(subscribeToPlayerContext, getPlayerContext, () => null);
+  useEffect(() => {
+    if (!playerId || getPlayerContext() === playerId) return;
+    try {
+      window.localStorage.setItem(PLAYER_CONTEXT_KEY, playerId);
+      window.dispatchEvent(new Event(PLAYER_CONTEXT_EVENT));
+    } catch { /* Navigation still works when storage is unavailable. */ }
+  }, [playerId]);
+  return playerId ?? storedId;
+}
 
 export function AltShell({ children, title, subtitle, topRight, activeNav, players, playerId, nowPlaying, onToggleStyle }: {
   children: ReactNode; title: ReactNode; subtitle?: string; topRight?: ReactNode; activeNav: AltNav;
   players: AltPlayer[]; playerId?: string; nowPlaying?: ReactNode; onToggleStyle: () => void;
 }) {
-  const currentId = playerId ?? players[0]?.id;
+  const requestedId = usePlayerContext(playerId);
+  const currentId = requestedId && players.some((player) => player.id === requestedId) ? requestedId : undefined;
   const currentPlayer = players.find((player) => player.id === currentId);
   const nav = [
     { id: "home", label: "Players", href: "/" },
     { id: "collection", label: "Collection", href: currentId ? `/p/${currentId}` : "/" },
     { id: "decks", label: "Decks", href: currentId ? `/p/${currentId}/decks` : "/" },
     { id: "analytics", label: "Analytics", href: "/analytics" },
-    { id: "matches", label: "Matches", href: currentId ? `/p/${currentId}/matches` : "/matches" },
+    { id: "matches", label: "Matches", href: "/matches" },
   ] as const;
   return <div className={`alt-ui-root ${nowPlaying ? "alt-has-nowbar" : ""}`}>
     <aside className="alt-sidebar">
