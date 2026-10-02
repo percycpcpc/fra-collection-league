@@ -27,13 +27,16 @@ export type AltCollectionViewProps = {
   importText: string;
   message: string;
   status: "idle" | "saving" | "saved" | "error";
+  unsyncedCount?: number;
   onImportTextChange: (value: string) => void;
   onImport: () => void;
   onToggleStyle: () => void;
   onSaveCard: (name: string, patch: { qty?: number; owned?: boolean }) => void;
+  onRetryUnsynced?: () => void;
+  onDiscardUnsynced?: () => void;
 };
 
-export function AltCollectionView({ profile, catalog, cards, importText, message, status, onImportTextChange, onImport, onToggleStyle, onSaveCard }: AltCollectionViewProps) {
+export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const [search, setSearch] = useState("");
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
@@ -70,6 +73,10 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
         <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} />
         <button className="alt-pill alt-primary" type="button" onClick={onImport}>Import &amp; merge</button>
       </section>}
+      {unsyncedCount > 0 && <div className="alt-unsynced" role="alert">
+        <span><strong>{unsyncedCount} unsynced {unsyncedCount === 1 ? "change" : "changes"}</strong> recovered from this browser. These values are pending until the server confirms them.</span>
+        <div><button className="alt-pill alt-primary" type="button" onClick={onRetryUnsynced} disabled={status === "saving"}>Retry</button><button className="alt-pill alt-outline" type="button" onClick={onDiscardUnsynced} disabled={status === "saving"}>Discard</button></div>
+      </div>}
       {(message || status === "saving") && <p className={`alt-notice ${status}`} role="status">{status === "saving" ? "Saving…" : message}</p>}
 
       <div className="alt-groups">

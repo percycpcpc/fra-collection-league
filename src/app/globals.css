@@ -571,6 +571,9 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-import .alt-primary { align-self: center; }
 .alt-notice { margin: 10px 28px 0; padding: 9px 12px; border-radius: 6px; color: var(--fra-alt-muted); background: var(--fra-alt-interactive); font-size: 12px; }
 .alt-notice.error { color: var(--fra-alt-negative); }
+.alt-unsynced { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 10px 28px 0; padding: 12px 14px; border: 1px solid var(--fra-alt-warning); border-radius: 8px; color: var(--fra-alt-text); background: #2b2418; font-size: 13px; }
+.alt-unsynced span { display: grid; gap: 3px; }
+.alt-unsynced div { display: flex; gap: 8px; }
 .alt-greeting { padding: 24px 28px 8px; }
 .alt-greeting h1 { margin: 0; font-size: 28px; line-height: 1.15; letter-spacing: -.5px; }
 .alt-greeting p { margin: 5px 0 0; color: var(--fra-alt-muted); font-size: 14px; }
@@ -616,6 +619,7 @@ h1, h2, h3, p { margin-top: 0; }
   .alt-search { flex: 1 1 240px; width: auto; }
   .alt-owned-counter { margin-left: 0; }
   .alt-section, .alt-greeting { padding-inline: 16px; }
+  .alt-unsynced { align-items: flex-start; flex-direction: column; margin-inline: 16px; }
   .alt-tabbar { position: fixed; z-index: 55; inset: auto 0 0 0; display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--fra-alt-surface); border-top: 1px solid #282828; }
   .alt-tabbar a { display: flex; min-height: 44px; align-items: center; justify-content: center; flex-direction: column; color: var(--fra-alt-muted); font-size: 11px; font-weight: 700; text-align: center; text-decoration: none; }
   .alt-tabbar a.active { color: #fff; box-shadow: inset 0 2px var(--fra-alt-accent); }
