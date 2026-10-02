@@ -1,7 +1,7 @@
 // Throwaway SSR smoke test for the Alt UI feature. Delete after verification.
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AltCollectionView } from "./AltCollectionView";
+import { AltCollectionView, collectionQuantityPatch } from "./AltCollectionView";
 import type { CatalogCard, CollectionCard } from "@/lib/client";
 
 const catalog: CatalogCard[] = [
@@ -48,6 +48,30 @@ describe("AltCollectionView SSR smoke", () => {
     expect(html).toContain("alt-ui-root");
   });
 
+  it("makes recovered collection edits visibly unsynced and recoverable", () => {
+    const html = renderToStaticMarkup(
+      <AltCollectionView
+        profile={{ id: "p1", name: "Percy", iconCard: null }}
+        catalog={catalog}
+        cards={cards}
+        importText=""
+        message=""
+        status="idle"
+        unsyncedCount={1}
+        onImportTextChange={noop}
+        onImport={noop}
+        onToggleStyle={noop}
+        onSaveCard={noop}
+        onRetryUnsynced={noop}
+        onDiscardUnsynced={noop}
+      />
+    );
+
+    expect(html).toContain("1 unsynced change");
+    expect(html).toContain("Retry");
+    expect(html).toContain("Discard");
+  });
+
   it("marks unowned cards dim and owned cards full", () => {
     const html = render();
     const counterIdx = html.indexOf("Countersculpt");
@@ -58,5 +82,10 @@ describe("AltCollectionView SSR smoke", () => {
   it("groups multicolor cards under Multi", () => {
     const html = render();
     expect(html).toContain("Multi");
+  });
+
+  it("keeps owned state consistent with quantity changes", () => {
+    expect(collectionQuantityPatch(3)).toEqual({ qty: 3, owned: true });
+    expect(collectionQuantityPatch(0)).toEqual({ qty: 0, owned: false });
   });
 });
