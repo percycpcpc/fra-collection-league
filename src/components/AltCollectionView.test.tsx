@@ -48,6 +48,30 @@ describe("AltCollectionView SSR smoke", () => {
     expect(html).toContain("alt-ui-root");
   });
 
+  it("makes recovered collection edits visibly unsynced and recoverable", () => {
+    const html = renderToStaticMarkup(
+      <AltCollectionView
+        profile={{ id: "p1", name: "Percy", iconCard: null }}
+        catalog={catalog}
+        cards={cards}
+        importText=""
+        message=""
+        status="idle"
+        unsyncedCount={1}
+        onImportTextChange={noop}
+        onImport={noop}
+        onToggleStyle={noop}
+        onSaveCard={noop}
+        onRetryUnsynced={noop}
+        onDiscardUnsynced={noop}
+      />
+    );
+
+    expect(html).toContain("1 unsynced change");
+    expect(html).toContain("Retry");
+    expect(html).toContain("Discard");
+  });
+
   it("marks unowned cards dim and owned cards full", () => {
     const html = render();
     const counterIdx = html.indexOf("Countersculpt");
