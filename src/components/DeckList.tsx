@@ -6,7 +6,7 @@ import { jsonFetch, type CatalogCard, type CollectionCard, type DeckSummary } fr
 import { commanderCandidates } from "@/lib/commander-selection";
 import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
-import { AltDeckList } from "./AltDeckList";
+import { AltCommanderField, AltDeckList } from "./AltDeckList";
 import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
@@ -84,7 +84,13 @@ export function DeckList({ profileId }: { profileId: string }) {
       : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
-  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-create-inline" onSubmit={create}><input name="name" required placeholder="New deck" /><button className="alt-pill alt-primary" type="submit">+ Create deck</button></form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete? <button type="button" onClick={() => void remove(deck.id)}>Confirm</button><button type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button className="alt-pill alt-danger" type="button" onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
+  if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-deck-create" onSubmit={create}>
+    <label className="alt-commander-field"><span>Deck name</span><input name="name" required placeholder="New deck" /></label>
+    <AltCommanderField label="Commander (optional)" query={cmdQuery} open={cmdOpen && candidates.length > 0} options={cmdMatches} clearLabel="— No commander" placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} disabled={!candidates.length && catalog.length > 0} describedBy="alt-commander-hint" onQuery={(value) => { setCmdQuery(value); setCommander(""); setCmdOpen(true); }} onOpen={setCmdOpen} onChoose={chooseCommander} />
+    <AltCommanderField label="Second commander (optional)" query={partnerQuery} open={partnerOpen} options={partnerMatches} clearLabel="— No second commander" placeholder="Search second commander…" disabled={!commander} describedBy="alt-commander-hint" onQuery={(value) => { setPartnerQuery(value); setPartner(""); setPartnerOpen(true); }} onOpen={setPartnerOpen} onChoose={choosePartner} />
+    <button className="alt-pill alt-primary" type="submit">+ Create deck</button>
+    <p id="alt-commander-hint" className="alt-field-hint">{hint}</p>
+  </form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete {deck.name}? <button className="alt-pill alt-danger" type="button" onClick={() => void remove(deck.id)}>Confirm</button><button className="alt-pill" type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button ref={(node) => { if (node) deleteTriggers.current.set(deck.id, node); else deleteTriggers.current.delete(deck.id); }} className="alt-pill alt-danger" type="button" aria-label={`Delete ${deck.name}`} onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
   return <main className="shell decks-page">
     <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
     <form className="deck-create" onSubmit={create}>
