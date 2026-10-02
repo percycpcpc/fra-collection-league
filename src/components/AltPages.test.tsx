@@ -5,11 +5,18 @@ import { AltAnalytics } from "./AltAnalytics";
 import { AltMatches } from "./AltMatches";
 import { AltDeckList } from "./AltDeckList";
 import { AltDeckEditor } from "./AltDeckEditor";
+import { AltShell } from "./AltShell";
 
 const noop = () => {};
 const player = { id: "p1", name: "Percy", iconCard: null, cardCount: 12, deckCount: 2 };
 
 describe("alternate player pages SSR smoke", () => {
+  it("announces the current page and mobile player context", () => {
+    const html = renderToStaticMarkup(<AltShell title="Percy's collection" activeNav="collection" playerId="p1" players={[player]} onToggleStyle={noop}><p>Cards</p></AltShell>);
+    expect(html).toContain('aria-label="Mobile league navigation. Player links target Percy"');
+    expect(html).toContain("Player links: Percy");
+    expect(html.match(/aria-current="page"/g)).toHaveLength(2);
+  });
   it("renders AltPlayersDirectory", () => {
     const html = renderToStaticMarkup(<AltPlayersDirectory players={[player]} sidebarPlayers={[{ id: "p2", name: "Alex" }]} createForm={<button>New</button>} onToggleStyle={noop} />);
     expect(html).toContain("Choose your player"); expect(html).toContain("Percy"); expect(html).toContain("Alex"); expect(html).toContain("Classic");
