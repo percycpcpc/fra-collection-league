@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState, type ReactNode } from "react";
 import { jsonFetch, type CatalogCard } from "@/lib/client";
+import { AltShell, type AltPlayer } from "./AltShell";
+import { useLeaguePlayers } from "./useLeaguePlayers";
+import { useUiStyle, type UiStyle } from "./useUiStyle";
 
 type Session = { enabled: boolean; authenticated: boolean };
 type SettingRow = { key: string; value: string; updatedAt: string };
@@ -27,7 +30,18 @@ const TEXT_FIELDS: { key: keyof CatalogCard; label: string }[] = [
   { key: "img", label: "Image URL" },
 ];
 
+/** Classic renders the admin page bare; Alt wraps the same content in AltShell chrome. */
+export function AdminFrame({ style, players, onToggleStyle, children }: { style: UiStyle; players: AltPlayer[]; onToggleStyle: () => void; children: ReactNode }) {
+  if (style !== "alt") return <main className="admin">{children}</main>;
+  return <AltShell title="Admin panel" subtitle="Catalog and league settings" activeNav="admin" players={players} onToggleStyle={onToggleStyle}>
+    <div className="admin alt-admin">{children}</div>
+  </AltShell>;
+}
+
 export function AdminPanel() {
+  const { style, toggle } = useUiStyle();
+  const { players } = useLeaguePlayers();
+  const frame = (children: ReactNode) => <AdminFrame style={style} players={players} onToggleStyle={toggle}>{children}</AdminFrame>;
   const [session, setSession] = useState<Session | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -236,15 +250,15 @@ export function AdminPanel() {
 
   if (session === null) {
     return (
-      <main className="admin">
+      frame(<>
         <p>Loading…</p>
-      </main>
+      </>)
     );
   }
 
   if (!session.enabled) {
     return (
-      <main className="admin">
+      frame(<>
         <h1>Admin panel</h1>
         <p className="error">
           The admin panel is disabled. Set the <code>ADMIN_PASSWORD</code> environment
@@ -254,13 +268,13 @@ export function AdminPanel() {
         <p>
           <Link href="/">← Back to league</Link>
         </p>
-      </main>
+      </>)
     );
   }
 
   if (!session.authenticated) {
     return (
-      <main className="admin">
+      frame(<>
         <h1>Admin panel</h1>
         <form onSubmit={login} className="admin-login">
           <label htmlFor="admin-password">Password</label>
@@ -277,12 +291,12 @@ export function AdminPanel() {
         <p>
           <Link href="/">← Back to league</Link>
         </p>
-      </main>
+      </>)
     );
   }
 
   return (
-    <main className="admin">
+    frame(<>
       <header className="admin-header">
         <h1>Admin panel</h1>
         <div>
@@ -455,6 +469,6 @@ export function AdminPanel() {
           <button type="submit">Add / update setting</button>
         </form>
       </section>
-    </main>
+    </>)
   );
 }

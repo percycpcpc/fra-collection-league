@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 export type AltPlayer = { id: string; name: string; cardCount?: number };
-export type AltNav = "collection" | "decks" | "analytics" | "matches" | "home";
+export type AltNav = "collection" | "decks" | "analytics" | "matches" | "home" | "admin";
 
 export function AltShell({ children, title, subtitle, topRight, activeNav, players, playerId, nowPlaying, onToggleStyle }: {
   children: ReactNode; title: ReactNode; subtitle?: string; topRight?: ReactNode; activeNav: AltNav;

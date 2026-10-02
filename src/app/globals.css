@@ -758,3 +758,42 @@ h1, h2, h3, p { margin-top: 0; }
   /* The workspace header stops being sticky here, so the toolbar sticks to the top. */
   .add-panel > .pool-toolbar { top: 0; }
 }
+
+/* Alt parity (#37): deck creation commanders, player/match deletion, admin shell. */
+.alt-player-card { padding: 0; }
+.alt-player-card .alt-player-link { display: flex; flex: 1; align-items: center; gap: 16px; min-width: 0; padding: 20px; color: inherit; text-decoration: none; }
+.alt-player-card .alt-player-actions { flex: 0 0 auto; padding-right: 20px; }
+.alt-inline-confirm { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fra-alt-muted); font-size: 13px; }
+.alt-deck-create { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: end; gap: 12px 16px; }
+.alt-commander-field { display: grid; gap: 6px; color: var(--fra-alt-muted); font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+.alt-commander-field input { width: 100%; min-height: 38px; padding: 8px 14px; border: 1px solid #444; border-radius: 9999px; color: #fff; background: var(--fra-alt-interactive); font-size: 14px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.alt-commander-field input:disabled { color: #777; cursor: not-allowed; }
+.alt-commander-field .cmd-dropdown { border-color: #444; border-radius: 8px; background: var(--fra-alt-surface); letter-spacing: 0; text-transform: none; }
+.alt-commander-field .cmd-dropdown li { color: #fff; font-weight: 400; }
+.alt-commander-field .cmd-dropdown li:hover { color: #fff; background: var(--fra-alt-hover); }
+.alt-commander-field .cmd-dropdown li:first-child { color: var(--fra-alt-muted); border-color: #303030; }
+.alt-deck-create > .alt-pill { justify-self: start; }
+.alt-field-hint { grid-column: 1 / -1; margin: 0; color: var(--fra-alt-muted); font-size: 12px; }
+.alt-match-row { flex-wrap: wrap; }
+.alt-match-row > div:first-child { flex: 1 1 320px; min-width: 0; }
+.alt-match-result { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 0 0 6px; }
+.alt-match-side { display: inline-flex; align-items: center; gap: 8px; }
+.alt-match-side > span { display: grid; }
+.alt-match-side small { font-size: 11px; }
+.alt-match-verb { color: var(--fra-alt-muted); font-size: 13px; }
+.alt-match-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.alt-list > .alt-h2h-row span:last-child { color: var(--fra-alt-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.alt-admin { width: auto; margin: 0; padding: 8px 28px 0; color: var(--fra-alt-text); }
+.alt-admin > h1, .alt-admin .admin-header h1 { display: none; }
+.alt-admin a { color: var(--fra-alt-accent); }
+.alt-admin .admin-header { justify-content: flex-end; }
+.alt-admin .admin-section { border-color: #303030; border-radius: 12px; background: var(--fra-alt-surface); }
+.alt-admin .admin-section h2 { color: #fff; }
+.alt-admin button { border: 0; border-radius: 9999px; color: #fff; background: var(--fra-alt-interactive); font-size: 12px; font-weight: 700; }
+.alt-admin button:hover { border-color: transparent; background: var(--fra-alt-hover); }
+.alt-admin button[type="submit"] { color: #000; background: var(--fra-alt-accent); }
+.alt-admin button.danger { color: var(--fra-alt-negative); }
+.alt-admin input, .alt-admin textarea { border-color: #444; color: #fff; background: var(--fra-alt-interactive); }
+.alt-admin .error { border-color: transparent; border-radius: 6px; color: var(--fra-alt-negative); background: var(--fra-alt-interactive); }
+.alt-admin .status { border-color: transparent; border-radius: 6px; color: var(--fra-alt-accent); background: var(--fra-alt-interactive); }
+@media (max-width: 700px) { .alt-admin { padding-inline: 16px; } }
