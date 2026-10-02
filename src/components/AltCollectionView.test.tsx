@@ -1,7 +1,7 @@
 // Throwaway SSR smoke test for the Alt UI feature. Delete after verification.
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AltCollectionView } from "./AltCollectionView";
+import { AltCollectionView, collectionQuantityPatch } from "./AltCollectionView";
 import type { CatalogCard, CollectionCard } from "@/lib/client";
 
 const catalog: CatalogCard[] = [
@@ -58,5 +58,10 @@ describe("AltCollectionView SSR smoke", () => {
   it("groups multicolor cards under Multi", () => {
     const html = render();
     expect(html).toContain("Multi");
+  });
+
+  it("keeps owned state consistent with quantity changes", () => {
+    expect(collectionQuantityPatch(3)).toEqual({ qty: 3, owned: true });
+    expect(collectionQuantityPatch(0)).toEqual({ qty: 0, owned: false });
   });
 });
