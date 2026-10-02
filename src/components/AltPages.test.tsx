@@ -79,6 +79,11 @@ describe("alt UI parity (#37)", () => {
   it("renders an empty Alt match history", () => {
     expect(renderToStaticMarkup(<AltMatches playerId="p1" playerName="League" players={[]} wins={0} losses={0} matches={[]} onToggleStyle={noop} />)).toContain("No matches yet");
   });
+  it("renders the league match total and history range", () => {
+    const html = renderToStaticMarkup(<AltMatches playerId="" playerName="League" players={[]} wins={0} losses={0} summary="42 matches recorded" matches={[match]} pagination={{ offset: 25, limit: 25, total: 42 }} onPage={noop} onToggleStyle={noop} />);
+    expect(html).toContain("42 matches recorded"); expect(html).toContain("26–42 of 42");
+    expect(html).toContain("Newer"); expect(html).toMatch(/<button[^>]*disabled=""[^>]*>Older/);
+  });
   it("wraps admin content in AltShell only for the Alt style", () => {
     const alt = renderToStaticMarkup(<AdminFrame style="alt" players={[player]} onToggleStyle={noop}><p>Catalog</p></AdminFrame>);
     expect(alt).toContain("alt-ui-root"); expect(alt).toContain("alt-admin"); expect(alt).toContain("Admin panel"); expect(alt).toContain("Catalog"); expect(alt).toContain("Switch to Classic UI");
