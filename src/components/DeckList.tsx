@@ -26,6 +26,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [error, setError] = useState("");
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [deckName, setDeckName] = useState("");
   const [commander, setCommander] = useState("");
   const [partner, setPartner] = useState("");
   const [cmdQuery, setCmdQuery] = useState("");
@@ -61,12 +62,12 @@ export function DeckList({ profileId }: { profileId: string }) {
   function choosePartner(name: string) { setPartner(name); setPartnerQuery(name); setPartnerOpen(false); }
 
   async function create(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(""); const form = new FormData(event.currentTarget); const formEl = event.currentTarget;
+    event.preventDefault(); setError("");
     const commanders = [commander, partner].filter(Boolean);
     try {
-      await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commanders }) });
+      await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: deckName, commanders }) });
       refreshLeaguePlayers().catch(() => undefined);
-      formEl.reset(); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
+      setDeckName(""); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
   }
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
@@ -85,7 +86,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
   if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-deck-create" onSubmit={create}>
-    <label className="alt-commander-field"><span>Deck name</span><input name="name" required placeholder="New deck" /></label>
+    <label className="alt-commander-field"><span>Deck name</span><input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
     <AltCommanderField label="Commander (optional)" query={cmdQuery} open={cmdOpen && candidates.length > 0} options={cmdMatches} clearLabel="— No commander" placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} disabled={!candidates.length && catalog.length > 0} describedBy="alt-commander-hint" onQuery={(value) => { setCmdQuery(value); setCommander(""); setCmdOpen(true); }} onOpen={setCmdOpen} onChoose={chooseCommander} />
     <AltCommanderField label="Second commander (optional)" query={partnerQuery} open={partnerOpen} options={partnerMatches} clearLabel="— No second commander" placeholder="Search second commander…" disabled={!commander} describedBy="alt-commander-hint" onQuery={(value) => { setPartnerQuery(value); setPartner(""); setPartnerOpen(true); }} onOpen={setPartnerOpen} onChoose={choosePartner} />
     <button className="alt-pill alt-primary" type="submit">+ Create deck</button>
@@ -94,7 +95,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   return <main className="shell decks-page">
     <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
     <form className="deck-create" onSubmit={create}>
-      <label>Deck name<input name="name" required placeholder="New deck" /></label>
+      <label>Deck name<input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
       <label>Commander (optional)
         <div className="cmd-search">
           <input type="text" value={cmdQuery} onChange={(e) => { setCmdQuery(e.target.value); setCommander(""); setCmdOpen(true); }} onFocus={() => setCmdOpen(true)} onBlur={() => setTimeout(() => setCmdOpen(false), 150)} placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} autoComplete="off" disabled={!candidates.length && catalog.length > 0} aria-describedby="commander-hint" />
