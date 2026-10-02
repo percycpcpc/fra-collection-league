@@ -20,6 +20,10 @@ function colorGroup(card: CatalogCard): (typeof GROUPS)[number] {
   return group || "Colorless";
 }
 
+export function collectionQuantityPatch(qty: number) {
+  return { qty, owned: qty > 0 };
+}
+
 export type AltCollectionViewProps = {
   profile: Profile;
   catalog: CatalogCard[];
@@ -59,7 +63,11 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
     onSaveCard(card.name, entry ? { owned: !entry.owned } : { qty: 1, owned: true });
   }
 
-  const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><span>Qty ×{selectedEntry?.qty || 0}</span><span>In deck</span><button type="button" onClick={() => toggle(selected)} aria-label={`Toggle owned status for ${selected.name}`}>{selectedEntry?.owned ? "✓" : "+"}</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
+  function setQuantity(card: CatalogCard, qty: number) {
+    onSaveCard(card.name, collectionQuantityPatch(qty));
+  }
+
+  const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><div className="alt-stepper alt-collection-quantity" role="group" aria-label={`Quantity for ${selected.name}`}><button type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, Math.max(0, (selectedEntry?.qty || 0) - 1))} aria-label={`Decrease ${selected.name} quantity`}>−</button><b>{selectedEntry?.qty || 0}</b><button type="button" onClick={() => setQuantity(selected, (selectedEntry?.qty || 0) + 1)} aria-label={`Increase ${selected.name} quantity`}>+</button></div><button className="alt-remove-quantity" type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, 0)} aria-label={`Remove ${selected.name} from collection`}>Remove</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
   return <AltShell title={`${profile.name}'s collection`} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
         <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>

@@ -608,6 +608,9 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-now-actions > span { padding: 7px 15px; border-radius: 9999px; color: var(--fra-alt-muted); background: var(--fra-alt-interactive); font-size: 11px; font-weight: 700; }
 .alt-now-actions > span.on { color: #000; background: var(--fra-alt-accent); }
 .alt-now-actions button { display: grid; width: 48px; min-height: 48px; padding: 0; place-items: center; border: 0; border-radius: 50%; color: #000; background: var(--fra-alt-accent); box-shadow: 0 8px 20px rgba(0,0,0,.5); font-size: 19px; font-weight: 700; }
+.alt-now-actions .alt-collection-quantity button { width: 36px; min-height: 36px; font-size: 16px; box-shadow: none; }
+.alt-now-actions .alt-remove-quantity { width: auto; min-height: 36px; padding: 0 14px; border-radius: 9999px; color: var(--fra-alt-negative); background: var(--fra-alt-interactive); box-shadow: none; font-size: 11px; text-transform: uppercase; }
+.alt-now-actions button:disabled { opacity: .45; cursor: not-allowed; }
 .alt-tabbar { display: none; }
 @media (max-width: 895px) {
   .alt-sidebar { display: none; }
