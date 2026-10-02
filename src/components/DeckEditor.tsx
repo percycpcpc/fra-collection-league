@@ -22,6 +22,7 @@ import { AltShell } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
+import { LatestWriteQueue } from "@/lib/latest-write-queue";
 
 type ProfileData = { profile: { name: string }; cards: CollectionCard[] };
 type DeckData = { deck: { id: string; name: string; commander: string | null }; cards: DeckCard[] };
@@ -74,7 +75,10 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
   const { style, toggle } = useUiStyle();
-  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images"); const saves = useRef(0);
+  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images");
+  const deckQueue = useRef<LatestWriteQueue<{ name: string; commander: string | null }> | null>(null);
+  const cardQueue = useRef<LatestWriteQueue<{ name: string; qty: number }> | null>(null);
+  const saveFailedRef = useRef(false);
   const { players } = useLeaguePlayers(profile ? { id: profileId, name: profile.profile.name } : undefined);
   // Collapsed pool groups (persisted), and whether off-color cards are shown.
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
@@ -95,6 +99,23 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   }, [loaded]);
   const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setCatalog(c); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); } }, [profileId, deckId]);
   useEffect(() => { void load(); }, [load]);
+  const queueChanged = () => queueMicrotask(() => {
+    const pending = deckQueue.current?.isPending() || cardQueue.current?.isPending();
+    setStatus(pending ? "Saving…" : saveFailedRef.current ? "" : "Saved");
+    if (!pending && saveFailedRef.current) void load();
+  });
+  const saveFailed = (cause: unknown) => {
+    saveFailedRef.current = true;
+    setError(cause instanceof Error ? cause.message : "Save failed.");
+  };
+  if (!deckQueue.current) deckQueue.current = new LatestWriteQueue(
+    async (value) => { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(value) }); },
+    { onError: saveFailed, onChange: queueChanged },
+  );
+  if (!cardQueue.current) cardQueue.current = new LatestWriteQueue(
+    async (value) => { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(value) }); },
+    { onError: saveFailed, onChange: queueChanged },
+  );
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
@@ -135,15 +156,14 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   );
 
   async function saveDeck(patch: { name?: string; commander?: string | null }) {
-    if (!deck) return; setDeck({ ...deck, deck: { ...deck.deck, ...patch } }); setStatus("Saving…"); setError("");
-    // On failure (e.g. a commander the server rejects) reload to undo the optimistic update.
-    try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) }); setStatus("Saved"); } catch (cause) { setStatus(""); setError(cause instanceof Error ? cause.message : "Save failed."); await load(); }
+    if (!deck) return; const next = { ...deck.deck, ...patch }; setDeck({ ...deck, deck: next }); saveFailedRef.current = false; setStatus("Saving…"); setError("");
+    deckQueue.current?.enqueue("deck", { name: next.name, commander: next.commander });
   }
   async function saveCard(name: string, qty: number) {
     if (!deck) return; const current = deckMap.get(name.toLowerCase());
     const nextCards = qty === 0 ? deck.cards.filter((card) => card.name.toLowerCase() !== name.toLowerCase()) : current ? deck.cards.map((card) => card.name.toLowerCase() === name.toLowerCase() ? { ...card, qty } : card) : [...deck.cards, { id: `temp-${name}`, deckId, name, qty, isBasic: isBasicName(name) }];
-    setDeck({ ...deck, cards: nextCards }); saves.current += 1; setStatus("Saving…"); setError("");
-    try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, qty }) }); setStatus("Saved"); } catch (cause) { setError(cause instanceof Error ? cause.message : "Save failed."); await load(); } finally { saves.current -= 1; if (saves.current > 0) setStatus("Saving…"); }
+    setDeck({ ...deck, cards: nextCards }); saveFailedRef.current = false; setStatus("Saving…"); setError("");
+    cardQueue.current?.enqueue(name.toLowerCase(), { name, qty });
   }
   function rename(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void saveDeck({ name: String(new FormData(event.currentTarget).get("name") || "") }); }
   function changeViewMode(mode: ViewMode) {

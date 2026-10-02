@@ -10,6 +10,7 @@ import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
+import { LatestWriteQueue } from "@/lib/latest-write-queue";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
 const GROUPS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"];
@@ -34,7 +35,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [message, setMessage] = useState("");
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const { players } = useLeaguePlayers(profile ?? undefined);
-  const saveCount = useRef(0);
+  const saveQueue = useRef<LatestWriteQueue<{ name: string; qty: number; owned: boolean }> | null>(null);
   const storageKey = `fra-pending-${profileId}`;
 
   const load = useCallback(async () => {
@@ -57,6 +58,24 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     } catch (cause) { setMessage(cause instanceof Error ? cause.message : "Could not load collection."); }
   }, [profileId, storageKey]);
   useEffect(() => { void load(); }, [load]);
+
+  if (!saveQueue.current) {
+    saveQueue.current = new LatestWriteQueue(
+      async (value) => {
+        await jsonFetch(`/api/profiles/${profileId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(value) });
+        const latest = JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, Partial<CollectionCard>>;
+        if (latest[value.name]?.qty === value.qty && latest[value.name]?.owned === value.owned) delete latest[value.name];
+        if (Object.keys(latest).length) localStorage.setItem(storageKey, JSON.stringify(latest)); else localStorage.removeItem(storageKey);
+      },
+      {
+        onError: (cause) => { setStatus("error"); setMessage(cause instanceof Error ? cause.message : "Save failed."); },
+        onChange: () => queueMicrotask(() => {
+          if (saveQueue.current?.isPending()) setStatus("saving");
+          else setStatus((current) => current === "error" ? current : "saved");
+        }),
+      },
+    );
+  }
 
   const catalogMap = useMemo(() => new Map(catalog.map((card) => [card.name.toLocaleLowerCase(), card])), [catalog]);
   const collectionMap = useMemo(() => new Map(cards.map((card) => [card.name.toLocaleLowerCase(), card])), [cards]);
@@ -86,15 +105,8 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     const pending = JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, Partial<CollectionCard>>;
     pending[card.name] = { ...pending[card.name], qty: next.qty, owned: next.owned };
     localStorage.setItem(storageKey, JSON.stringify(pending));
-    saveCount.current += 1; setStatus("saving"); setMessage("");
-    try {
-      await jsonFetch(`/api/profiles/${profileId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, ...patch }) });
-      const latest = JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, Partial<CollectionCard>>;
-      if (latest[card.name]?.qty === next.qty && latest[card.name]?.owned === next.owned) delete latest[card.name];
-      if (Object.keys(latest).length) localStorage.setItem(storageKey, JSON.stringify(latest)); else localStorage.removeItem(storageKey);
-      setStatus("saved");
-    } catch (cause) { setStatus("error"); setMessage(cause instanceof Error ? cause.message : "Save failed."); }
-    finally { saveCount.current -= 1; if (saveCount.current > 0) setStatus("saving"); }
+    setStatus("saving"); setMessage("");
+    saveQueue.current?.enqueue(name.toLowerCase(), { name, qty: next.qty, owned: next.owned });
   }
 
   async function rename(event: FormEvent<HTMLFormElement>) {
