@@ -8,6 +8,7 @@ import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
 import { AltCommanderField, AltDeckList } from "./AltDeckList";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
@@ -25,6 +26,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [data, setData] = useState<Data | null>(null);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [commander, setCommander] = useState("");
   const [partner, setPartner] = useState("");
@@ -34,7 +36,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const { players } = useLeaguePlayers(data ? { id: profileId, name: data.profile.name } : undefined);
   const deleteTriggers = useRef(new Map<string, HTMLButtonElement>());
-  const load = useCallback(() => jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)), [profileId]);
+  const load = useCallback(() => { setLoading(true); setError(""); return jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)).finally(() => setLoading(false)); }, [profileId]);
   useEffect(() => { void load(); }, [load]);
   // The catalog carries card types, needed to find legendary creatures. Cached for an hour by the API.
   useEffect(() => { jsonFetch<CatalogCard[]>("/api/catalog").then(setCatalog).catch((cause) => setError(cause.message)); }, []);
@@ -73,7 +75,7 @@ export function DeckList({ profileId }: { profileId: string }) {
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
   if (!data) {
-    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading decks…"}</p></div></AltShell>;
+    if (style === "alt") return <AltShell title={loading ? "Loading decks…" : "Decks unavailable"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={loading ? "Loading decks" : "We couldn't load these decks"} busy={loading} onRetry={loading ? undefined : () => void load()}>{loading ? "Fetching this player's decks." : error}</AltPageState></AltShell>;
     return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
   }
   const noCandidates = catalog.length > 0 && candidates.length === 0;

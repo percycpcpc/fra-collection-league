@@ -6,6 +6,7 @@ import { CardImage } from "./CardImage";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltCollectionView } from "./AltCollectionView";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
@@ -34,6 +35,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [importText, setImportText] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [pendingEdits, setPendingEdits] = useState<PendingEdits>({});
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const { players } = useLeaguePlayers(profile ?? undefined);
@@ -52,6 +54,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   }, [storageKey]);
 
   const load = useCallback(async () => {
+    setLoading(true); setMessage("");
     try {
       const [data, cat] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<CatalogCard[]>("/api/catalog")]);
       let loaded = data.cards;
@@ -69,6 +72,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
       setPendingEdits(edits);
       setProfile(data.profile); setCards(loaded); setCatalog(cat);
     } catch (cause) { setMessage(cause instanceof Error ? cause.message : "Could not load collection."); }
+    finally { setLoading(false); }
   }, [profileId, readPending]);
   useEffect(() => { void load(); }, [load]);
 
@@ -171,7 +175,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   function download() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([exportText()], { type: "text/plain" })); link.download = `${profile?.name || "collection"}-FRA.txt`; link.click(); URL.revokeObjectURL(link.href); }
 
   if (!profile) {
-    if (uiStyle === "alt") return <AltShell title="Loading…" activeNav="collection" playerId={profileId} players={players} onToggleStyle={toggleUiStyle}><div className="alt-section"><p className="muted">{message || "Loading collection…"}</p></div></AltShell>;
+    if (uiStyle === "alt") return <AltShell title={loading ? "Loading collection…" : "Collection unavailable"} activeNav="collection" playerId={profileId} players={players} onToggleStyle={toggleUiStyle}><AltPageState title={loading ? "Loading collection" : "We couldn't load this collection"} busy={loading} onRetry={loading ? undefined : () => void load()}>{loading ? "Fetching the player and card catalog." : message}</AltPageState></AltShell>;
     return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
   }
   if (uiStyle === "alt") return <AltCollectionView

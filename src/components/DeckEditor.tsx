@@ -19,6 +19,7 @@ import {
 } from "@/lib/deck-identity";
 import { AltDeckEditor } from "./AltDeckEditor";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -181,7 +182,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   }
 
   if (!profile || !deck) {
-    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading deck…"}</p></div></AltShell>;
+    if (style === "alt") return <AltShell title={error ? "Deck unavailable" : "Loading deck…"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load this deck" : "Loading deck"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Fetching the deck, collection, and card catalog."}</AltPageState></AltShell>;
     return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
   }
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));

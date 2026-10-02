@@ -88,6 +88,7 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
       {(message || status === "saving") && <p className={`alt-notice ${status}`} role="status">{status === "saving" ? "Saving…" : message}</p>}
 
       <div className="alt-groups">
+        {catalog.length > 0 && [...groups.values()].every((items) => items.length === 0) && <section className="alt-page-section"><h2>No cards found</h2><p className="alt-field-hint">No cards match “{search}”. Clear or change the search to browse the collection.</p></section>}
         {GROUPS.map((group) => {
           const items = groups.get(group) || [];
           if (!items.length) return null;
