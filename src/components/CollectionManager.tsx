@@ -13,6 +13,7 @@ import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
+type PendingEdits = Record<string, Partial<Pick<CollectionCard, "qty" | "owned">>>;
 const GROUPS = ["White", "Blue", "Black", "Red", "Green", "Multi", "Colorless"];
 const RARITY: Record<string, number> = { mythic: 0, rare: 1, uncommon: 2, common: 3 };
 
@@ -33,18 +34,29 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [importText, setImportText] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [pendingEdits, setPendingEdits] = useState<PendingEdits>({});
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const { players } = useLeaguePlayers(profile ?? undefined);
   const saveQueue = useRef<LatestWriteQueue<{ name: string; qty: number; owned: boolean }> | null>(null);
   const storageKey = `fra-pending-${profileId}`;
 
+  const readPending = useCallback((): PendingEdits => {
+    try { return JSON.parse(localStorage.getItem(storageKey) || "{}"); }
+    catch { return {}; }
+  }, [storageKey]);
+
+  const writePending = useCallback((edits: PendingEdits) => {
+    if (Object.keys(edits).length) localStorage.setItem(storageKey, JSON.stringify(edits));
+    else localStorage.removeItem(storageKey);
+    setPendingEdits(edits);
+  }, [storageKey]);
+
   const load = useCallback(async () => {
     try {
       const [data, cat] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<CatalogCard[]>("/api/catalog")]);
       let loaded = data.cards;
-      const pending = localStorage.getItem(storageKey);
-      if (pending) {
-        const edits = JSON.parse(pending) as Record<string, Partial<CollectionCard>>;
+      const edits = readPending();
+      if (Object.keys(edits).length) {
         const recovered = new Map(loaded.map((card) => [card.name.toLowerCase(), card]));
         Object.entries(edits).forEach(([name, edit]) => {
           const key = name.toLowerCase();
@@ -54,18 +66,19 @@ export function CollectionManager({ profileId }: { profileId: string }) {
         });
         loaded = [...recovered.values()];
       }
+      setPendingEdits(edits);
       setProfile(data.profile); setCards(loaded); setCatalog(cat);
     } catch (cause) { setMessage(cause instanceof Error ? cause.message : "Could not load collection."); }
-  }, [profileId, storageKey]);
+  }, [profileId, readPending]);
   useEffect(() => { void load(); }, [load]);
 
   if (!saveQueue.current) {
     saveQueue.current = new LatestWriteQueue(
       async (value) => {
         await jsonFetch(`/api/profiles/${profileId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(value) });
-        const latest = JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, Partial<CollectionCard>>;
+        const latest = readPending();
         if (latest[value.name]?.qty === value.qty && latest[value.name]?.owned === value.owned) delete latest[value.name];
-        if (Object.keys(latest).length) localStorage.setItem(storageKey, JSON.stringify(latest)); else localStorage.removeItem(storageKey);
+        writePending(latest);
       },
       {
         onError: (cause) => { setStatus("error"); setMessage(cause instanceof Error ? cause.message : "Save failed."); },
@@ -102,11 +115,31 @@ export function CollectionManager({ profileId }: { profileId: string }) {
       if (!exists) return [...current, next];
       return current.map((item) => item.name.toLowerCase() === name.toLowerCase() ? next : item);
     });
-    const pending = JSON.parse(localStorage.getItem(storageKey) || "{}") as Record<string, Partial<CollectionCard>>;
+    const pending = readPending();
     pending[card.name] = { ...pending[card.name], qty: next.qty, owned: next.owned };
-    localStorage.setItem(storageKey, JSON.stringify(pending));
+    writePending(pending);
     setStatus("saving"); setMessage("");
     saveQueue.current?.enqueue(name.toLowerCase(), { name, qty: next.qty, owned: next.owned });
+  }
+
+  async function retryUnsynced() {
+    const remaining = readPending();
+    setStatus("saving"); setMessage("");
+    let failed = 0;
+    for (const [name, patch] of Object.entries({ ...remaining })) {
+      try {
+        await jsonFetch(`/api/profiles/${profileId}/cards`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, ...patch }) });
+        delete remaining[name];
+        writePending({ ...remaining });
+      } catch { failed += 1; }
+    }
+    if (failed) { setStatus("error"); setMessage(`${failed} ${failed === 1 ? "change" : "changes"} still could not be saved.`); }
+    else { setStatus("saved"); setMessage("All recovered changes are saved."); }
+  }
+
+  async function discardUnsynced() {
+    writePending({}); setStatus("idle"); setMessage("");
+    await load();
   }
 
   async function rename(event: FormEvent<HTMLFormElement>) {
@@ -148,10 +181,13 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     importText={importText}
     message={message}
     status={status}
+    unsyncedCount={Object.keys(pendingEdits).length}
     onImportTextChange={setImportText}
     onImport={() => void runImport()}
     onToggleStyle={toggleUiStyle}
     onSaveCard={(name, patch) => void saveCard(name, patch)}
+    onRetryUnsynced={() => void retryUnsynced()}
+    onDiscardUnsynced={() => void discardUnsynced()}
   />;
   return <main className="collection-page">
     <header className="workspace-header">
@@ -160,6 +196,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     </header>
     {iconPickerOpen && <section className="icon-picker" id="icon-picker" aria-label="Choose profile icon"><div className="icon-picker-tools"><strong>Choose an icon</strong><input type="search" placeholder="Search owned cards" value={iconSearch} onChange={(event) => setIconSearch(event.target.value)} autoFocus /></div><div className="icon-picker-grid"><button className="icon-choice initial-choice" type="button" onClick={() => void setIcon(null)}><PlayerAvatar name={profile.name} iconCard={null} size={90} /><span>Use initial</span></button>{ownedIconCards.map((card) => <div className={`icon-choice ${profile.iconCard === card.name ? "selected" : ""}`} key={card.name}><CardImage name={card.name} catalog={card} onClick={() => void setIcon(card.name)} ariaLabel={`Use ${card.name} as profile icon`} /><span title={card.name}>{card.name}</span></div>)}</div>{ownedIconCards.length === 0 && <p className="muted">No owned cards match that search.</p>}</section>}
     <section className="collection-tools">
+      {Object.keys(pendingEdits).length > 0 && <div className="notice error-banner" role="alert"><strong>{Object.keys(pendingEdits).length} unsynced {Object.keys(pendingEdits).length === 1 ? "change" : "changes"}</strong> recovered from this browser. <button type="button" onClick={() => void retryUnsynced()} disabled={status === "saving"}>Retry</button> <button type="button" onClick={() => void discardUnsynced()} disabled={status === "saving"}>Discard</button></div>}
       <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>
       <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} /><button className="primary" onClick={() => void runImport()}>Import & merge</button></div>
       {message && <p className="notice" role="status">{message}</p>}
