@@ -61,7 +61,7 @@ export function AltShell({ children, title, subtitle, topRight, activeNav, playe
     </aside>
     <main className="alt-main">
       <header className="alt-topbar">
-        <div className="alt-topbar-context">{!onChooser && <Link className="alt-back-players" href="/">← Players</Link>}{showChip && <PlayerChip browsing={browsing} />}</div>
+        <div className="alt-topbar-context">{showChip && <PlayerChip browsing={browsing} />}</div>
         <div className="alt-topbar-spacer" />{topRight}<button className="alt-pill alt-style-toggle" type="button" onClick={onToggleStyle} aria-label="Switch to Classic UI">Classic</button>
       </header>
       <div className="alt-greeting">{typeof title === "string" ? <h1>{title}</h1> : title}{subtitle && <p>{subtitle}</p>}</div>

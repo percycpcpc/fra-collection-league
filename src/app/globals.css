@@ -554,10 +554,8 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-avatar { display: grid; flex: 0 0 32px; width: 32px; height: 32px; place-items: center; border-radius: 50%; color: #090909; font-size: 12px; font-weight: 700; }
 .alt-main { min-height: 100vh; margin-left: 250px; background: linear-gradient(180deg, #252525 0, var(--fra-alt-page) 320px); }
 .alt-topbar { position: sticky; z-index: 40; top: 0; display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 12px 28px; background: rgba(18,18,18,.78); backdrop-filter: blur(14px); }
-/* Topbar left cluster: back to the chooser + the browsing player (lives inside the measured .alt-topbar). */
+/* Topbar left cluster: the browsing player (lives inside the measured .alt-topbar). */
 .alt-topbar-context { display: flex; min-width: 0; max-width: 100%; align-items: center; gap: 14px; }
-.alt-back-players { color: var(--fra-alt-muted); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
-.alt-back-players:hover { color: #fff; }
 .alt-player-chip { display: flex; min-width: 0; align-items: center; gap: 10px; padding: 4px 14px 4px 4px; border-radius: 9999px; background: var(--fra-alt-interactive); }
 .alt-player-chip-avatar { display: grid; flex: 0 0 32px; }
 .alt-player-chip-avatar .player-avatar { border-radius: 50%; object-fit: cover; }

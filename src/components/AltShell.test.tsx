@@ -50,11 +50,11 @@ describe("AltShell", () => {
     expect(html).not.toContain("alt-players");
   });
 
-  it("renders the back link and a non-interactive player chip inside the topbar", () => {
+  it("renders a non-interactive player chip inside the topbar, with no back link", () => {
     const html = renderToStaticMarkup(<AltShell title="T" activeNav="collection" player={{ id: "p1", name: "Percy Long Name" }} onToggleStyle={noop}>x</AltShell>);
     const topbar = html.slice(html.indexOf('class="alt-topbar"'), html.indexOf("</header>"));
-    expect(topbar).toContain('href="/"');
-    expect(topbar).toContain("← Players");
+    expect(topbar).not.toContain("<a ");
+    expect(topbar).not.toContain("← Players");
     expect(topbar).toContain("Browsing");
     expect(topbar).toContain("Percy Long Name");
     const chip = topbar.slice(topbar.indexOf("alt-player-chip"));
