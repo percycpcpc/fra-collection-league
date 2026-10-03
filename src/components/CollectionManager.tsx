@@ -142,11 +142,16 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     await load();
   }
 
-  async function rename(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); if (!profile) return;
-    const form = new FormData(event.currentTarget); const name = String(form.get("name") || "");
+  async function renameProfile(name: string) {
+    if (!profile) return;
     try { const data = await jsonFetch<{ profile: ProfileData["profile"] }>(`/api/profiles/${profileId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) }); setProfile(data.profile); refreshLeaguePlayers().catch(() => undefined); }
-    catch (cause) { setMessage(cause instanceof Error ? cause.message : "Rename failed."); }
+    catch (cause) { setMessage(cause instanceof Error ? cause.message : "Rename failed."); throw cause; }
+  }
+
+  function rename(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const name = String(new FormData(event.currentTarget).get("name") || "");
+    void renameProfile(name).catch(() => undefined);
   }
 
   async function setIcon(iconCard: string | null) {
@@ -185,6 +190,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     onImportTextChange={setImportText}
     onImport={() => void runImport()}
     onToggleStyle={toggleUiStyle}
+    onRename={renameProfile}
     onSaveCard={(name, patch) => void saveCard(name, patch)}
     onRetryUnsynced={() => void retryUnsynced()}
     onDiscardUnsynced={() => void discardUnsynced()}

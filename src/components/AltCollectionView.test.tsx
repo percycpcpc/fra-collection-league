@@ -28,6 +28,7 @@ function render() {
       onImportTextChange={noop}
       onImport={noop}
       onToggleStyle={noop}
+      onRename={async () => {}}
       onSaveCard={noop}
     />
   );
@@ -45,6 +46,7 @@ describe("AltCollectionView SSR smoke", () => {
     expect(html).toContain("Countersculpt");
     expect(html).toContain("Aerid Konstrari");
     expect(html).toContain("Classic");
+    expect(html).toContain("Rename profile");
     expect(html).toContain("alt-ui-root");
   });
 
@@ -61,6 +63,7 @@ describe("AltCollectionView SSR smoke", () => {
         onImportTextChange={noop}
         onImport={noop}
         onToggleStyle={noop}
+        onRename={async () => {}}
         onSaveCard={noop}
         onRetryUnsynced={noop}
         onDiscardUnsynced={noop}

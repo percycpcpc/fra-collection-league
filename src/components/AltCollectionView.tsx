@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { FormEvent, KeyboardEvent, useMemo, useState } from "react";
 import { cardImage, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { AltShell } from "./AltShell";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -35,15 +35,17 @@ export type AltCollectionViewProps = {
   onImportTextChange: (value: string) => void;
   onImport: () => void;
   onToggleStyle: () => void;
+  onRename: (name: string) => Promise<void>;
   onSaveCard: (name: string, patch: { qty?: number; owned?: boolean }) => void;
   onRetryUnsynced?: () => void;
   onDiscardUnsynced?: () => void;
 };
 
-export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
+export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, onToggleStyle, onRename, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const [search, setSearch] = useState("");
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
   const { players } = useLeaguePlayers(profile);
 
   const collectionMap = useMemo(() => new Map(cards.map((card) => [card.name.toLowerCase(), card])), [cards]);
@@ -70,9 +72,22 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
     onSaveCard(card.name, collectionQuantityPatch(qty));
   }
 
+  async function submitRename(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const name = String(new FormData(event.currentTarget).get("name") || "");
+    try { await onRename(name); setRenaming(false); }
+    catch { /* The parent surfaces the API error and leaves the form open. */ }
+  }
+
+  function renameKeys(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") { event.preventDefault(); setRenaming(false); }
+  }
+
+  const title = <div className="alt-profile-title-row"><h1>{profile.name}&apos;s collection</h1>{renaming ? <form className="alt-create-inline" onSubmit={(event) => void submitRename(event)}><input autoFocus name="name" aria-label="Profile name" defaultValue={profile.name} onKeyDown={renameKeys} /><button className="alt-pill alt-primary">Save</button><button className="alt-pill alt-outline" type="button" onClick={() => setRenaming(false)}>Cancel</button></form> : <button className="alt-rename" type="button" onClick={() => setRenaming(true)}>Rename profile</button>}</div>;
+
   const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><div className="alt-stepper alt-collection-quantity" role="group" aria-label={`Quantity for ${selected.name}`}><button type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, Math.max(0, (selectedEntry?.qty || 0) - 1))} aria-label={`Decrease ${selected.name} quantity`}>−</button><b>{selectedEntry?.qty || 0}</b><button type="button" onClick={() => setQuantity(selected, (selectedEntry?.qty || 0) + 1)} aria-label={`Increase ${selected.name} quantity`}>+</button></div><button className="alt-remove-quantity" type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, 0)} aria-label={`Remove ${selected.name} from collection`}>Remove</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
-  return <AltShell title={`${profile.name}'s collection`} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
+  return <AltShell title={title} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
         <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>
         <div className="alt-owned-counter">Owned <b>{ownedCount} / {catalog.length}</b></div>
         <button className="alt-pill alt-outline" type="button" onClick={() => setImportOpen((open) => !open)} aria-expanded={importOpen}>Import &amp; merge</button>

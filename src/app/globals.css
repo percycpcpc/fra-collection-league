@@ -673,11 +673,13 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .alt-deck-editor .alt-style-toggle { border: 1px solid #555; color: var(--fra-alt-muted); background: transparent; }
 .alt-deck-editor .alt-greeting { padding-bottom: 12px; }
-.alt-deck-editor .alt-deck-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-.alt-deck-editor .alt-deck-title-row h1 { margin: 0; font-size: 28px; }
-.alt-deck-editor .alt-rename { padding: 4px 0; border: 0; color: var(--fra-alt-muted); background: transparent; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.alt-deck-editor .alt-deck-title-row, .alt-profile-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.alt-deck-editor .alt-deck-title-row h1, .alt-profile-title-row h1 { margin: 0; font-size: 28px; }
+.alt-rename { padding: 4px 0; border: 0; color: var(--fra-alt-muted); background: transparent; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
 .alt-deck-editor .alt-deck-title-row .alt-create-inline { flex: 1 1 280px; max-width: 520px; }
 .alt-deck-editor .alt-deck-title-row input { min-width: 0; width: min(320px, 100%); }
+.alt-profile-title-row .alt-create-inline { flex: 1 1 280px; max-width: 520px; }
+.alt-profile-title-row input { min-width: 0; width: min(320px, 100%); }
 .alt-deck-editor .alt-deck-view-switch { display: flex; min-height: 36px; padding: 4px; border-radius: 9999px; background: var(--fra-alt-interactive); }
 .alt-deck-editor .alt-deck-view-switch button { padding: 4px 12px; border: 0; border-radius: 9999px; color: var(--fra-alt-muted); background: transparent; font-size: 13px; }
 .alt-deck-editor .alt-deck-view-switch button[aria-pressed="true"] { color: #fff; background: var(--fra-alt-hover); }
