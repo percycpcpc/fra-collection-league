@@ -19,6 +19,7 @@ import {
 } from "@/lib/deck-identity";
 import { AltDeckEditor } from "./AltDeckEditor";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -75,7 +76,7 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
   const { style, toggle } = useUiStyle();
-  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images");
+  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [renameDraft, setRenameDraft] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images");
   const deckQueue = useRef<LatestWriteQueue<{ name: string; commander: string | null }> | null>(null);
   const cardQueue = useRef<LatestWriteQueue<{ name: string; qty: number }> | null>(null);
   const saveFailedRef = useRef(false);
@@ -97,7 +98,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     observer.observe(header);
     return () => observer.disconnect();
   }, [loaded]);
-  const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setCatalog(c); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); } }, [profileId, deckId]);
+  const load = useCallback(async () => { try { const [p, d, c] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<DeckData>(`/api/profiles/${profileId}/decks/${deckId}`), jsonFetch<CatalogCard[]>("/api/catalog")]); setProfile(p); setDeck(d); setRenameDraft(d.deck.name); setCatalog(c); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load deck."); } }, [profileId, deckId]);
   useEffect(() => { void load(); }, [load]);
   const queueChanged = () => queueMicrotask(() => {
     const pending = deckQueue.current?.isPending() || cardQueue.current?.isPending();
@@ -165,7 +166,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     setDeck({ ...deck, cards: nextCards }); saveFailedRef.current = false; setStatus("Saving…"); setError("");
     cardQueue.current?.enqueue(name.toLowerCase(), { name, qty });
   }
-  function rename(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void saveDeck({ name: String(new FormData(event.currentTarget).get("name") || "") }); }
+  function rename(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void saveDeck({ name: renameDraft }); }
   function changeViewMode(mode: ViewMode) {
     setViewMode(mode);
     try { window.localStorage.setItem(VIEW_STORAGE_KEY, mode); } catch { /* Keep the in-memory preference. */ }
@@ -181,7 +182,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   }
 
   if (!profile || !deck) {
-    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading deck…"}</p></div></AltShell>;
+    if (style === "alt") return <AltShell title={error ? "Deck unavailable" : "Loading deck…"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load this deck" : "Loading deck"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Fetching the deck, collection, and card catalog."}</AltPageState></AltShell>;
     return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
   }
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));
@@ -220,17 +221,17 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
 
   if (style === "alt") return <AltDeckEditor
     profileId={profileId} profileName={profile.profile.name} players={players}
-    deckName={deck.deck.name} cards={deck.cards} catalog={catalog} collection={profile.cards}
+    deckName={deck.deck.name} renameDraft={renameDraft} cards={deck.cards} catalog={catalog} collection={profile.cards}
     poolGroups={pool.groups} basics={basics} hiddenPoolCount={pool.hiddenCount} search={search}
     showOffColor={showOffColor} viewMode={viewMode} status={status} error={error}
     commanderNames={commanderNames} eligibleCommanderNames={[...eligibleCommanders].map((key) => catalogMap.get(key)?.name).filter((name): name is string => Boolean(name))}
     hasCommanderIdentity={commanderIdentity !== undefined} isOffColor={isCardOutOfIdentity}
-    onSearch={setSearch} onShowOffColor={setShowOffColor} onViewMode={changeViewMode}
+    onSearch={setSearch} onRenameDraft={setRenameDraft} onShowOffColor={setShowOffColor} onViewMode={changeViewMode}
     onQty={(name, qty) => void saveCard(name, qty)} onCommander={setCommander}
-    onRename={(name) => void saveDeck({ name })} onToggleStyle={toggle}
+    onRename={(name) => { setRenameDraft(name); void saveDeck({ name }); }} onToggleStyle={toggle}
   />;
 
-  return <main className="deck-editor" ref={editorRef}><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" defaultValue={deck.deck.name} key={deck.deck.name} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div><UiStyleToggle onToggle={toggle} /></div></header>
+  return <main className="deck-editor" ref={editorRef}><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" value={renameDraft || deck.deck.name} onChange={(event) => setRenameDraft(event.target.value)} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div><UiStyleToggle onToggle={toggle} /></div></header>
     {error && <p className="error-banner deck-error" role="alert">{error}</p>}{viewMode === "images" ? <div className="editor-columns">
       <section className="deck-contents"><div className="panel-title"><h2>Deck</h2><span>{total} cards · commander excluded</span></div>
         {commanderNames.length > 0 && <section className="deck-group"><h3><span>★ {commanderNames.length > 1 ? "Commanders" : "Commander"}</span><small>{commanderNames.length}</small></h3><div className="commander-with-analysis"><div className="deck-grid">{commanderNames.map((cmd) => <GalleryCard key={cmd} name={cmd} catalog={catalogMap.get(cmd.toLowerCase())} qty={deckMap.get(cmd.toLowerCase())?.qty || 0} owned={ownedMap.get(cmd.toLowerCase())?.qty} cap={ownedMap.get(cmd.toLowerCase())?.qty || 0} star="active" onQty={(qty) => void saveCard(cmd, qty)} onCommander={() => setCommander(cmd)} />)}</div><DeckAnalysis cards={deck.cards} commanderNames={commanderNames} catalogMap={catalogMap} /></div></section>}

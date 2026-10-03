@@ -224,6 +224,8 @@ h1, h2, h3, p { margin-top: 0; }
 .match-form { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; align-items: end; gap: .8rem; padding: 1rem; border: 1px solid var(--line); background: var(--panel); }
 .match-form label { display: grid; gap: .35rem; color: var(--muted); font-size: .84rem; }
 .match-form select, .match-form input { min-width: 0; width: 100%; }
+.field-error { color: var(--danger); font-size: .78rem; }
+.field-error button { margin-left: .35rem; padding: .2rem .45rem; }
 .versus { align-self: center; color: var(--gold); font-family: Georgia, serif; font-weight: 900; }
 .match-note { grid-column: 1 / -2; }
 .match-list { display: grid; gap: .55rem; }
@@ -584,12 +586,14 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-section-head h2 i { width: 14px; height: 14px; border-radius: 50%; }
 .alt-section-head > span { color: var(--fra-alt-muted); font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
 .alt-card-row { display: flex; gap: 16px; overflow-x: auto; padding: 0 0 14px; scrollbar-color: #555 transparent; }
-.alt-card { flex: 0 0 172px; width: 172px; padding: 12px; border-radius: 8px; background: var(--fra-alt-surface); cursor: pointer; transition: background .18s, box-shadow .18s; }
+.alt-card { flex: 0 0 172px; width: 172px; padding: 12px; border-radius: 8px; background: var(--fra-alt-surface); transition: background .18s, box-shadow .18s; }
 .alt-card:hover, .alt-card.selected { background: var(--fra-alt-hover); box-shadow: 0 8px 24px rgba(0,0,0,.45); }
 .alt-card.selected { outline: 1px solid #555; }
 .alt-card-visual { position: relative; aspect-ratio: .72; overflow: hidden; border-radius: 6px; background: #050505; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
-.alt-card-visual > img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity .18s, filter .18s; }
-.alt-card.unowned .alt-card-visual > img { opacity: .3; filter: grayscale(1); }
+.alt-card-inspect { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
+.alt-card-inspect:focus-visible { outline: 3px solid var(--fra-alt-accent); outline-offset: -3px; }
+.alt-card-inspect > img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity .18s, filter .18s; }
+.alt-card.unowned .alt-card-inspect > img { opacity: .3; filter: grayscale(1); }
 .alt-card > strong { display: block; overflow: hidden; margin-top: 10px; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
 .alt-card.unowned > strong { color: var(--fra-alt-muted); }
 .alt-card > small { display: flex; align-items: center; gap: 6px; margin-top: 3px; color: var(--fra-alt-muted); font-size: 11px; text-transform: capitalize; }
