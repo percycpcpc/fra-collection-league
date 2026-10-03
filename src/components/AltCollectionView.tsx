@@ -34,13 +34,14 @@ export type AltCollectionViewProps = {
   unsyncedCount?: number;
   onImportTextChange: (value: string) => void;
   onImport: () => void;
+  importing?: boolean;
   onToggleStyle: () => void;
   onSaveCard: (name: string, patch: { qty?: number; owned?: boolean }) => void;
   onRetryUnsynced?: () => void;
   onDiscardUnsynced?: () => void;
 };
 
-export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
+export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, importing = false, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const [search, setSearch] = useState("");
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
@@ -78,8 +79,8 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
         <button className="alt-pill alt-outline" type="button" onClick={() => setImportOpen((open) => !open)} aria-expanded={importOpen}>Import &amp; merge</button>
       </>}>
       {importOpen && <section className="alt-import" aria-label="Import collection">
-        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} />
-        <button className="alt-pill alt-primary" type="button" onClick={onImport}>Import &amp; merge</button>
+        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} disabled={importing} />
+        <button className="alt-pill alt-primary" type="button" onClick={onImport} disabled={importing}>{importing ? "Importing…" : "Import & merge"}</button>
       </section>}
       {unsyncedCount > 0 && <div className="alt-unsynced" role="alert">
         <span><strong>{unsyncedCount} unsynced {unsyncedCount === 1 ? "change" : "changes"}</strong> recovered from this browser. These values are pending until the server confirms them.</span>
