@@ -8,9 +8,11 @@ import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
 import { AltCommanderField, AltDeckList } from "./AltDeckList";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
+import { MutationLock } from "@/lib/mutation-lock";
 
 type Data = { profile: { name: string }; cards: CollectionCard[]; decks: DeckSummary[] };
 
@@ -25,7 +27,10 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [data, setData] = useState<Data | null>(null);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [deckName, setDeckName] = useState("");
   const [commander, setCommander] = useState("");
   const [partner, setPartner] = useState("");
   const [cmdQuery, setCmdQuery] = useState("");
@@ -34,7 +39,8 @@ export function DeckList({ profileId }: { profileId: string }) {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const { players } = useLeaguePlayers(data ? { id: profileId, name: data.profile.name } : undefined);
   const deleteTriggers = useRef(new Map<string, HTMLButtonElement>());
-  const load = useCallback(() => jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)), [profileId]);
+  const createLock = useRef(new MutationLock());
+  const load = useCallback(() => { setLoading(true); setError(""); return jsonFetch<Data>(`/api/profiles/${profileId}`).then(setData).catch((cause) => setError(cause.message)).finally(() => setLoading(false)); }, [profileId]);
   useEffect(() => { void load(); }, [load]);
   // The catalog carries card types, needed to find legendary creatures. Cached for an hour by the API.
   useEffect(() => { jsonFetch<CatalogCard[]>("/api/catalog").then(setCatalog).catch((cause) => setError(cause.message)); }, []);
@@ -62,18 +68,21 @@ export function DeckList({ profileId }: { profileId: string }) {
 
   async function create(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(""); const form = new FormData(event.currentTarget); const formEl = event.currentTarget;
+    if (!createLock.current.tryAcquire()) return;
+    setCreating(true);
     const commanders = [commander, partner].filter(Boolean);
     try {
-      await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), commanders }) });
+      await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: deckName, commanders }) });
       refreshLeaguePlayers().catch(() => undefined);
-      formEl.reset(); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
+      setDeckName(""); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); await load();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
+    finally { createLock.current.release(); setCreating(false); }
   }
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
   if (!data) {
-    if (style === "alt") return <AltShell title="Loading…" activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><div className="alt-section"><p className="muted">{error || "Loading decks…"}</p></div></AltShell>;
+    if (style === "alt") return <AltShell title={loading ? "Loading decks…" : "Decks unavailable"} activeNav="decks" playerId={profileId} players={players} onToggleStyle={toggle}><AltPageState title={loading ? "Loading decks" : "We couldn't load these decks"} busy={loading} onRetry={loading ? undefined : () => void load()}>{loading ? "Fetching this player's decks." : error}</AltPageState></AltShell>;
     return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
   }
   const noCandidates = catalog.length > 0 && candidates.length === 0;
@@ -85,16 +94,16 @@ export function DeckList({ profileId }: { profileId: string }) {
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
   if (style === "alt") return <AltDeckList profileId={profileId} profileName={data.profile.name} players={players} decks={data.decks} banners={banners} error={error} onToggleStyle={toggle} createForm={<form className="alt-deck-create" onSubmit={create}>
-    <label className="alt-commander-field"><span>Deck name</span><input name="name" required placeholder="New deck" /></label>
+    <label className="alt-commander-field"><span>Deck name</span><input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
     <AltCommanderField label="Commander (optional)" query={cmdQuery} open={cmdOpen && candidates.length > 0} options={cmdMatches} clearLabel="— No commander" placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} disabled={!candidates.length && catalog.length > 0} describedBy="alt-commander-hint" onQuery={(value) => { setCmdQuery(value); setCommander(""); setCmdOpen(true); }} onOpen={setCmdOpen} onChoose={chooseCommander} />
     <AltCommanderField label="Second commander (optional)" query={partnerQuery} open={partnerOpen} options={partnerMatches} clearLabel="— No second commander" placeholder="Search second commander…" disabled={!commander} describedBy="alt-commander-hint" onQuery={(value) => { setPartnerQuery(value); setPartner(""); setPartnerOpen(true); }} onOpen={setPartnerOpen} onChoose={choosePartner} />
-    <button className="alt-pill alt-primary" type="submit">+ Create deck</button>
+    <button className="alt-pill alt-primary" type="submit" disabled={creating}>{creating ? "Creating…" : "+ Create deck"}</button>
     <p id="alt-commander-hint" className="alt-field-hint">{hint}</p>
   </form>} actions={(deck) => confirmId === deck.id ? <span className="alt-inline-confirm">Delete {deck.name}? <button className="alt-pill alt-danger" type="button" onClick={() => void remove(deck.id)}>Confirm</button><button className="alt-pill" type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></span> : <button ref={(node) => { if (node) deleteTriggers.current.set(deck.id, node); else deleteTriggers.current.delete(deck.id); }} className="alt-pill alt-danger" type="button" aria-label={`Delete ${deck.name}`} onClick={() => setConfirmId(deck.id)}>Delete</button>} />;
   return <main className="shell decks-page">
     <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
     <form className="deck-create" onSubmit={create}>
-      <label>Deck name<input name="name" required placeholder="New deck" /></label>
+      <label>Deck name<input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
       <label>Commander (optional)
         <div className="cmd-search">
           <input type="text" value={cmdQuery} onChange={(e) => { setCmdQuery(e.target.value); setCommander(""); setCmdOpen(true); }} onFocus={() => setCmdOpen(true)} onBlur={() => setTimeout(() => setCmdOpen(false), 150)} placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} autoComplete="off" disabled={!candidates.length && catalog.length > 0} aria-describedby="commander-hint" />
@@ -107,7 +116,7 @@ export function DeckList({ profileId }: { profileId: string }) {
           {partnerOpen && commander && <ul className="cmd-dropdown"><li onMouseDown={() => choosePartner("")}>— No second commander</li>{partnerMatches.map((name) => <li key={name} onMouseDown={() => choosePartner(name)}>{name}</li>)}</ul>}
         </div>
       </label>
-      <button className="primary" type="submit">Create deck</button>
+      <button className="primary" type="submit" disabled={creating}>{creating ? "Creating…" : "Create deck"}</button>
       <p id="commander-hint" className="field-hint">{hint}</p>
     </form>
     {error && <p className="error-banner" role="alert">{error}</p>}
