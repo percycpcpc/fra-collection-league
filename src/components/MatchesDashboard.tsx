@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { isNotFound, jsonFetch, type DeckSummary } from "@/lib/client";
 import { MatchList, type MatchPagination, type MatchRecord } from "./MatchList";
 import { MutationLock } from "@/lib/mutation-lock";
-import { AltMatches, useAltMatchDelete, type HeadToHeadRow } from "./AltMatches";
+import { AltMatches, matchOffsetAfterDeletion, useAltMatchDelete, type HeadToHeadRow } from "./AltMatches";
 import { AltPlayerPageState, AltShell } from "./AltShell";
 import { AltPageState } from "./AltPageState";
 import { ProfilesDirectory } from "./ProfilesDirectory";
@@ -91,8 +91,12 @@ export function MatchesDashboard() {
   }, []);
   useEffect(() => { if (selectedId) void loadPlayerMatches(selectedId); }, [selectedId, loadPlayerMatches]);
   const loadMatches = useCallback(async (offset = 0) => { const data = await jsonFetch<{ matches: MatchRecord[]; pagination: MatchPagination }>(`/api/matches?offset=${offset}`); setMatches(data.matches); setPagination(data.pagination); }, []);
-  const playerOffset = playerMatches?.pagination.offset ?? 0;
-  const altDelete = useAltMatchDelete(useCallback(async () => { if (selectedId) await loadPlayerMatches(selectedId, playerOffset); }, [selectedId, playerOffset, loadPlayerMatches]));
+  const altDelete = useAltMatchDelete(useCallback(async () => {
+    if (!selectedId || !playerMatches) return;
+    const playerOffset = matchOffsetAfterDeletion(playerMatches.pagination, playerMatches.matches.length);
+    const leagueOffset = matchOffsetAfterDeletion(pagination, matches.length);
+    await Promise.all([loadPlayerMatches(selectedId, playerOffset), loadMatches(leagueOffset)]);
+  }, [selectedId, playerMatches, pagination, matches.length, loadPlayerMatches, loadMatches]));
   useEffect(() => { Promise.all([jsonFetch<{ profiles: Profile[] }>("/api/profiles?counts=0"), loadMatches()]).then(([data]) => setProfiles(data.profiles)).catch((cause) => setError(cause.message)); }, [loadMatches]);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError("");

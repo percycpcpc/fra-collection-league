@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { isNotFound, jsonFetch } from "@/lib/client";
 import { MatchList, type MatchPagination, type MatchRecord } from "./MatchList";
 import { PlayerAvatar } from "./PlayerAvatar";
-import { AltMatches, useAltMatchDelete } from "./AltMatches";
+import { AltMatches, matchOffsetAfterDeletion, useAltMatchDelete } from "./AltMatches";
 import { AltPlayerPageState } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
@@ -22,7 +22,10 @@ export function ProfileMatches({ profileId }: { profileId: string }) {
   // One request per load, so any 404 means the player itself is missing.
   const fail = useCallback((cause: Error) => { setError(cause.message); setNotFound(isNotFound(cause)); }, []);
   useEffect(() => { load().catch(fail); }, [load, fail]);
-  const altDelete = useAltMatchDelete(load);
+  const altDelete = useAltMatchDelete(useCallback(async () => {
+    if (!data) return;
+    await load(matchOffsetAfterDeletion(data.pagination, data.matches.length));
+  }, [data, load]));
   // Alt: the route id is authoritative, so another player's data still in state counts as loading.
   if (!data || (style === "alt" && data.profile.id !== profileId)) {
     if (style === "alt") return <AltPlayerPageState profileId={profileId} activeNav="matches" copy={{ loading: "Loading match record", loadingDetail: "Fetching this player's results and head-to-head record.", unavailable: "Matches unavailable", failed: "We couldn't load this match record" }} error={error} notFound={notFound} onRetry={() => { setError(""); setNotFound(false); load().catch(fail); }} onToggleStyle={toggle} />;
