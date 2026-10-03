@@ -866,7 +866,7 @@ export function AltDeckEditor(props: Props) {
       });
       target
         .querySelector<HTMLButtonElement>(".alt-card-section-toggle")
-        ?.focus();
+        ?.focus({ preventScroll: true });
     });
   };
   const focusAfterLastRemoval = (groupId: DeckDisplayGroupId) => {

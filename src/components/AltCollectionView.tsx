@@ -27,6 +27,9 @@ function colorGroup(card: CatalogCard): ColorGroup {
 }
 function storage() { return typeof window === "undefined" ? undefined : window.localStorage; }
 export function collectionQuantityPatch(qty: number) { return { qty, owned: qty > 0 }; }
+export function focusSectionToggle(section: Pick<HTMLElement, "querySelector">) {
+  section.querySelector<HTMLButtonElement>(".alt-card-section-toggle")?.focus({ preventScroll: true });
+}
 
 export type AltCollectionViewProps = {
   profile: Profile; catalog: CatalogCard[]; cards: CollectionCard[]; importText: string; message: string;
@@ -120,7 +123,7 @@ export function AltCollectionView(props: AltCollectionViewProps) {
     const id = sectionId.replace(/^alt-collection-(?:type|color)-/, "");
     if (effectiveCollapsed.has(id)) { const next = new Set(effectiveCollapsed); next.delete(id); if (query) setSearchCollapsed(next); else saveCollapsed(next); }
     history.replaceState(null, "", `#${sectionId}`);
-    requestAnimationFrame(() => { const section = document.getElementById(sectionId); section?.scrollIntoView({ behavior: "smooth", block: "start" }); section?.querySelector<HTMLButtonElement>(".alt-card-section-toggle")?.focus(); });
+    requestAnimationFrame(() => { const section = document.getElementById(sectionId); section?.scrollIntoView({ behavior: "smooth", block: "start" }); if (section) focusSectionToggle(section); });
   };
   useEffect(() => {
     if (!hydrated.current || !location.hash) return;

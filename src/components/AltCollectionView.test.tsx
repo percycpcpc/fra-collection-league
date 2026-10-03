@@ -1,7 +1,7 @@
 // Throwaway SSR smoke test for the Alt UI feature. Delete after verification.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AltCollectionView, collectionQuantityPatch } from "./AltCollectionView";
+import { AltCollectionView, collectionQuantityPatch, focusSectionToggle } from "./AltCollectionView";
 import { AltSectionNav } from "./AltSectionNav";
 import { CardTypeIcon } from "./CardTypeIcon";
 import type { CatalogCard, CollectionCard } from "@/lib/client";
@@ -134,5 +134,14 @@ describe("AltCollectionView SSR smoke", () => {
   it("keeps owned state consistent with quantity changes", () => {
     expect(collectionQuantityPatch(3)).toEqual({ qty: 3, owned: true });
     expect(collectionQuantityPatch(0)).toEqual({ qty: 0, owned: false });
+  });
+
+  it("focuses a jumped section without interrupting smooth scrolling", () => {
+    const focus = vi.fn();
+    const section = { querySelector: vi.fn(() => ({ focus })) } as unknown as Pick<HTMLElement, "querySelector">;
+
+    focusSectionToggle(section);
+
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 });
