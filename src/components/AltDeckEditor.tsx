@@ -751,20 +751,17 @@ export function AltDeckEditor(props: Props) {
       <div className="alt-deck-commanders">
         {commanderNames.length ? (
           commanderNames.map((name) => (
-            <div className="alt-deck-commander-card" key={name}>
+            <div
+              className="alt-deck-commander-card"
+              key={name}
+              aria-label={`Commander: ${name}`}
+            >
               <div>
                 <CardImage
                   name={name}
                   catalog={catalogMap.get(name.toLowerCase())}
                 />
               </div>
-              <span>
-                <strong>{name}</strong>
-                <small>
-                  {catalogMap.get(name.toLowerCase())?.colorIdentity ||
-                    "Colorless"}
-                </small>
-              </span>
             </div>
           ))
         ) : (
