@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { ALT_COLLAPSED_STORAGE_KEY, AltDeckEditor, readCollapsedGroups, writeCollapsedGroups } from "./AltDeckEditor";
+import { ALT_COLLAPSED_STORAGE_KEY, ALT_DECK_DEFAULT_VIEW_MODE, AltDeckEditor, readCollapsedGroups, writeCollapsedGroups } from "./AltDeckEditor";
 import type { CatalogCard, CollectionCard, DeckCard } from "@/lib/client";
+import { ALT_DECK_CONTENTS_TYPE_COLLAPSED_STORAGE_KEY, readIdSet, writeIdSet } from "@/lib/alt-group-preferences";
 
 const noop = () => {};
 const catalog: CatalogCard[] = [
   { name: "Ajani", qty: 1, img: "/a.jpg", colors: "white", rarity: "rare", type: "Legendary Creature", colorIdentity: "w", manaCost: "{2}{W}" },
   { name: "Dawn Charm", qty: 1, img: "/b.jpg", colors: "white", rarity: "common", type: "Instant", colorIdentity: "w", manaCost: "{1}{W} // {W/U}" },
+  { name: "Sol Ring", qty: 1, img: "/s.jpg", colors: "colorless", rarity: "uncommon", type: "Artifact", colorIdentity: "", manaCost: "{1}" },
   { name: "Plains", qty: 1, img: "/p.jpg", colors: "colorless", rarity: "common", type: "Basic Land", colorIdentity: "", manaCost: "" },
 ];
 const ajani: CollectionCard = { id: "c1", profileId: "p1", name: "Ajani", qty: 2, owned: true };
@@ -26,6 +28,9 @@ function memoryStorage(initial: Record<string, string> = {}) {
 }
 
 describe("AltDeckEditor Classic builder layout", () => {
+  it("defaults fresh editor preferences to List mode", () => {
+    expect(ALT_DECK_DEFAULT_VIEW_MODE).toBe("list");
+  });
   it("renders collapsible pool groups with aria-expanded and collapse-all", () => {
     const html = render();
     expect(html).toMatch(/aria-expanded="true" aria-controls="alt-pool-group-white"/);
@@ -72,23 +77,40 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(html).not.toContain('aria-label="0 in deck"');
   });
 
-  it("mounts the deck analysis beside the commanders in image mode only", () => {
+  it("mounts deck analysis whenever the deck has commanders or cards, including List mode", () => {
     const html = render();
     expect(html).toContain("alt-deck-overview"); expect(html).toContain('aria-label="Deck analysis"'); expect(html).toContain("deck-analysis");
-    expect(render({ viewMode: "list" })).not.toContain("deck-analysis");
+    expect(render({ viewMode: "list" })).toContain("deck-analysis");
     expect(render({ cards: [], commanderNames: [] })).not.toContain("deck-analysis");
   });
 
-  it("groups deck contents into Creatures, Other and Lands", () => {
-    const html = render({ cards: [...deck, { id: "d3", deckId: "deck", name: "Ajani", qty: 1, isBasic: false }] });
-    const order = ["<h3>Creatures</h3>", "<h3>Other</h3>", "<h3>Lands</h3>"].map((heading) => html.indexOf(heading));
+  it("groups deck contents in four-group order with additive copy totals", () => {
+    const cards = [...deck, { id: "d3", deckId: "deck", name: "Ajani", qty: 2, isBasic: false }, { id: "d4", deckId: "deck", name: "Sol Ring", qty: 3, isBasic: false }];
+    const html = render({ cards });
+    const order = ["alt-deck-contents-creature", "alt-deck-contents-spell", "alt-deck-contents-permanent", "alt-deck-contents-land"].map((id) => html.indexOf(`id="${id}"`));
     expect(order.every((index) => index >= 0)).toBe(true);
     expect([...order].sort((a, b) => a - b)).toEqual(order);
+    expect(html).toContain("2 copies · 1 names"); expect(html).toContain("3 copies · 1 names"); expect(html).toContain("1 copies · 1 names"); expect(html).toContain("7 copies · 1 names");
+    expect([2, 3, 1, 7].reduce((sum, qty) => sum + qty, 0)).toBe(cards.reduce((sum, card) => sum + card.qty, 0));
+    expect(html).toContain('aria-label="Deck contents sections"');
+  });
+
+  it("uses persisted disclosure IDs and flips the pane-local bulk label", () => {
+    const storage = memoryStorage();
+    writeIdSet(storage, ALT_DECK_CONTENTS_TYPE_COLLAPSED_STORAGE_KEY, new Set(["creature", "spell", "bogus"]));
+    expect(storage.data.get(ALT_DECK_CONTENTS_TYPE_COLLAPSED_STORAGE_KEY)).toBe('["creature","spell","bogus"]');
+    expect([...readIdSet(storage, ALT_DECK_CONTENTS_TYPE_COLLAPSED_STORAGE_KEY, ["creature", "spell", "permanent", "land"])]).toEqual(["creature", "spell"]);
+    const html = render({ initialContentsCollapsed: ["spell", "land"] });
+    expect(html).toContain("Expand all");
+    expect(html).toMatch(/id="alt-deck-contents-spell"[\s\S]*?aria-expanded="false"/);
   });
 
   it("renders mana symbols (including split faces) and rarity in list rows", () => {
     const html = render({ viewMode: "list" });
     expect(html).toContain("alt-deck-list-name");
+    expect(html).toContain('aria-label="1 copies in deck">1×');
+    expect(html).toContain("Instant");
+    expect(html).toMatch(/aria-pressed="false">Images<\/button><button type="button" aria-pressed="true">List/);
     expect(html).toContain("ms ms-2 ms-cost"); expect(html).toContain("ms ms-wu ms-cost"); expect(html).toContain('class="mana-sep"');
     expect(html).toMatch(/<span class="alt-deck-rarity" title="rare"><i class="alt-gem alt-rarity-rare"><\/i>R<\/span>/);
   });
