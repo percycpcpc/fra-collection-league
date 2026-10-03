@@ -17,7 +17,7 @@ import {
   isLegal as isLegalIdentity,
   isOutOfIdentity as isOutOfIdentityCard,
 } from "@/lib/deck-identity";
-import { AltDeckEditor } from "./AltDeckEditor";
+import { ALT_DECK_DEFAULT_VIEW_MODE, AltDeckEditor } from "./AltDeckEditor";
 import { AltPlayerPageState } from "./AltShell";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
@@ -74,7 +74,7 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
   const { style, toggle } = useUiStyle();
-  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [renameDraft, setRenameDraft] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>("images");
+  const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [renameDraft, setRenameDraft] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>(ALT_DECK_DEFAULT_VIEW_MODE);
   const deckQueue = useRef<LatestWriteQueue<{ name: string; commander: string | null }> | null>(null);
   const cardQueue = useRef<LatestWriteQueue<{ name: string; qty: number }> | null>(null);
   const saveFailedRef = useRef(false);
