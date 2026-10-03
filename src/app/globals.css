@@ -791,6 +791,8 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-match-side small { font-size: 11px; }
 .alt-match-verb { color: var(--fra-alt-muted); font-size: 13px; }
 .alt-match-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.match-pager { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; }
+.match-pager span { color: var(--muted); font-size: 13px; }
 .alt-list > .alt-h2h-row span:last-child { color: var(--fra-alt-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .alt-admin { width: auto; margin: 0; padding: 8px 28px 0; color: var(--fra-alt-text); }
 .alt-admin > h1, .alt-admin .admin-header h1 { display: none; }

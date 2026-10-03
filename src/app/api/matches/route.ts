@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
-import { inArray } from "drizzle-orm";
+import { inArray, sql } from "drizzle-orm";
 import { cleanName, error } from "@/lib/api";
 import { matchFeedQuery } from "@/lib/match-feed";
 import { getDb } from "@/lib/db";
 import { decks, matches, profiles } from "@/db/schema";
 
-export async function GET() {
-  // One statement: matches joined with players and decks.
-  const rows = await matchFeedQuery(getDb()).limit(100);
-  return NextResponse.json({ matches: rows });
+const PAGE_SIZE = 25;
+
+export async function GET(request: Request) {
+  const requestedOffset = Number(new URL(request.url).searchParams.get("offset") ?? 0);
+  const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
+  const db = getDb();
+  const [rows, totals] = await db.batch([
+    matchFeedQuery(db).limit(PAGE_SIZE).offset(offset),
+    db.select({ total: sql<number>`count(*)` }).from(matches),
+  ]);
+  return NextResponse.json({ matches: rows, pagination: { offset, limit: PAGE_SIZE, total: totals[0]?.total ?? 0 } });
 }
 
 export async function POST(request: Request) {

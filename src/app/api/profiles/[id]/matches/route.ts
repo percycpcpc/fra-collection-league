@@ -7,11 +7,12 @@ import { profiles } from "@/db/schema";
 
 type Context = { params: Promise<{ id: string }> };
 
-/** Most recent matches returned in the list; record/head-to-head cover all. */
-const FEED_LIMIT = 100;
+const PAGE_SIZE = 25;
 
-export async function GET(_: Request, { params }: Context) {
+export async function GET(request: Request, { params }: Context) {
   const { id } = await params;
+  const requestedOffset = Number(new URL(request.url).searchParams.get("offset") ?? 0);
+  const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
   const db = getDb();
 
   // One round trip: profile, recent joined feed, and SQL-aggregated head-to-head.
@@ -21,7 +22,7 @@ export async function GET(_: Request, { params }: Context) {
       .from(profiles)
       .where(eq(profiles.id, id))
       .limit(1),
-    matchFeedQuery(db, id).limit(FEED_LIMIT),
+    matchFeedQuery(db, id).limit(PAGE_SIZE).offset(offset),
     headToHeadQuery(db, id),
   ]);
   const profile = profileRows[0];
@@ -33,6 +34,7 @@ export async function GET(_: Request, { params }: Context) {
     profile,
     matches: recent,
     record: { wins, losses },
+    pagination: { offset, limit: PAGE_SIZE, total: wins + losses },
     headToHead: headToHead.sort((a, b) =>
       a.opponentName.localeCompare(b.opponentName),
     ),
