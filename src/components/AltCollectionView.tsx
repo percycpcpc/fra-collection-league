@@ -40,13 +40,14 @@ export type AltCollectionViewProps = {
   onSelectedNameChange: (value: string | null) => void;
   onImportOpenChange: (value: boolean) => void;
   onImport: () => void;
+  importing?: boolean;
   onToggleStyle: () => void;
   onSaveCard: (name: string, patch: { qty?: number; owned?: boolean }) => void;
   onRetryUnsynced?: () => void;
   onDiscardUnsynced?: () => void;
 };
 
-export function AltCollectionView({ profile, catalog, cards, importText, message, status, search, selectedName, importOpen, unsyncedCount = 0, onImportTextChange, onSearchChange, onSelectedNameChange, onImportOpenChange, onImport, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
+export function AltCollectionView({ profile, catalog, cards, importText, message, status, search, selectedName, importOpen, unsyncedCount = 0, onImportTextChange, onSearchChange, onSelectedNameChange, onImportOpenChange, onImport, importing = false, onToggleStyle, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const { players } = useLeaguePlayers(profile);
 
   const collectionMap = useMemo(() => new Map(cards.map((card) => [card.name.toLowerCase(), card])), [cards]);
@@ -81,8 +82,8 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
         <button className="alt-pill alt-outline" type="button" onClick={() => onImportOpenChange(!importOpen)} aria-expanded={importOpen}>Import &amp; merge</button>
       </>}>
       {importOpen && <section className="alt-import" aria-label="Import collection">
-        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} />
-        <button className="alt-pill alt-primary" type="button" onClick={onImport}>Import &amp; merge</button>
+        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} disabled={importing} />
+        <button className="alt-pill alt-primary" type="button" onClick={onImport} disabled={importing}>{importing ? "Importing…" : "Import & merge"}</button>
       </section>}
       {unsyncedCount > 0 && <div className="alt-unsynced" role="alert">
         <span><strong>{unsyncedCount} unsynced {unsyncedCount === 1 ? "change" : "changes"}</strong> recovered from this browser. These values are pending until the server confirms them.</span>
@@ -91,6 +92,7 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
       {(message || status === "saving") && <p className={`alt-notice ${status}`} role="status">{status === "saving" ? "Saving…" : message}</p>}
 
       <div className="alt-groups">
+        {catalog.length > 0 && [...groups.values()].every((items) => items.length === 0) && <section className="alt-page-section"><h2>No cards found</h2><p className="alt-field-hint">No cards match “{search}”. Clear or change the search to browse the collection.</p></section>}
         {GROUPS.map((group) => {
           const items = groups.get(group) || [];
           if (!items.length) return null;

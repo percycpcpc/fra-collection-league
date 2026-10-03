@@ -35,7 +35,7 @@ function MatchSide({ name, iconCard, deckName }: { name: string; iconCard: strin
   return <span className="alt-match-side"><PlayerAvatar name={name} iconCard={iconCard} size={28} /><span><strong>{name}</strong>{deckName && <small>{deckName}</small>}</span></span>;
 }
 
-export function AltMatches({ playerId, playerName, players, matches, wins, losses, recordForm, headToHead, actions, error, onToggleStyle }: { playerId: string; playerName: string; players: AltPlayer[]; matches: MatchRecord[]; wins: number; losses: number; recordForm?: React.ReactNode; headToHead?: HeadToHeadRow[]; actions?: (match: MatchRecord) => React.ReactNode; error?: string; onToggleStyle: () => void }) {
+export function AltMatches({ playerId, playerName, players, matches, wins, losses, recordForm, headToHead, actions, error, onToggleStyle }: { playerId?: string; playerName: string; players: AltPlayer[]; matches: MatchRecord[]; wins: number; losses: number; recordForm?: React.ReactNode; headToHead?: HeadToHeadRow[]; actions?: (match: MatchRecord) => React.ReactNode; error?: string; onToggleStyle: () => void }) {
   return <AltShell title={`${playerName}'s matches`} subtitle={`${wins} wins · ${losses} losses`} activeNav="matches" playerId={playerId} players={players} onToggleStyle={onToggleStyle}>
     {error && <p className="alt-notice error" role="alert">{error}</p>}
     {recordForm && <section className="alt-page-section"><h2>Record a match</h2>{recordForm}</section>}

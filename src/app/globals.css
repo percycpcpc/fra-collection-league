@@ -224,6 +224,8 @@ h1, h2, h3, p { margin-top: 0; }
 .match-form { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; align-items: end; gap: .8rem; padding: 1rem; border: 1px solid var(--line); background: var(--panel); }
 .match-form label { display: grid; gap: .35rem; color: var(--muted); font-size: .84rem; }
 .match-form select, .match-form input { min-width: 0; width: 100%; }
+.field-error { color: var(--danger); font-size: .78rem; }
+.field-error button { margin-left: .35rem; padding: .2rem .45rem; }
 .versus { align-self: center; color: var(--gold); font-family: Georgia, serif; font-weight: 900; }
 .match-note { grid-column: 1 / -2; }
 .match-list { display: grid; gap: .55rem; }
