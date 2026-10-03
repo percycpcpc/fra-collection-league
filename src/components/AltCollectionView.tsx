@@ -104,10 +104,13 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
               {items.map((card) => {
                 const entry = collectionMap.get(card.name.toLowerCase());
                 const isOwned = entry?.owned === true;
-                return <article className={`alt-card ${isOwned ? "owned" : "unowned"} ${selectedName === card.name ? "selected" : ""}`} key={card.name} onClick={() => onSelectedNameChange(card.name)}>
+                const isSelected = selectedName === card.name;
+                return <article className={`alt-card ${isOwned ? "owned" : "unowned"} ${isSelected ? "selected" : ""}`} key={card.name} onClick={() => onSelectedNameChange(card.name)}>
                   <div className="alt-card-visual">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={cardImage(card.name, card)} alt={card.name} loading="lazy" />
+                    <button className="alt-card-inspect" type="button" aria-label={`Inspect ${card.name}`} aria-pressed={isSelected} onClick={() => onSelectedNameChange(card.name)}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={cardImage(card.name, card)} alt="" loading="lazy" />
+                    </button>
                     <span className={`alt-rarity alt-rarity-${card.rarity.toLowerCase()}`}><i />{card.rarity}</span>
                     <button className="alt-card-toggle" type="button" aria-label={`${isOwned ? "Mark unowned" : "Mark owned"}: ${card.name}`} onClick={(event) => { event.stopPropagation(); toggle(card); }}>{isOwned ? "✓" : "+"}</button>
                   </div>

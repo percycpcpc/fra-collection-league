@@ -91,6 +91,14 @@ describe("AltCollectionView SSR smoke", () => {
     expect(slice).toContain("unowned");
   });
 
+  it("exposes card inspection separately from ownership changes", () => {
+    const html = render();
+    expect(html).toContain('class="alt-card-inspect"');
+    expect(html).toContain('aria-label="Inspect Ajani Resolute"');
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-label="Mark unowned: Ajani Resolute"');
+  });
+
   it("groups multicolor cards under Multi", () => {
     const html = render();
     expect(html).toContain("Multi");
