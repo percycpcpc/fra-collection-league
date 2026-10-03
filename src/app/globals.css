@@ -743,7 +743,8 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-editor .alt-color-dot.white { background: #f4e9c9; } .alt-deck-editor .alt-color-dot.blue { background: #539df5; } .alt-deck-editor .alt-color-dot.black { background: #716a7a; } .alt-deck-editor .alt-color-dot.red { background: #f3727f; } .alt-deck-editor .alt-color-dot.green, .alt-deck-editor .alt-color-dot.lands { background: #1ed760; } .alt-deck-editor .alt-color-dot.multicolor { background: #e8c468; }
 .alt-deck-editor .alt-deck-off-color { display: inline-flex; margin-top: 6px; padding: 3px 7px; border: 1px solid var(--fra-alt-warning); border-radius: 9999px; color: var(--fra-alt-warning); font-size: 11px; }
 .alt-deck-editor .alt-deck-list-row { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px 16px; border-bottom: 1px solid #303030; }
-.alt-deck-editor .alt-deck-list-row > div { display: grid; flex: 1; min-width: 0; gap: 3px; }
+.alt-deck-editor .alt-deck-list-details { display: grid; flex: 1; min-width: 0; gap: 3px; }
+.alt-deck-editor .alt-deck-list-row > .alt-deck-quantity { flex: 0 0 auto; justify-content: flex-end; margin-top: 0; }
 .alt-deck-editor .alt-deck-list-row small { color: var(--fra-alt-muted); font-size: 11px; }
 .alt-deck-editor .alt-deck-list-qty { flex: 0 0 3ch; color: var(--fra-alt-accent); font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
 .alt-deck-editor .alt-commander-backdrop { position: fixed; z-index: 100; inset: 0; display: grid; padding: 16px; place-items: center; background: #000b; }
