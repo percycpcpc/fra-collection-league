@@ -863,3 +863,15 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-editor .alt-deck-rarity { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 9999px; color: var(--fra-alt-muted); background: var(--fra-alt-interactive); font-size: 10px; font-weight: 700; }
 @media (max-width: 1099px) { .alt-deck-editor .alt-deck-overview { grid-template-columns: minmax(0, 1fr); } .alt-deck-editor .alt-deck-contents { position: static; max-height: none; overflow: visible; } .alt-deck-editor .alt-deck-contents > .alt-deck-pane-head { position: static; } }
 @media (max-width: 895px) { .alt-deck-editor .alt-deck-overview { margin-inline: 16px; } .alt-deck-editor .alt-deck-overview .alt-deck-commander { margin-inline: 0; } .alt-deck-editor .alt-deck-analysis .deck-analysis { grid-template-columns: minmax(0, 1fr); } }
+
+/* Shared card-section disclosure; consumers provide their own section-body layout. */
+.alt-card-section-heading { margin: 0; }
+.alt-card-section-toggle { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; padding: 6px 10px; border: 0; border-radius: 8px; color: inherit; background: transparent; font: inherit; text-align: left; }
+.alt-card-section-toggle:hover { background: var(--fra-alt-hover); }
+.alt-card-section-toggle:focus-visible { outline: 2px solid var(--fra-alt-accent); outline-offset: 2px; }
+.alt-card-section-chevron { flex: 0 0 1ch; color: var(--fra-alt-muted); transform: rotate(0); transition: transform 120ms ease; }
+.alt-card-section-chevron.is-collapsed { transform: rotate(-90deg); }
+.alt-card-section-icon { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; }
+.alt-card-section-label { flex: 1 1 auto; min-width: 0; }
+.alt-card-section-count { flex: 0 1 auto; color: var(--fra-alt-muted); font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+@media (prefers-reduced-motion: reduce) { .alt-card-section-chevron { transition: none; } }
