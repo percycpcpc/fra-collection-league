@@ -145,7 +145,7 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(html).toContain("Collapse all");
   });
 
-  it("hides collapsed groups and offers expand-all when every group is collapsed", () => {
+  it("hides collapsed pool groups while the shared bulk control reflects both panes", () => {
     const html = render({
       initialPoolGrouping: "color",
       initialCollapsedGroups: ["White", "Basic lands"],
@@ -154,7 +154,8 @@ describe("AltDeckEditor Classic builder layout", () => {
       /aria-expanded="false" aria-controls="alt-pool-group-white"/,
     );
     expect(html).toMatch(/id="alt-pool-group-white" hidden=""/);
-    expect(html).toContain("Expand all");
+    expect(html).toContain('aria-label="Deck editor controls"');
+    expect(html).toContain("Collapse all");
     const partial = render({
       initialPoolGrouping: "color",
       initialCollapsedGroups: ["White"],
@@ -215,6 +216,10 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(html).toContain('id="alt-deck-pool-type-spell"');
     expect(html).not.toContain('id="alt-deck-pool-type-creature"');
     expect(html).not.toContain('id="alt-deck-pool-type-basics"');
+    expect(html).toContain('id="alt-deck-contents-spell"');
+    expect(html).not.toContain('id="alt-deck-contents-land"');
+    expect(html).toContain('aria-label="Search deck and collection"');
+    expect(html.match(/aria-label="Deck editor type filters"/g)).toHaveLength(1);
     expect(render({ initialPoolFilter: null })).toContain(
       'id="alt-deck-pool-type-creature"',
     );
@@ -326,10 +331,10 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect([2, 3, 1, 7].reduce((sum, qty) => sum + qty, 0)).toBe(
       cards.reduce((sum, card) => sum + card.qty, 0),
     );
-    expect(html).toContain('aria-label="Deck contents sections"');
+    expect(html).toContain('aria-label="Deck editor type filters"');
   });
 
-  it("uses persisted disclosure IDs and flips the pane-local bulk label", () => {
+  it("uses persisted disclosure IDs with the shared bulk control", () => {
     const storage = memoryStorage();
     writeIdSet(
       storage,
@@ -348,7 +353,7 @@ describe("AltDeckEditor Classic builder layout", () => {
       ]),
     ]).toEqual(["creature", "spell"]);
     const html = render({ initialContentsCollapsed: ["spell", "land"] });
-    expect(html).toContain("Expand all");
+    expect(html).toContain("Collapse all");
     expect(html).toMatch(
       /id="alt-deck-contents-spell"[\s\S]*?aria-expanded="false"/,
     );

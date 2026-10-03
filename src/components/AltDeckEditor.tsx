@@ -220,9 +220,6 @@ export function AltDeckEditor(props: Props) {
     initialPoolFilter || null,
   );
   const [poolCompact, setPoolCompact] = useState(false);
-  const [activeContentsSection, setActiveContentsSection] = useState<
-    string | null
-  >(null);
   const contentsHydrated = useRef(false);
   const poolHydrated = useRef(false);
   const [commanderOpen, setCommanderOpen] = useState(false);
@@ -308,8 +305,23 @@ export function AltDeckEditor(props: Props) {
     );
     return next;
   }, [cards, catalogMap]);
+  const filteredGroups = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return new Map(
+      DECK_DISPLAY_GROUPS.map(({ id }) => [
+        id,
+        (groups.get(id) || []).filter((card) => {
+          if (query && !card.name.toLowerCase().includes(query)) return false;
+          if (!poolFilter) return true;
+          if (poolFilter === "basics") return card.isBasic;
+          if (poolFilter === "land") return id === "land" && !card.isBasic;
+          return id === poolFilter;
+        }),
+      ]),
+    );
+  }, [groups, poolFilter, search]);
   const visibleContentsGroups = DECK_DISPLAY_GROUPS.filter(
-    ({ id }) => (groups.get(id)?.length || 0) > 0,
+    ({ id }) => (filteredGroups.get(id)?.length || 0) > 0,
   );
   const allContentsCollapsed =
     visibleContentsGroups.length > 0 &&
@@ -364,38 +376,6 @@ export function AltDeckEditor(props: Props) {
   }, [initialPoolGrouping, initialPoolTypeCollapsed]);
 
   useEffect(() => { setPoolSearchCollapsed(new Set()); }, [search]);
-
-  useEffect(() => {
-    const pane =
-      rootRef.current?.querySelector<HTMLElement>(".alt-deck-contents");
-    const ids = visibleContentsGroups.map(
-      ({ id }) => `alt-deck-contents-${id}`,
-    );
-    if (!pane || !ids.length) {
-      setActiveContentsSection(null);
-      return;
-    }
-    const update = () => {
-      const boundary =
-        pane.getBoundingClientRect().top +
-        (pane.querySelector<HTMLElement>(".alt-deck-contents-sticky")
-          ?.offsetHeight || 0);
-      let current = ids[0];
-      ids.forEach((id) => {
-        const element = document.getElementById(id);
-        if (element && element.getBoundingClientRect().top <= boundary + 1)
-          current = id;
-      });
-      setActiveContentsSection(current);
-    };
-    update();
-    pane.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      pane.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, [visibleContentsGroups.map(({ id }) => id).join("|")]);
 
   useEffect(() => {
     if (!commanderOpen) return;
@@ -592,15 +572,6 @@ export function AltDeckEditor(props: Props) {
     next.has(id) ? next.delete(id) : next.add(id);
     search.trim() ? setPoolSearchCollapsed(next) : savePoolTypeCollapsed(next);
   };
-  const bulkTogglePool = () => {
-    const next = new Set(activeCollapsed);
-    visiblePoolIds.forEach((id) =>
-      allPoolCollapsed ? next.delete(id) : next.add(id),
-    );
-    poolGrouping === "type"
-      ? search.trim() ? setPoolSearchCollapsed(next) : savePoolTypeCollapsed(next)
-      : storeCollapsed(next);
-  };
   const choosePoolGrouping = (grouping: AltGrouping) => {
     setPoolGrouping(grouping);
     setPoolFilter(null);
@@ -611,12 +582,42 @@ export function AltDeckEditor(props: Props) {
         grouping,
       );
   };
-  const togglePoolCompact = () => {
-    const next = !poolCompact;
+  const allSharedCollapsed =
+    (visibleContentsGroups.length === 0 || allContentsCollapsed) &&
+    (visiblePoolIds.length === 0 || allPoolCollapsed);
+  const bulkToggleShared = () => {
+    const collapse = !allSharedCollapsed;
+    const nextContents = new Set(contentsCollapsed);
+    visibleContentsGroups.forEach(({ id }) =>
+      collapse ? nextContents.add(id) : nextContents.delete(id),
+    );
+    setContentsCollapsed(nextContents);
+    if (contentsHydrated.current)
+      writeIdSet(
+        browserStorage(),
+        ALT_DECK_CONTENTS_TYPE_COLLAPSED_STORAGE_KEY,
+        nextContents,
+      );
+
+    const nextPool = new Set(activeCollapsed);
+    visiblePoolIds.forEach((id) =>
+      collapse ? nextPool.add(id) : nextPool.delete(id),
+    );
+    poolGrouping === "type"
+      ? search.trim()
+        ? setPoolSearchCollapsed(nextPool)
+        : savePoolTypeCollapsed(nextPool)
+      : storeCollapsed(nextPool);
+  };
+  const toggleSharedCompact = () => {
+    const next = !(contentsCompact && poolCompact);
+    setContentsCompact(next);
     setPoolCompact(next);
-    if (poolHydrated.current)
-      writeSectionNavCompaction(browserStorage(), {
-        ...readSectionNavCompaction(browserStorage()),
+    const store = browserStorage();
+    if (contentsHydrated.current || poolHydrated.current)
+      writeSectionNavCompaction(store, {
+        ...readSectionNavCompaction(store),
+        contents: next,
         pool: next,
       });
   };
@@ -819,53 +820,6 @@ export function AltDeckEditor(props: Props) {
     next.has(id) ? next.delete(id) : next.add(id);
     saveContentsCollapsed(next);
   };
-  const bulkToggleContents = () => {
-    const next = new Set(contentsCollapsed);
-    visibleContentsGroups.forEach(({ id }) =>
-      allContentsCollapsed ? next.delete(id) : next.add(id),
-    );
-    saveContentsCollapsed(next);
-  };
-  const toggleContentsCompact = () => {
-    const next = !contentsCompact;
-    setContentsCompact(next);
-    if (contentsHydrated.current)
-      writeSectionNavCompaction(browserStorage(), {
-        ...readSectionNavCompaction(browserStorage()),
-        contents: next,
-      });
-  };
-  const jumpContents = (sectionId: string) => {
-    const id = sectionId.replace(
-      "alt-deck-contents-",
-      "",
-    ) as DeckDisplayGroupId;
-    if (contentsCollapsed.has(id)) {
-      const next = new Set(contentsCollapsed);
-      next.delete(id);
-      saveContentsCollapsed(next);
-    }
-    requestAnimationFrame(() => {
-      const pane =
-        rootRef.current?.querySelector<HTMLElement>(".alt-deck-contents");
-      const target = document.getElementById(sectionId);
-      const sticky = pane?.querySelector<HTMLElement>(
-        ".alt-deck-contents-sticky",
-      );
-      if (!pane || !target) return;
-      pane.scrollTo({
-        top:
-          pane.scrollTop +
-          target.getBoundingClientRect().top -
-          pane.getBoundingClientRect().top -
-          (sticky?.offsetHeight || 0),
-        behavior: "smooth",
-      });
-      target
-        .querySelector<HTMLButtonElement>(".alt-card-section-toggle")
-        ?.focus({ preventScroll: true });
-    });
-  };
   const focusAfterLastRemoval = (groupId: DeckDisplayGroupId) => {
     const index = visibleContentsGroups.findIndex(({ id }) => id === groupId);
     const target =
@@ -923,6 +877,110 @@ export function AltDeckEditor(props: Props) {
           <a href="#deck-contents">Deck contents</a>
           <a href="#your-collection">Your collection</a>
         </nav>
+        <section
+          className="alt-deck-shared-controls"
+          aria-label="Deck editor controls"
+        >
+          <label className="alt-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => onSearch(event.target.value)}
+              placeholder="Search deck and collection"
+              aria-label="Search deck and collection"
+            />
+          </label>
+          <div
+            className="alt-grouping-switch"
+            role="group"
+            aria-label="Pool grouping"
+          >
+            <span>Group by:</span>
+            <button
+              type="button"
+              aria-pressed={poolGrouping === "type"}
+              onClick={() => choosePoolGrouping("type")}
+            >
+              Type
+            </button>
+            <button
+              type="button"
+              aria-pressed={poolGrouping === "color"}
+              onClick={() => choosePoolGrouping("color")}
+            >
+              Color
+            </button>
+          </div>
+          {hasCommanderIdentity && (
+            <button
+              type="button"
+              className="alt-pill alt-outline"
+              aria-pressed={showOffColor}
+              onClick={() => onShowOffColor(!showOffColor)}
+            >
+              {showOffColor
+                ? "Hide off-color"
+                : `Show off-color (${hiddenPoolCount})`}
+            </button>
+          )}
+          {(visibleContentsGroups.length > 0 || visiblePoolIds.length > 0) && (
+            <button
+              type="button"
+              className="alt-pill alt-outline alt-deck-collapse-all"
+              onClick={bulkToggleShared}
+            >
+              {allSharedCollapsed ? "Expand all" : "Collapse all"}
+            </button>
+          )}
+          {poolGrouping === "type" && (
+            <>
+              <button
+                type="button"
+                className="alt-pill alt-outline"
+                aria-pressed={contentsCompact && poolCompact}
+                onClick={toggleSharedCompact}
+              >
+                {contentsCompact && poolCompact
+                  ? "Show chip labels"
+                  : "Compact section navigation"}
+              </button>
+              <AltSectionNav
+                label="Deck editor type filters"
+                items={[
+                  {
+                    id: "all",
+                    label: "All",
+                    count: matchingCount,
+                    icon: <span aria-hidden="true">*</span>,
+                  },
+                  ...DECK_DISPLAY_GROUPS.map(({ id, label }) => ({
+                    id,
+                    label,
+                    count: typePoolGroups.get(id)?.length || 0,
+                    icon: <CardTypeIcon type={id} />,
+                  })),
+                  ...(basics.length
+                    ? [
+                        {
+                          id: "basics",
+                          label: "Basics",
+                          count: basics.length,
+                          icon: <CardTypeIcon type="basic" />,
+                        },
+                      ]
+                    : []),
+                ]}
+                compact={contentsCompact && poolCompact}
+                mode="filter"
+                activeId={poolFilter || "all"}
+                onSelect={(id) =>
+                  setPoolFilter(id === "all" || poolFilter === id ? null : id)
+                }
+              />
+            </>
+          )}
+        </section>
         <div className="alt-deck-workspace">
           <section
             id="deck-contents"
@@ -935,43 +993,6 @@ export function AltDeckEditor(props: Props) {
                 </h2>
                 <span>{total} cards · commander excluded</span>
               </div>
-              {visibleContentsGroups.length > 0 && (
-                <div className="alt-deck-contents-controls">
-                  <button
-                    type="button"
-                    className="alt-pill alt-outline"
-                    onClick={bulkToggleContents}
-                  >
-                    {allContentsCollapsed ? "Expand all" : "Collapse all"}
-                  </button>
-                  <button
-                    type="button"
-                    className="alt-pill alt-outline"
-                    aria-pressed={contentsCompact}
-                    onClick={toggleContentsCompact}
-                  >
-                    {contentsCompact
-                      ? "Show chip labels"
-                      : "Compact section navigation"}
-                  </button>
-                </div>
-              )}
-              <AltSectionNav
-                label="Deck contents sections"
-                items={visibleContentsGroups.map(({ id, label }) => ({
-                  id: `alt-deck-contents-${id}`,
-                  label,
-                  count: groups
-                    .get(id)!
-                    .reduce((sum, card) => sum + card.qty, 0),
-                  icon: <CardTypeIcon type={id} />,
-                }))}
-                compact={contentsCompact}
-                mode="jump"
-                topId="deck-contents"
-                activeId={activeContentsSection}
-                onSelect={jumpContents}
-              />
             </div>
             {cards.length === 0 ? (
               <div className="alt-deck-empty">
@@ -981,7 +1002,7 @@ export function AltDeckEditor(props: Props) {
             ) : (
               <div className="alt-deck-content-groups">
                 {visibleContentsGroups.map(({ id, label }) => {
-                  const entries = groups.get(id)!;
+                  const entries = filteredGroups.get(id)!;
                   const copies = entries.reduce(
                     (sum, card) => sum + card.qty,
                     0,
@@ -1026,107 +1047,6 @@ export function AltDeckEditor(props: Props) {
                 <h2>Your collection</h2>
                 <span>{matchingCount} cards available</span>
               </div>
-              <label className="alt-search">
-                <span aria-hidden="true">⌕</span>
-                <input
-                  type="search"
-                  value={search}
-                  onChange={(event) => onSearch(event.target.value)}
-                  placeholder="Search owned cards"
-                  aria-label="Search owned cards"
-                />
-              </label>
-              <div className="alt-deck-pool-controls">
-                <div
-                  className="alt-grouping-switch"
-                  role="group"
-                  aria-label="Pool grouping"
-                >
-                  <span>Group by:</span>
-                  <button
-                    type="button"
-                    aria-pressed={poolGrouping === "type"}
-                    onClick={() => choosePoolGrouping("type")}
-                  >
-                    Type
-                  </button>
-                  <button
-                    type="button"
-                    aria-pressed={poolGrouping === "color"}
-                    onClick={() => choosePoolGrouping("color")}
-                  >
-                    Color
-                  </button>
-                </div>
-                {hasCommanderIdentity && (
-                  <button
-                    type="button"
-                    className="alt-pill alt-outline"
-                    aria-pressed={showOffColor}
-                    onClick={() => onShowOffColor(!showOffColor)}
-                  >
-                    {showOffColor
-                      ? "Hide off-color"
-                      : `Show off-color (${hiddenPoolCount})`}
-                  </button>
-                )}
-                {visiblePoolIds.length > 0 && (
-                  <button
-                    type="button"
-                    className="alt-pill alt-outline alt-deck-collapse-all"
-                    onClick={bulkTogglePool}
-                  >
-                    {allPoolCollapsed ? "Expand all" : "Collapse all"}
-                  </button>
-                )}
-                {poolGrouping === "type" && (
-                  <button
-                    type="button"
-                    className="alt-pill alt-outline"
-                    aria-pressed={poolCompact}
-                    onClick={togglePoolCompact}
-                  >
-                    {poolCompact
-                      ? "Show chip labels"
-                      : "Compact section navigation"}
-                  </button>
-                )}
-              </div>
-              {poolGrouping === "type" && (
-                <AltSectionNav
-                  label="Add pool sections"
-                  items={[
-                    {
-                      id: "all",
-                      label: "All",
-                      count: matchingCount,
-                      icon: <span aria-hidden="true">*</span>,
-                    },
-                    ...DECK_DISPLAY_GROUPS.map(({ id, label }) => ({
-                      id,
-                      label,
-                      count: typePoolGroups.get(id)?.length || 0,
-                      icon: <CardTypeIcon type={id} />,
-                    })),
-                    ...(basics.length
-                      ? [
-                          {
-                            id: "basics",
-                            label: "Basics",
-                            count: basics.length,
-                            icon: <CardTypeIcon type="basic" />,
-                          },
-                        ]
-                      : []),
-                  ]}
-                  compact={poolCompact}
-                  mode="filter"
-                  activeId={poolFilter || "all"}
-                  onSelect={(id) =>
-                    setPoolFilter(id === "all" || poolFilter === id ? null : id)
-                  }
-                />
-              )}
             </div>
             {!search.trim() && !collection.some((card) => card.owned) ? (
               <div className="alt-deck-empty">
