@@ -31,9 +31,16 @@ export type AltCollectionViewProps = {
   importText: string;
   message: string;
   status: "idle" | "saving" | "saved" | "error";
+  search: string;
+  selectedName: string | null;
+  importOpen: boolean;
   unsyncedCount?: number;
   onImportTextChange: (value: string) => void;
+  onSearchChange: (value: string) => void;
+  onSelectedNameChange: (value: string | null) => void;
+  onImportOpenChange: (value: boolean) => void;
   onImport: () => void;
+  importing?: boolean;
   onToggleStyle: () => void;
   onRename: (name: string) => Promise<void>;
   onSaveCard: (name: string, patch: { qty?: number; owned?: boolean }) => void;
@@ -41,10 +48,7 @@ export type AltCollectionViewProps = {
   onDiscardUnsynced?: () => void;
 };
 
-export function AltCollectionView({ profile, catalog, cards, importText, message, status, unsyncedCount = 0, onImportTextChange, onImport, onToggleStyle, onRename, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
-  const [search, setSearch] = useState("");
-  const [selectedName, setSelectedName] = useState<string | null>(null);
-  const [importOpen, setImportOpen] = useState(false);
+export function AltCollectionView({ profile, catalog, cards, importText, message, status, search, selectedName, importOpen, unsyncedCount = 0, onImportTextChange, onSearchChange, onSelectedNameChange, onImportOpenChange, onImport, importing = false, onToggleStyle, onRename, onSaveCard, onRetryUnsynced, onDiscardUnsynced }: AltCollectionViewProps) {
   const [renaming, setRenaming] = useState(false);
   const { players } = useLeaguePlayers(profile);
 
@@ -88,13 +92,13 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
   const nowPlaying = <><div className="alt-progress"><span style={{ width: `${completion}%` }} /></div>{selected ? <>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={cardImage(selected.name, selected)} alt="" /><div className="alt-now-title"><strong>{selected.name}</strong><small>{selected.rarity} · Reality Fracture</small></div><div className="alt-now-actions"><span className={selectedEntry?.owned ? "on" : ""}>Owned</span><div className="alt-stepper alt-collection-quantity" role="group" aria-label={`Quantity for ${selected.name}`}><button type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, Math.max(0, (selectedEntry?.qty || 0) - 1))} aria-label={`Decrease ${selected.name} quantity`}>−</button><b>{selectedEntry?.qty || 0}</b><button type="button" onClick={() => setQuantity(selected, (selectedEntry?.qty || 0) + 1)} aria-label={`Increase ${selected.name} quantity`}>+</button></div><button className="alt-remove-quantity" type="button" disabled={!selectedEntry?.qty} onClick={() => setQuantity(selected, 0)} aria-label={`Remove ${selected.name} from collection`}>Remove</button></div></> : <div className="alt-now-empty"><strong>Select a card</strong><small>Choose a tile to inspect its collection state</small></div>}</>;
 
   return <AltShell title={title} subtitle="Reality Fracture league · season 1" activeNav="collection" playerId={profile.id} players={shellPlayers} onToggleStyle={onToggleStyle} nowPlaying={nowPlaying} topRight={<>
-        <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>
+        <label className="alt-search"><span aria-hidden>⌕</span><input type="search" value={search} onChange={(event) => onSearchChange(event.target.value)} placeholder="Search cards…" aria-label="Search cards" /></label>
         <div className="alt-owned-counter">Owned <b>{ownedCount} / {catalog.length}</b></div>
-        <button className="alt-pill alt-outline" type="button" onClick={() => setImportOpen((open) => !open)} aria-expanded={importOpen}>Import &amp; merge</button>
+        <button className="alt-pill alt-outline" type="button" onClick={() => onImportOpenChange(!importOpen)} aria-expanded={importOpen}>Import &amp; merge</button>
       </>}>
       {importOpen && <section className="alt-import" aria-label="Import collection">
-        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} />
-        <button className="alt-pill alt-primary" type="button" onClick={onImport}>Import &amp; merge</button>
+        <textarea value={importText} onChange={(event) => onImportTextChange(event.target.value)} placeholder={"Paste a card list\n1 Card Name (FRA)"} disabled={importing} />
+        <button className="alt-pill alt-primary" type="button" onClick={onImport} disabled={importing}>{importing ? "Importing…" : "Import & merge"}</button>
       </section>}
       {unsyncedCount > 0 && <div className="alt-unsynced" role="alert">
         <span><strong>{unsyncedCount} unsynced {unsyncedCount === 1 ? "change" : "changes"}</strong> recovered from this browser. These values are pending until the server confirms them.</span>
@@ -103,6 +107,7 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
       {(message || status === "saving") && <p className={`alt-notice ${status}`} role="status">{status === "saving" ? "Saving…" : message}</p>}
 
       <div className="alt-groups">
+        {catalog.length > 0 && [...groups.values()].every((items) => items.length === 0) && <section className="alt-page-section"><h2>No cards found</h2><p className="alt-field-hint">No cards match “{search}”. Clear or change the search to browse the collection.</p></section>}
         {GROUPS.map((group) => {
           const items = groups.get(group) || [];
           if (!items.length) return null;
@@ -114,10 +119,13 @@ export function AltCollectionView({ profile, catalog, cards, importText, message
               {items.map((card) => {
                 const entry = collectionMap.get(card.name.toLowerCase());
                 const isOwned = entry?.owned === true;
-                return <article className={`alt-card ${isOwned ? "owned" : "unowned"} ${selectedName === card.name ? "selected" : ""}`} key={card.name} onClick={() => setSelectedName(card.name)}>
+                const isSelected = selectedName === card.name;
+                return <article className={`alt-card ${isOwned ? "owned" : "unowned"} ${isSelected ? "selected" : ""}`} key={card.name} onClick={() => onSelectedNameChange(card.name)}>
                   <div className="alt-card-visual">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={cardImage(card.name, card)} alt={card.name} loading="lazy" />
+                    <button className="alt-card-inspect" type="button" aria-label={`Inspect ${card.name}`} aria-pressed={isSelected} onClick={() => onSelectedNameChange(card.name)}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={cardImage(card.name, card)} alt="" loading="lazy" />
+                    </button>
                     <span className={`alt-rarity alt-rarity-${card.rarity.toLowerCase()}`}><i />{card.rarity}</span>
                     <button className="alt-card-toggle" type="button" aria-label={`${isOwned ? "Mark unowned" : "Mark owned"}: ${card.name}`} onClick={(event) => { event.stopPropagation(); toggle(card); }}>{isOwned ? "✓" : "+"}</button>
                   </div>

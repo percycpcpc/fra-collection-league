@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { jsonFetch } from "@/lib/client";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { AltAnalytics } from "./AltAnalytics";
 import { AltShell } from "./AltShell";
+import { AltPageState } from "./AltPageState";
 import { UiStyleToggle } from "./UiStyleToggle";
 import { useUiStyle } from "./useUiStyle";
 import { useLeaguePlayers } from "./useLeaguePlayers";
@@ -21,7 +22,8 @@ export function AnalyticsDashboard() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<{ key: SortKey; direction: "asc" | "desc" }>({ key: "owners", direction: "desc" });
   const { players: sidebarPlayers } = useLeaguePlayers();
-  useEffect(() => { jsonFetch<{ players: Player[]; cards: Card[] }>("/api/analytics").then(setData).catch((cause) => setError(cause.message)); }, []);
+  const load = useCallback(() => { setError(""); return jsonFetch<{ players: Player[]; cards: Card[] }>("/api/analytics").then(setData).catch((cause) => setError(cause.message)); }, []);
+  useEffect(() => { void load(); }, [load]);
 
   const cards = useMemo(() => (data?.cards ?? []).filter((card) => card.name.toLowerCase().includes(search.toLowerCase())).sort((a, b) => {
     const result = sort.key === "name" ? a.name.localeCompare(b.name) : a[sort.key] - b[sort.key];
@@ -32,7 +34,7 @@ export function AnalyticsDashboard() {
   function heading(key: SortKey, label: string) { return <button className="sort-button" type="button" onClick={() => toggleSort(key)}>{label} {sort.key === key ? (sort.direction === "desc" ? "↓" : "↑") : ""}</button>; }
 
   if (!data) {
-    if (style === "alt") return <AltShell title="Loading…" activeNav="analytics" players={sidebarPlayers} onToggleStyle={toggle}><div className="alt-section"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></div></AltShell>;
+    if (style === "alt") return <AltShell title={error ? "Analytics unavailable" : "Loading analytics…"} activeNav="analytics" players={sidebarPlayers} onToggleStyle={toggle}><AltPageState title={error ? "We couldn't load analytics" : "Loading analytics"} busy={!error} onRetry={error ? () => void load() : undefined}>{error || "Calculating league collection coverage."}</AltPageState></AltShell>;
     return <main className="shell"><p className={error ? "error-banner" : "muted"}>{error || "Loading analytics…"}</p></main>;
   }
   if (style === "alt") return <AltAnalytics players={players} sidebarPlayers={sidebarPlayers} cards={cards} search={search} onSearch={setSearch} onToggleStyle={toggle} />;

@@ -17,6 +17,16 @@ describe("alternate player pages SSR smoke", () => {
     expect(html).toContain('aria-label="Mobile league navigation. Player links target Percy"');
     expect(html).toContain("Player links: Percy");
     expect(html.match(/aria-current="page"/g)).toHaveLength(2);
+    expect(html).toContain('href="/p/p1/decks"');
+    expect(html).toContain('href="/matches"');
+    expect(html).not.toContain('href="/p/p1/matches"');
+  });
+  it("does not silently choose the first player on league pages", () => {
+    const html = renderToStaticMarkup(<AltShell title="League analytics" activeNav="analytics" players={[player]} onToggleStyle={noop}><p>Stats</p></AltShell>);
+    expect(html).toContain('href="/matches"');
+    expect(html).not.toContain('href="/p/p1/decks"');
+    expect(html).not.toContain('href="/p/p1/matches"');
+    expect(html).toContain("League navigation");
   });
   it("renders AltPlayersDirectory", () => {
     const html = renderToStaticMarkup(<AltPlayersDirectory players={[player]} sidebarPlayers={[{ id: "p2", name: "Alex" }]} createForm={<button>New</button>} onToggleStyle={noop} />);
@@ -25,6 +35,14 @@ describe("alternate player pages SSR smoke", () => {
   it("renders AltAnalytics", () => {
     const html = renderToStaticMarkup(<AltAnalytics players={[{ ...player, ownedCards: 12, ownedQty: 14, byRarity: { common: 4, uncommon: 4, rare: 3, mythic: 1 }, completionPct: 5 }]} cards={[{ name: "Ajani", rarity: "rare", colors: "white", img: "/a.jpg", owners: 1, totalQty: 2 }]} search="" onSearch={noop} onToggleStyle={noop} />);
     expect(html).toContain("League analytics"); expect(html).toContain("Completion"); expect(html).toContain("Ajani");
+  });
+  it("renders actionable empty and no-result Alt states", () => {
+    const emptyPlayers = renderToStaticMarkup(<AltPlayersDirectory players={[]} createForm={<button>New player</button>} onToggleStyle={noop} />);
+    expect(emptyPlayers).toContain("No players yet"); expect(emptyPlayers).toContain("New player");
+    const emptyDecks = renderToStaticMarkup(<AltDeckList profileId="p1" profileName="Percy" players={[player]} decks={[]} createForm={<button>Create</button>} onToggleStyle={noop} />);
+    expect(emptyDecks).toContain("No decks yet"); expect(emptyDecks).toContain("Create a deck above");
+    const emptyAnalytics = renderToStaticMarkup(<AltAnalytics players={[]} cards={[]} search="" onSearch={noop} onToggleStyle={noop} />);
+    expect(emptyAnalytics).toContain("No analytics data yet"); expect(emptyAnalytics).toContain("Back to players");
   });
   it("renders AltMatches", () => {
     const html = renderToStaticMarkup(<AltMatches playerId="p1" playerName="Percy" players={[player]} wins={1} losses={0} matches={[{ id: "m1", winnerId: "p1", winnerName: "Percy", winnerIconCard: null, loserId: "p2", loserName: "Alex", loserIconCard: null, winnerDeckName: null, loserDeckName: null, note: null, createdAt: "2026-01-01T00:00:00Z" }]} onToggleStyle={noop} />);
@@ -36,7 +54,7 @@ describe("alternate player pages SSR smoke", () => {
   });
   it("renders AltDeckEditor", () => {
     const ajani = { id: "c1", profileId: "p1", name: "Ajani", qty: 2, owned: true };
-    const html = renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" players={[player]} deckName="Azorius" cards={[]} collection={[ajani]} poolGroups={[{ group: "White", entries: [{ card: ajani, offColor: false }] }]} basics={[]} hiddenPoolCount={0} search="" showOffColor={false} viewMode="images" status="Saved" error="" commanderNames={["Ajani"]} eligibleCommanderNames={["Ajani"]} hasCommanderIdentity catalog={[{ name: "Ajani", qty: 1, img: "/a.jpg", colors: "white", rarity: "rare", type: "Legendary Creature", colorIdentity: "w", manaCost: "" }]} onSearch={noop} onShowOffColor={noop} onViewMode={noop} onQty={noop} onCommander={noop} onRename={noop} onToggleStyle={noop} isOffColor={() => false} />);
+    const html = renderToStaticMarkup(<AltDeckEditor profileId="p1" profileName="Percy" players={[player]} deckName="Azorius" renameDraft="Azorius" cards={[]} collection={[ajani]} poolGroups={[{ group: "White", entries: [{ card: ajani, offColor: false }] }]} basics={[]} hiddenPoolCount={0} search="" showOffColor={false} viewMode="images" status="Saved" error="" commanderNames={["Ajani"]} eligibleCommanderNames={["Ajani"]} hasCommanderIdentity catalog={[{ name: "Ajani", qty: 1, img: "/a.jpg", colors: "white", rarity: "rare", type: "Legendary Creature", colorIdentity: "w", manaCost: "" }]} onSearch={noop} onRenameDraft={noop} onShowOffColor={noop} onViewMode={noop} onQty={noop} onCommander={noop} onRename={noop} onToggleStyle={noop} isOffColor={() => false} />);
     expect(html).toContain("Azorius");
     expect(html).toContain("alt-deck-commander-card"); expect(html).toContain("/a.jpg"); expect(html).toContain("Ajani");
     expect(html).toContain("alt-deck-workspace"); expect(html).toContain("Deck contents"); expect(html).toContain("Your collection");
@@ -78,6 +96,11 @@ describe("alt UI parity (#37)", () => {
   });
   it("renders an empty Alt match history", () => {
     expect(renderToStaticMarkup(<AltMatches playerId="p1" playerName="League" players={[]} wins={0} losses={0} matches={[]} onToggleStyle={noop} />)).toContain("No matches yet");
+  });
+  it("renders the league match total and history range", () => {
+    const html = renderToStaticMarkup(<AltMatches playerId="" playerName="League" players={[]} wins={0} losses={0} summary="42 matches recorded" matches={[match]} pagination={{ offset: 25, limit: 25, total: 42 }} onPage={noop} onToggleStyle={noop} />);
+    expect(html).toContain("42 matches recorded"); expect(html).toContain("26–42 of 42");
+    expect(html).toContain("Newer"); expect(html).toMatch(/<button[^>]*disabled=""[^>]*>Older/);
   });
   it("wraps admin content in AltShell only for the Alt style", () => {
     const alt = renderToStaticMarkup(<AdminFrame style="alt" players={[player]} onToggleStyle={noop}><p>Catalog</p></AdminFrame>);

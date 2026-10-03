@@ -25,7 +25,13 @@ function render() {
       importText=""
       message=""
       status="idle"
+      search=""
+      selectedName={null}
+      importOpen={false}
       onImportTextChange={noop}
+      onSearchChange={noop}
+      onSelectedNameChange={noop}
+      onImportOpenChange={noop}
       onImport={noop}
       onToggleStyle={noop}
       onRename={async () => {}}
@@ -59,8 +65,14 @@ describe("AltCollectionView SSR smoke", () => {
         importText=""
         message=""
         status="idle"
+        search=""
+        selectedName={null}
+        importOpen={false}
         unsyncedCount={1}
         onImportTextChange={noop}
+        onSearchChange={noop}
+        onSelectedNameChange={noop}
+        onImportOpenChange={noop}
         onImport={noop}
         onToggleStyle={noop}
         onRename={async () => {}}
@@ -80,6 +92,14 @@ describe("AltCollectionView SSR smoke", () => {
     const counterIdx = html.indexOf("Countersculpt");
     const slice = html.slice(Math.max(0, counterIdx - 800), counterIdx);
     expect(slice).toContain("unowned");
+  });
+
+  it("exposes card inspection separately from ownership changes", () => {
+    const html = render();
+    expect(html).toContain('class="alt-card-inspect"');
+    expect(html).toContain('aria-label="Inspect Ajani Resolute"');
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-label="Mark unowned: Ajani Resolute"');
   });
 
   it("groups multicolor cards under Multi", () => {
