@@ -36,6 +36,14 @@ describe("alternate player pages SSR smoke", () => {
     const html = renderToStaticMarkup(<AltAnalytics players={[{ ...player, ownedCards: 12, ownedQty: 14, byRarity: { common: 4, uncommon: 4, rare: 3, mythic: 1 }, completionPct: 5 }]} cards={[{ name: "Ajani", rarity: "rare", colors: "white", img: "/a.jpg", owners: 1, totalQty: 2 }]} search="" onSearch={noop} onToggleStyle={noop} />);
     expect(html).toContain("League analytics"); expect(html).toContain("Completion"); expect(html).toContain("Ajani");
   });
+  it("renders actionable empty and no-result Alt states", () => {
+    const emptyPlayers = renderToStaticMarkup(<AltPlayersDirectory players={[]} createForm={<button>New player</button>} onToggleStyle={noop} />);
+    expect(emptyPlayers).toContain("No players yet"); expect(emptyPlayers).toContain("New player");
+    const emptyDecks = renderToStaticMarkup(<AltDeckList profileId="p1" profileName="Percy" players={[player]} decks={[]} createForm={<button>Create</button>} onToggleStyle={noop} />);
+    expect(emptyDecks).toContain("No decks yet"); expect(emptyDecks).toContain("Create a deck above");
+    const emptyAnalytics = renderToStaticMarkup(<AltAnalytics players={[]} cards={[]} search="" onSearch={noop} onToggleStyle={noop} />);
+    expect(emptyAnalytics).toContain("No analytics data yet"); expect(emptyAnalytics).toContain("Back to players");
+  });
   it("renders AltMatches", () => {
     const html = renderToStaticMarkup(<AltMatches playerId="p1" playerName="Percy" players={[player]} wins={1} losses={0} matches={[{ id: "m1", winnerId: "p1", winnerName: "Percy", winnerIconCard: null, loserId: "p2", loserName: "Alex", loserIconCard: null, winnerDeckName: null, loserDeckName: null, note: null, createdAt: "2026-01-01T00:00:00Z" }]} onToggleStyle={noop} />);
     expect(html).toContain("Percy&#x27;s matches"); expect(html).toContain("Match history"); expect(html).toContain("Alex");
