@@ -1099,6 +1099,12 @@ export function AltDeckEditor(props: Props) {
                 <AltSectionNav
                   label="Add pool sections"
                   items={[
+                    {
+                      id: "all",
+                      label: "All",
+                      count: matchingCount,
+                      icon: <span aria-hidden="true">*</span>,
+                    },
                     ...DECK_DISPLAY_GROUPS.map(({ id, label }) => ({
                       id,
                       label,
@@ -1118,9 +1124,9 @@ export function AltDeckEditor(props: Props) {
                   ]}
                   compact={poolCompact}
                   mode="filter"
-                  activeId={poolFilter}
+                  activeId={poolFilter || "all"}
                   onSelect={(id) =>
-                    setPoolFilter(poolFilter === id ? null : id)
+                    setPoolFilter(id === "all" || poolFilter === id ? null : id)
                   }
                 />
               )}
