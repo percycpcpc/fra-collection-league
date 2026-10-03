@@ -60,17 +60,15 @@ function useDeckOptions(profileId: string) {
   return { ...current, retry: () => setAttempt((value) => value + 1) };
 }
 
-function DeckSelect({ label, name, profileId, options, disabled }: { label: string; name: string; profileId: string; options: ReturnType<typeof useDeckOptions>; disabled?: boolean }) {
-  const loading = options.status === "loading";
-  return <label>{label}<select name={name} defaultValue="" key={`${profileId}-${options.status}`} disabled={disabled || !profileId || loading || options.status === "error"}><option value="">{loading ? "Loading decks…" : "No deck"}</option>{options.decks.map((deck) => <option value={deck.id} key={deck.id}>{deck.name}</option>)}</select>{options.status === "error" && <span className="field-error" role="alert">{options.error} <button type="button" onClick={options.retry}>Retry</button></span>}</label>;
-}
-
 export function MatchesDashboard() {
   const { style, toggle } = useUiStyle();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [matches, setMatches] = useState<MatchRecord[]>([]);
   const [winnerId, setWinnerId] = useState("");
   const [loserId, setLoserId] = useState("");
+  const [winnerDeckId, setWinnerDeckId] = useState("");
+  const [loserDeckId, setLoserDeckId] = useState("");
+  const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const submitLock = useRef(new MutationLock());
@@ -80,17 +78,16 @@ export function MatchesDashboard() {
   const loadMatches = useCallback(async () => { const data = await jsonFetch<{ matches: MatchRecord[] }>("/api/matches"); setMatches(data.matches); }, []);
   const altDelete = useAltMatchDelete(loadMatches);
   useEffect(() => { Promise.all([jsonFetch<{ profiles: Profile[] }>("/api/profiles?counts=0"), loadMatches()]).then(([data]) => setProfiles(data.profiles)).catch((cause) => setError(cause.message)); }, [loadMatches]);
-
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(""); const form = new FormData(event.currentTarget); const formElement = event.currentTarget;
+    event.preventDefault(); setError("");
     if (!submitLock.current.tryAcquire()) return;
     setSubmitting(true);
-    try { await jsonFetch("/api/matches", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winnerId, loserId, winnerDeckId: form.get("winnerDeckId") || null, loserDeckId: form.get("loserDeckId") || null, note: form.get("note") || null }) }); formElement.reset(); setWinnerId(""); setLoserId(""); try { await loadMatches(); } catch { setError("Match saved, but recent matches could not be refreshed. Reload to try again."); } }
+    try { await jsonFetch("/api/matches", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ winnerId, loserId, winnerDeckId: winnerDeckId || null, loserDeckId: loserDeckId || null, note: note || null }) }); setWinnerId(""); setLoserId(""); setWinnerDeckId(""); setLoserDeckId(""); setNote(""); try { await loadMatches(); } catch { setError("Match saved, but recent matches could not be refreshed. Reload to try again."); } }
     catch (cause) { setError(cause instanceof Error ? cause.message : "Could not record match."); }
     finally { submitLock.current.release(); setSubmitting(false); }
   }
 
-  const recordForm = profiles.length < 2 ? <p className="notice">Create at least two players before recording a match.</p> : <form className="match-form" onSubmit={submit}><label>Winner<select required value={winnerId} onChange={(event) => setWinnerId(event.target.value)} disabled={submitting}><option value="">Select winner</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><DeckSelect label="Winner deck" name="winnerDeckId" profileId={winnerId} options={winnerDecks} disabled={submitting} /><span className="versus">VS</span><label>Loser<select required value={loserId} onChange={(event) => setLoserId(event.target.value)} disabled={submitting}><option value="">Select loser</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><DeckSelect label="Loser deck" name="loserDeckId" profileId={loserId} options={loserDecks} disabled={submitting} /><label className="match-note">Note (optional)<input name="note" maxLength={200} placeholder="A close game…" disabled={submitting} /></label><button className="primary" type="submit" disabled={submitting || !winnerId || !loserId || winnerId === loserId || winnerDecks.status === "loading" || loserDecks.status === "loading"}>{submitting ? "Recording..." : "Record match"}</button></form>;
+  const recordForm = profiles.length < 2 ? <p className="notice">Create at least two players before recording a match.</p> : <form className="match-form" onSubmit={submit}><label>Winner<select required value={winnerId} onChange={(event) => { setWinnerId(event.target.value); setWinnerDeckId(""); }} disabled={submitting}><option value="">Select winner</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><label>Winner deck<select name="winnerDeckId" value={winnerDeckId} onChange={(event) => setWinnerDeckId(event.target.value)} key={winnerId} disabled={submitting || !winnerId || winnerDecks.status !== "ready"}><option value="">{winnerDecks.status === "loading" ? "Loading decks..." : "No deck"}</option>{winnerDecks.decks.map((deck) => <option value={deck.id} key={deck.id}>{deck.name}</option>)}</select></label><span className="versus">VS</span><label>Loser<select required value={loserId} onChange={(event) => { setLoserId(event.target.value); setLoserDeckId(""); }} disabled={submitting}><option value="">Select loser</option>{profiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name}</option>)}</select></label><label>Loser deck<select name="loserDeckId" value={loserDeckId} onChange={(event) => setLoserDeckId(event.target.value)} key={loserId} disabled={submitting || !loserId || loserDecks.status !== "ready"}><option value="">{loserDecks.status === "loading" ? "Loading decks..." : "No deck"}</option>{loserDecks.decks.map((deck) => <option value={deck.id} key={deck.id}>{deck.name}</option>)}</select></label><label className="match-note">Note (optional)<input name="note" value={note} onChange={(event) => setNote(event.target.value)} maxLength={200} placeholder="A close game…" disabled={submitting} /></label><button className="primary" type="submit" disabled={submitting || !winnerId || !loserId || winnerId === loserId || winnerDecks.status === "loading" || loserDecks.status === "loading"}>{submitting ? "Recording..." : "Record match"}</button></form>;
   if (style === "alt") return <AltMatches playerId={winnerId || profiles[0]?.id || ""} playerName="League" players={sidebarPlayers} matches={matches} wins={0} losses={0} recordForm={recordForm} actions={altDelete.actions} error={altDelete.error || error} onToggleStyle={toggle} />;
   return <main className="shell matches-page"><header className="page-heading"><div><Link className="back-link" href="/">← Players</Link><div className="eyebrow">League play</div><h1>Matches</h1></div><span>{matches.length} recent</span><UiStyleToggle onToggle={toggle} /></header>
     <section className="data-section"><h2>Record a match</h2>{recordForm}{error && <p className="error-banner">{error}</p>}</section>

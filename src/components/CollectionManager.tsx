@@ -31,6 +31,8 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [cards, setCards] = useState<CollectionCard[]>([]);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [search, setSearch] = useState("");
+  const [selectedName, setSelectedName] = useState<string | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
   const [iconSearch, setIconSearch] = useState("");
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
   const [importText, setImportText] = useState("");
@@ -193,8 +195,14 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     importText={importText}
     message={message}
     status={status}
+    search={search}
+    selectedName={selectedName}
+    importOpen={importOpen}
     unsyncedCount={Object.keys(pendingEdits).length}
     onImportTextChange={setImportText}
+    onSearchChange={setSearch}
+    onSelectedNameChange={setSelectedName}
+    onImportOpenChange={setImportOpen}
     onImport={() => void runImport()}
     importing={importing}
     onToggleStyle={toggleUiStyle}
