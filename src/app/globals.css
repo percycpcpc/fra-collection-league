@@ -851,6 +851,10 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-editor .alt-deck-content-groups .alt-card-section-toggle { font-size: 17px; font-weight: 700; }
 .alt-deck-editor .alt-deck-pool .alt-deck-pool-toolbar { margin: 0 -16px; padding: 0 16px 12px; border-radius: 12px 12px 0 0; background: var(--fra-alt-surface); box-shadow: 0 1px #303030; }
 .alt-deck-editor .alt-deck-pool-controls { display: flex; flex: 1 0 100%; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.alt-deck-editor .alt-deck-pool-controls .alt-grouping-switch { margin-right: auto; }
+.alt-deck-editor .alt-deck-pool-toolbar > .alt-section-nav { flex: 1 0 100%; padding: 4px 0 0; }
+.alt-deck-editor .alt-deck-pool-type-groups .alt-card-section-root { padding-top: 14px; }
+.alt-deck-editor .alt-deck-pool-type-groups .alt-card-section-toggle { font-size: 17px; font-weight: 700; }
 .alt-deck-editor .alt-deck-pool-group { padding-top: 14px; }
 .alt-deck-editor .alt-deck-pool-group > h3 { margin: 0 0 12px; }
 .alt-deck-editor .alt-deck-group-toggle { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 40px; padding: 6px 10px; border: 0; border-radius: 8px; color: #fff; background: transparent; font: inherit; font-size: 17px; font-weight: 700; text-align: left; }
