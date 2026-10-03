@@ -12,6 +12,7 @@ import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers, useLeaguePlayers } from "./useLeaguePlayers";
 import { jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
+import { MutationLock } from "@/lib/mutation-lock";
 
 type ProfileData = { profile: { id: string; name: string; iconCard: string | null }; cards: CollectionCard[] };
 type PendingEdits = Record<string, Partial<Pick<CollectionCard, "qty" | "owned">>>;
@@ -36,10 +37,12 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [importing, setImporting] = useState(false);
   const [pendingEdits, setPendingEdits] = useState<PendingEdits>({});
   const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const { players } = useLeaguePlayers(profile ?? undefined);
   const saveQueue = useRef<LatestWriteQueue<{ name: string; qty: number; owned: boolean }> | null>(null);
+  const importLock = useRef(new MutationLock());
   const storageKey = `fra-pending-${profileId}`;
 
   const readPending = useCallback((): PendingEdits => {
@@ -53,7 +56,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     setPendingEdits(edits);
   }, [storageKey]);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (throwOnError = false) => {
     setLoading(true); setMessage("");
     try {
       const [data, cat] = await Promise.all([jsonFetch<ProfileData>(`/api/profiles/${profileId}`), jsonFetch<CatalogCard[]>("/api/catalog")]);
@@ -71,8 +74,10 @@ export function CollectionManager({ profileId }: { profileId: string }) {
       }
       setPendingEdits(edits);
       setProfile(data.profile); setCards(loaded); setCatalog(cat);
-    } catch (cause) { setMessage(cause instanceof Error ? cause.message : "Could not load collection."); }
-    finally { setLoading(false); }
+    } catch (cause) {
+      setMessage(cause instanceof Error ? cause.message : "Could not load collection.");
+      if (throwOnError) throw cause;
+    } finally { setLoading(false); }
   }, [profileId, readPending]);
   useEffect(() => { void load(); }, [load]);
 
@@ -164,8 +169,11 @@ export function CollectionManager({ profileId }: { profileId: string }) {
 
   async function runImport() {
     setMessage("");
-    try { const result = await jsonFetch<{ added: number; updated: number; unknown: string[] }>(`/api/profiles/${profileId}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: importText }) }); setImportText(""); setMessage(`Imported ${result.added} new and updated ${result.updated}.${result.unknown.length ? ` Unknown: ${result.unknown.join(", ")}` : ""}`); refreshLeaguePlayers().catch(() => undefined); await load(); }
+    if (!importLock.current.tryAcquire()) return;
+    setImporting(true);
+    try { const result = await jsonFetch<{ added: number; updated: number; unknown: string[] }>(`/api/profiles/${profileId}/import`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: importText }) }); setImportText(""); setMessage(`Imported ${result.added} new and updated ${result.updated}.${result.unknown.length ? ` Unknown: ${result.unknown.join(", ")}` : ""}`); refreshLeaguePlayers().catch(() => undefined); try { await load(true); } catch { setMessage("Import saved, but the collection could not be refreshed. Reload to try again."); } }
     catch (cause) { setMessage(cause instanceof Error ? cause.message : "Import failed."); }
+    finally { importLock.current.release(); setImporting(false); }
   }
 
   function exportText() {
@@ -188,6 +196,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     unsyncedCount={Object.keys(pendingEdits).length}
     onImportTextChange={setImportText}
     onImport={() => void runImport()}
+    importing={importing}
     onToggleStyle={toggleUiStyle}
     onSaveCard={(name, patch) => void saveCard(name, patch)}
     onRetryUnsynced={() => void retryUnsynced()}
@@ -202,7 +211,7 @@ export function CollectionManager({ profileId }: { profileId: string }) {
     <section className="collection-tools">
       {Object.keys(pendingEdits).length > 0 && <div className="notice error-banner" role="alert"><strong>{Object.keys(pendingEdits).length} unsynced {Object.keys(pendingEdits).length === 1 ? "change" : "changes"}</strong> recovered from this browser. <button type="button" onClick={() => void retryUnsynced()} disabled={status === "saving"}>Retry</button> <button type="button" onClick={() => void discardUnsynced()} disabled={status === "saving"}>Discard</button></div>}
       <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>
-      <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} /><button className="primary" onClick={() => void runImport()}>Import & merge</button></div>
+      <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} disabled={importing} /><button className="primary" onClick={() => void runImport()} disabled={importing}>{importing ? "Importing…" : "Import & merge"}</button></div>
       {message && <p className="notice" role="status">{message}</p>}
     </section>
     {GROUPS.map((group) => {
