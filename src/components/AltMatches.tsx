@@ -10,6 +10,12 @@ export type HeadToHeadRow = { opponentId: string; opponentName: string; opponent
 
 const matchTime = new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" });
 
+export function matchOffsetAfterDeletion(pagination: MatchPagination, visibleMatches: number) {
+  return visibleMatches === 1 && pagination.offset > 0
+    ? Math.max(0, pagination.offset - pagination.limit)
+    : pagination.offset;
+}
+
 /** Inline Delete → named Confirm/Cancel for Alt match rows; refetches via onDeleted and surfaces failures as `error`. */
 export function useAltMatchDelete(onDeleted: () => Promise<void>) {
   const [confirmId, setConfirmId] = useState<string | null>(null);
