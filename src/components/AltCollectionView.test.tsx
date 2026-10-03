@@ -2,6 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AltCollectionView, collectionQuantityPatch } from "./AltCollectionView";
+import { AltSectionNav } from "./AltSectionNav";
+import { CardTypeIcon } from "./CardTypeIcon";
 import type { CatalogCard, CollectionCard } from "@/lib/client";
 
 const catalog: CatalogCard[] = [
@@ -16,7 +18,7 @@ const cards: CollectionCard[] = [
 
 const noop = () => {};
 
-function render() {
+function render(overrides: { search?: string; selectedName?: string | null } = {}) {
   return renderToStaticMarkup(
     <AltCollectionView
       profile={{ id: "p1", name: "Percy", iconCard: null }}
@@ -25,8 +27,8 @@ function render() {
       importText=""
       message=""
       status="idle"
-      search=""
-      selectedName={null}
+      search={overrides.search ?? ""}
+      selectedName={overrides.selectedName ?? null}
       importOpen={false}
       onImportTextChange={noop}
       onSearchChange={noop}
@@ -41,13 +43,18 @@ function render() {
 }
 
 describe("AltCollectionView SSR smoke", () => {
-  it("renders shell, WUBRG groups, card tiles, and classic toggle", () => {
+  it("defaults to ordered type groups with typed counts, chips, and classic toggle", () => {
     const html = render();
     expect(html).toContain("Percy");
     expect(html).toContain("Collection");
     expect(html).toContain("Analytics");
-    expect(html).toContain("White");
-    expect(html).toContain("Blue");
+    expect(html).toContain('aria-pressed="true">Type');
+    expect(html).toContain('aria-pressed="false">Color');
+    expect(html.indexOf("Creatures")).toBeLessThan(html.indexOf("Instants"));
+    expect(html).toContain("2 cards · 1 / 2 owned");
+    expect(html).toContain("1 cards · 0 / 1 owned");
+    expect(html).toContain('aria-label="Collection sections"');
+    expect(html).toContain('href="#alt-collection-type-creature"');
     expect(html).toContain("Ajani Resolute");
     expect(html).toContain("Countersculpt");
     expect(html).toContain("Aerid Konstrari");
@@ -102,9 +109,26 @@ describe("AltCollectionView SSR smoke", () => {
     expect(html).toContain('aria-label="Mark unowned: Ajani Resolute"');
   });
 
-  it("groups multicolor cards under Multi", () => {
+  it("alphabetizes cards within a type group", () => {
     const html = render();
-    expect(html).toContain("Multi");
+    expect(html.indexOf("Aerid Konstrari")).toBeLessThan(html.indexOf("Ajani Resolute"));
+  });
+
+  it("hides zero-result sections and chips while preserving a hidden selection in the bottom bar", () => {
+    const html = render({ search: "Countersculpt", selectedName: "Ajani Resolute" });
+    expect(html).not.toContain('id="alt-collection-type-creature"');
+    expect(html).not.toContain('href="#alt-collection-type-creature"');
+    expect(html).toContain('id="alt-collection-type-instant"');
+    expect(html).toContain('<strong>Ajani Resolute</strong>');
+    expect(html).toContain("Quantity for Ajani Resolute");
+  });
+
+  it("renders compact chips with labels visually hidden but accessible names intact", () => {
+    const html = renderToStaticMarkup(<AltSectionNav label="Collection sections" compact mode="jump" topId="top" onSelect={noop} items={[{ id: "alt-collection-type-instant", label: "Instants", count: 3, icon: <CardTypeIcon type="instant" /> }]} />);
+    expect(html).toContain("alt-section-nav is-compact");
+    expect(html).toContain('aria-label="Instants, 3 cards"');
+    expect(html).toContain('title="Instants, 3 cards"');
+    expect(html).toContain("alt-section-nav-label");
   });
 
   it("keeps owned state consistent with quantity changes", () => {
