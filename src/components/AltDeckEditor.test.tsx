@@ -376,6 +376,17 @@ describe("AltDeckEditor Classic builder layout", () => {
     );
   });
 
+  it("places the view switch in the shared deck editor controls", () => {
+    const html = render();
+    const sharedControls = html.indexOf('class="alt-deck-shared-controls"');
+    const viewSwitch = html.indexOf('class="alt-deck-view-switch"');
+    const workspace = html.indexOf('class="alt-deck-workspace"');
+
+    expect(sharedControls).toBeGreaterThan(-1);
+    expect(viewSwitch).toBeGreaterThan(sharedControls);
+    expect(viewSwitch).toBeLessThan(workspace);
+  });
+
   it("keeps the Alt off-color toggle, legality status and commander modal trigger", () => {
     const html = render({ hiddenPoolCount: 3 });
     expect(html).toContain("Show off-color (3)");
