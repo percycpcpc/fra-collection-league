@@ -209,15 +209,16 @@ describe("AltDeckEditor Classic builder layout", () => {
       ],
     });
     expect(html).toContain('aria-label="Spells, 1 cards" aria-pressed="true"');
+    expect(html).toContain('aria-label="All, 1 cards" aria-pressed="false"');
     expect(html).toContain(
       'aria-label="Creatures, 0 cards" aria-pressed="false"',
     );
     expect(html).toContain('id="alt-deck-pool-type-spell"');
     expect(html).not.toContain('id="alt-deck-pool-type-creature"');
     expect(html).not.toContain('id="alt-deck-pool-type-basics"');
-    expect(render({ initialPoolFilter: null })).toContain(
-      'id="alt-deck-pool-type-creature"',
-    );
+    const unfiltered = render({ initialPoolFilter: null });
+    expect(unfiltered).toContain('aria-label="All, 3 cards" aria-pressed="true"');
+    expect(unfiltered).toContain('id="alt-deck-pool-type-creature"');
   });
 
   it("isolates Type disclosures and grouping from the legacy Color key", () => {

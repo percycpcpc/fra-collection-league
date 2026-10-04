@@ -900,6 +900,7 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-section-nav-chip { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border-radius: 9999px; color: #fff; background: var(--fra-alt-interactive); font-size: 12px; font-weight: 700; text-decoration: none; }
 .alt-section-nav-chip:focus-visible { outline: 2px solid var(--fra-alt-accent); outline-offset: 2px; }
 .alt-section-nav-chip[aria-current="location"] { color: var(--fra-alt-accent); box-shadow: inset 0 -2px var(--fra-alt-accent); }
+.alt-section-nav-chip[aria-pressed="true"] { color: #000; background: var(--fra-alt-accent); box-shadow: 0 0 0 1px var(--fra-alt-accent); }
 .alt-section-nav-icon { display: inline-flex; }
 .alt-section-nav-count { color: var(--fra-alt-muted); font-variant-numeric: tabular-nums; }
 .alt-section-nav.is-compact .alt-section-nav-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
