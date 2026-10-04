@@ -43,7 +43,7 @@ const profile = {
 async function mountDeckList(onPost?: (route: Route) => void) {
   const page = await browser.newPage();
   let deletes = 0;
-  await page.route("http://deck-list.test/**", async (route) => {
+  await page.route("http://deck-list.test/**", async (route: Route) => {
     const url = new URL(route.request().url());
     if (route.request().resourceType() === "document") {
       await route.fulfill({ contentType: "text/html", body: '<div id="root"></div>' });
@@ -92,7 +92,7 @@ describe("Alt decks mounted dialog interactions", () => {
     await page.getByRole("textbox", { name: "Deck name" }).fill("Esper");
     await page.getByRole("button", { name: "Create deck" }).click();
     await expect.poll(() => page.getByRole("dialog").count()).toBe(0);
-    await expect.poll(() => opener.evaluate((node) => node === document.activeElement), { timeout: 3_000 }).toBe(true);
+    await expect.poll(() => opener.evaluate((node: HTMLElement) => node === document.activeElement), { timeout: 3_000 }).toBe(true);
     await page.close();
   }, 30_000);
 
@@ -102,7 +102,7 @@ describe("Alt decks mounted dialog interactions", () => {
     await trigger.click();
     await page.getByRole("button", { name: "Cancel" }).click();
     await expect.poll(() => page.getByRole("dialog").count()).toBe(0);
-    await expect.poll(() => trigger.evaluate((node) => node === document.activeElement)).toBe(true);
+    await expect.poll(() => trigger.evaluate((node: HTMLElement) => node === document.activeElement)).toBe(true);
     await trigger.click();
     await page.getByRole("button", { name: "Delete deck" }).click();
     await expect.poll(deleteCount).toBe(1);
