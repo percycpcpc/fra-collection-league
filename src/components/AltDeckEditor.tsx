@@ -481,15 +481,12 @@ export function AltDeckEditor(props: Props) {
     </div>
   );
   const topRight = (
-    <>
-      <Link
-        className="alt-pill alt-outline alt-back"
-        href={`/p/${profileId}/decks`}
-      >
-        Back to decks
-      </Link>
-      {viewSwitch}
-    </>
+    <Link
+      className="alt-pill alt-outline alt-back"
+      href={`/p/${profileId}/decks`}
+    >
+      Back to decks
+    </Link>
   );
   const stepper = (
     name: string,
@@ -891,6 +888,7 @@ export function AltDeckEditor(props: Props) {
               aria-label="Search deck and collection"
             />
           </label>
+          {viewSwitch}
           <div
             className="alt-grouping-switch"
             role="group"
