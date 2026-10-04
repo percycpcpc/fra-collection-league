@@ -701,7 +701,7 @@ export function AltDeckEditor(props: Props) {
         >
           {qty}×
         </span>
-        <div>
+        <div className="alt-deck-list-details">
           <span className="alt-deck-list-name">
             <strong>{name}</strong>
             <ManaCost cost={info?.manaCost || ""} />

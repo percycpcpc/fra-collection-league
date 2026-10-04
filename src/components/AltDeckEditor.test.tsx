@@ -357,6 +357,7 @@ describe("AltDeckEditor Classic builder layout", () => {
   it("renders mana symbols (including split faces) and rarity in list rows", () => {
     const html = render({ viewMode: "list" });
     expect(html).toContain("alt-deck-list-name");
+    expect(html).toContain('class="alt-deck-list-details"');
     expect(html).toContain('aria-label="1 copies in deck">1×');
     expect(html).toContain("Instant");
     expect(html).toMatch(
