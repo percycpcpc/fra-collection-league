@@ -864,6 +864,7 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-editor .alt-deck-pane .alt-card { background: var(--fra-alt-interactive); }
 .alt-deck-editor .alt-deck-pane .alt-deck-empty { background: var(--fra-alt-interactive); }
 .alt-deck-editor .alt-deck-pane > .alt-deck-pane-head, .alt-deck-editor .alt-deck-pool-toolbar .alt-deck-pane-head, .alt-deck-editor .alt-deck-contents-sticky .alt-deck-pane-head { flex: 1 0 100%; margin: 0; padding: 14px 0 10px; border-bottom: 1px solid #303030; }
+.alt-deck-editor .alt-deck-pane-head > h2 { flex-shrink: 0; }
 .alt-deck-editor .alt-deck-contents { position: sticky; top: calc(var(--alt-deck-topbar-h, 72px) + 8px); max-height: calc(100vh - var(--alt-deck-topbar-h, 72px) - 16px); overflow-y: auto; scrollbar-color: #555 transparent; }
 .alt-deck-editor .alt-deck-contents-sticky { position: sticky; z-index: 5; top: 0; margin: 0 -16px; padding: 0 16px 12px; border-radius: 12px 12px 0 0; background: var(--fra-alt-surface); box-shadow: 0 1px #303030; }
 .alt-deck-editor .alt-deck-contents-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 8px 0 4px; }
