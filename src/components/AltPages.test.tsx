@@ -10,6 +10,10 @@ import { AltShell } from "./AltShell";
 
 const noop = () => {};
 const player = { id: "p1", name: "Percy", iconCard: null, cardCount: 12, deckCount: 2 };
+const catalog = [
+  { name: "Ajani", qty: 1, img: "https://cards.example/ajani.jpg", colors: "white", rarity: "rare", type: "Legendary Creature", colorIdentity: "w", manaCost: "" },
+  { name: "Bruse Tarl", qty: 1, img: "https://cards.example/bruse.jpg", colors: "red,white", rarity: "rare", type: "Legendary Creature", colorIdentity: "rw", manaCost: "" },
+];
 
 describe("alternate player pages SSR smoke", () => {
   it("announces the current page and the browsing player", () => {
@@ -45,9 +49,16 @@ describe("alternate player pages SSR smoke", () => {
     const html = renderToStaticMarkup(<AltMatches player={{ id: "p1", name: "Percy" }} wins={1} losses={0} matches={[{ id: "m1", winnerId: "p1", winnerName: "Percy", winnerIconCard: null, loserId: "p2", loserName: "Alex", loserIconCard: null, winnerDeckName: null, loserDeckName: null, note: null, createdAt: "2026-01-01T00:00:00Z" }]} onToggleStyle={noop} />);
     expect(html).toContain("Percy&#x27;s matches"); expect(html).toContain("Match history"); expect(html).toContain("Alex");
   });
-  it("renders AltDeckList", () => {
-    const html = renderToStaticMarkup(<AltDeckList profileId="p1" profileName="Percy" decks={[{ id: "d1", name: "Azorius", commander: "Ajani", cardCount: 20 }]} createForm={<button>Create</button>} onToggleStyle={noop} />);
-    expect(html).toContain("Percy&#x27;s decks"); expect(html).toContain("Azorius"); expect(html).toContain("Ajani");
+  it("renders AltDeckList commander images for zero, one, or two commanders", () => {
+    const html = renderToStaticMarkup(<AltDeckList profileId="p1" profileName="Percy" decks={[
+      { id: "d0", name: "Unled", commander: null, cardCount: 0 },
+      { id: "d1", name: "Azorius", commander: "Ajani", cardCount: 20 },
+      { id: "d2", name: "Partners", commander: "Ajani // Bruse Tarl", cardCount: 30 },
+    ]} catalog={catalog} createForm={<button>Create</button>} onToggleStyle={noop} />);
+    expect(html).toContain("Percy&#x27;s decks"); expect(html).toContain("No commander selected");
+    expect(html.match(/class="alt-commander-images"/g)).toHaveLength(2);
+    expect(html.match(/src="https:\/\/cards\.example\/ajani\.jpg" alt="Ajani" loading="lazy"/g)).toHaveLength(2);
+    expect(html).toContain('src="https://cards.example/bruse.jpg" alt="Bruse Tarl" loading="lazy"');
   });
   it("renders AltDeckEditor", () => {
     const ajani = { id: "c1", profileId: "p1", name: "Ajani", qty: 2, owned: true };
