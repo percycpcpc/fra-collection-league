@@ -218,6 +218,10 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(render({ initialPoolFilter: null })).toContain(
       'id="alt-deck-pool-type-creature"',
     );
+    expect(render({ initialPoolFilter: null })).toContain(
+      'aria-label="All, 3 cards" aria-pressed="true"',
+    );
+    expect(html).toContain('aria-label="All, 1 cards" aria-pressed="false"');
   });
 
   it("isolates Type disclosures and grouping from the legacy Color key", () => {
