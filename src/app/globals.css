@@ -994,9 +994,12 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-decks-btn-ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--deck-accent) 10%, transparent); }
 .alt-decks-btn-ghost:active:not(:disabled) { background: color-mix(in srgb, var(--deck-accent) 18%, transparent); }
 .alt-decks-btn-icon { width: 36px; height: 36px; padding: 0; font-size: 18px; }
+/* Match the global button hover selector's specificity so Classic gold never leaks in. */
+.alt-decks-v2 button.alt-decks-btn:hover:not(:disabled):not(.primary):not(.active):not([aria-pressed="true"]), .alt-decks-v2 button.alt-decks-btn:focus-visible:not(:disabled) { border-color: var(--deck-accent); color: var(--deck-accent); background: color-mix(in srgb, var(--deck-accent) 12%, transparent); }
 
-.alt-decks-body { display: flex; flex-direction: column; gap: var(--deck-space-6); max-width: 1240px; padding: var(--deck-space-8) 28px 32px; }
-.alt-decks-body > .alt-notice, .alt-decks-body > .alt-page-section { margin: 0; padding-inline: 0; }
+.alt-decks-body { max-width: 1240px; padding: var(--deck-space-8) 28px 32px; }
+.alt-decks-page-content { display: flex; flex-direction: column; gap: var(--deck-space-6); }
+.alt-decks-page-content > .alt-notice, .alt-decks-page-content > .alt-page-section { margin: 0; padding-inline: 0; }
 .alt-decks-no-match { margin: 0; color: var(--deck-neutral-400); font-size: 14px; }
 .alt-decks-rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--deck-space-6); }
 
@@ -1028,7 +1031,7 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-row-actions { display: flex; gap: var(--deck-space-2); margin-top: auto; }
 
 .alt-decks-cta { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--deck-space-2); min-height: 160px; padding: var(--deck-space-6); border: 1px dashed var(--deck-neutral-800); border-radius: var(--deck-radius-lg); color: var(--deck-neutral-400); background: transparent; font: inherit; text-align: left; cursor: pointer; transition: border-color .15s, color .15s; }
-.alt-decks-cta:hover { border-color: var(--deck-accent-700); color: var(--deck-text); }
+.alt-decks-v2 button.alt-decks-cta:hover:not(:disabled):not(.primary):not(.active):not([aria-pressed="true"]), .alt-decks-v2 button.alt-decks-cta:focus-visible:not(:disabled) { border-color: var(--deck-accent-700); color: var(--deck-text); background: color-mix(in srgb, var(--deck-accent) 6%, transparent); }
 .alt-decks-cta:active { background: color-mix(in srgb, var(--deck-accent) 6%, transparent); }
 .alt-decks-cta > .alt-decks-icon { color: var(--deck-accent); font-size: 20px; }
 .alt-decks-cta strong { font-size: 14px; font-weight: 500; }

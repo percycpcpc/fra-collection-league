@@ -77,12 +77,12 @@ export function DeckList({ profileId }: { profileId: string }) {
     try {
       await jsonFetch(`/api/profiles/${profileId}/decks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: deckName, commanders }) });
       refreshLeaguePlayers().catch(() => undefined);
-      setDeckName(""); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); setNewDeckOpen(false); await load();
+      setDeckName(""); setCommander(""); setPartner(""); setCmdQuery(""); setPartnerQuery(""); setCmdOpen(false); setPartnerOpen(false); closeNewDeck(); await load();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not create deck."); }
     finally { createLock.current.release(); setCreating(false); }
   }
   function openNewDeck() { newDeckOpener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null; setError(""); setNewDeckOpen(true); }
-  function closeNewDeck() { setNewDeckOpen(false); setCmdOpen(false); setPartnerOpen(false); window.requestAnimationFrame(() => newDeckOpener.current?.focus()); }
+  function closeNewDeck() { setNewDeckOpen(false); setCmdOpen(false); setPartnerOpen(false); window.requestAnimationFrame(() => window.requestAnimationFrame(() => newDeckOpener.current?.focus())); }
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 

@@ -44,7 +44,8 @@ export function AltDecksDialog({ labelledBy, describedBy, width, onClose, childr
       const focusable = [...root.querySelectorAll<HTMLElement>("input:not(:disabled), button:not(:disabled), a[href], [tabindex]:not([tabindex='-1'])")];
       if (!focusable.length) return;
       const first = focusable[0], last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!focusable.includes(document.activeElement as HTMLElement)) { event.preventDefault(); first.focus(); }
+      else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     };
     document.addEventListener("keydown", keydown);
@@ -118,20 +119,21 @@ export function AltDeckList({ profileId, profileName, profileIcon = null, decks,
       <button className="alt-decks-btn alt-decks-btn-primary" type="button" onClick={onNewDeck}><Icon name="plus" />New deck</button>
     </div>
   </div>;
-  return <AltShell title={header} activeNav="decks" player={{ id: profileId, name: profileName, iconCard: profileIcon }} onToggleStyle={onToggleStyle}>
+  return <><div className="alt-decks-page-background" inert={dialog ? true : undefined}><AltShell title={header} activeNav="decks" player={{ id: profileId, name: profileName, iconCard: profileIcon }} onToggleStyle={onToggleStyle}>
     <div className="alt-decks-v2 alt-decks-body">
-      {error && !dialog && <p className="alt-notice error" role="alert">{error}</p>}
-      {decks.length === 0 && <AltPageState title="No decks yet">Use New deck to create one, then add cards from {profileName}&apos;s collection.</AltPageState>}
-      {decks.length > 0 && shown.length === 0 && <p className="alt-decks-no-match" role="status">No decks match &ldquo;{query.trim()}&rdquo;.</p>}
-      <section className="alt-decks-rows" aria-label={`${profileName}'s decks`}>
-        {shown.map((deck) => <AltDeckRow key={deck.id} deck={deck} profileId={profileId} catalog={catalog} onDelete={onDelete} deleteRef={deleteRef} />)}
-        <button className="alt-decks-cta" type="button" onClick={onNewDeck}>
-          <Icon name="plus" />
-          <strong>{decks.length ? "Build another deck" : "Build your first deck"}</strong>
-          <span>Up to two legendary commanders from {profileName}&apos;s collection</span>
-        </button>
-      </section>
-      {dialog}
+      <div className="alt-decks-page-content">
+        {error && !dialog && <p className="alt-notice error" role="alert">{error}</p>}
+        {decks.length === 0 && <AltPageState title="No decks yet">Use New deck to create one, then add cards from {profileName}&apos;s collection.</AltPageState>}
+        {decks.length > 0 && shown.length === 0 && <p className="alt-decks-no-match" role="status">No decks match &ldquo;{query.trim()}&rdquo;.</p>}
+        <section className="alt-decks-rows" aria-label={`${profileName}'s decks`}>
+          {shown.map((deck) => <AltDeckRow key={deck.id} deck={deck} profileId={profileId} catalog={catalog} onDelete={onDelete} deleteRef={deleteRef} />)}
+          <button className="alt-decks-cta" type="button" onClick={onNewDeck}>
+            <Icon name="plus" />
+            <strong>{decks.length ? "Build another deck" : "Build your first deck"}</strong>
+            <span>Up to two legendary commanders from {profileName}&apos;s collection</span>
+          </button>
+        </section>
+      </div>
     </div>
-  </AltShell>;
+  </AltShell></div>{dialog && <div className="alt-decks-v2">{dialog}</div>}</>;
 }
