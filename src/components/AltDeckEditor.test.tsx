@@ -376,4 +376,14 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(html).toContain("Color identity: no conflicts");
     expect(html).toContain("Change commanders");
   });
+
+  it("uses commander art as the overview hero without repeating its name", () => {
+    const html = render();
+    expect(html).toMatch(
+      /class="alt-deck-commander-card" aria-label="Commander: Ajani"><div>.*?<\/div><\/div>/,
+    );
+    expect(html).not.toMatch(
+      /class="alt-deck-commander-card"[^>]*>.*?<strong>Ajani<\/strong>/,
+    );
+  });
 });

@@ -723,13 +723,12 @@ h1, h2, h3, p { margin-top: 0; }
 .alt-deck-editor .alt-deck-view-switch button { padding: 4px 12px; border: 0; border-radius: 9999px; color: var(--fra-alt-muted); background: transparent; font-size: 13px; }
 .alt-deck-editor .alt-deck-view-switch button[aria-pressed="true"] { color: #fff; background: var(--fra-alt-hover); }
 .alt-deck-editor .alt-deck-commander { display: flex; min-height: 110px; align-items: center; gap: 16px; margin: 8px 28px 0; padding: 16px; border-radius: 8px; background: var(--fra-alt-surface); }
-.alt-deck-editor .alt-deck-commanders { display: flex; flex: 1 1 auto; flex-wrap: wrap; gap: 16px; min-width: 0; }
-.alt-deck-editor .alt-deck-commander-card { display: flex; flex: 1 1 210px; align-items: center; gap: 12px; min-width: 0; max-width: 320px; }
-.alt-deck-editor .alt-deck-commander-card > div { flex: 0 0 56px; width: 56px; height: 78px; overflow: hidden; border-radius: 6px; }
+.alt-deck-editor .alt-deck-commanders { display: flex; flex: 1 1 auto; flex-wrap: wrap; justify-content: center; gap: 16px; min-width: 0; }
+.alt-deck-editor .alt-deck-commander-card { flex: 1 1 150px; min-width: 0; max-width: 260px; }
+.alt-deck-editor .alt-deck-commander-card > div { width: 100%; aspect-ratio: 488 / 680; overflow: hidden; border-radius: 10px; box-shadow: 0 12px 28px rgba(0,0,0,.45); }
 .alt-deck-editor .alt-deck-commander-card img { width: 100%; height: 100%; object-fit: cover; }
-.alt-deck-editor .alt-deck-commander-card span, .alt-deck-editor .alt-deck-commander-empty { display: grid; gap: 4px; min-width: 0; }
-.alt-deck-editor .alt-deck-commander-card strong { font-size: 16px; overflow-wrap: anywhere; }
-.alt-deck-editor .alt-deck-commander-card small, .alt-deck-editor .alt-deck-commander-empty small { color: var(--fra-alt-muted); font-size: 12px; }
+.alt-deck-editor .alt-deck-commander-empty { display: grid; gap: 4px; min-width: 0; }
+.alt-deck-editor .alt-deck-commander-empty small { color: var(--fra-alt-muted); font-size: 12px; }
 .alt-deck-editor .alt-deck-legality { display: flex; flex: 0 1 250px; align-items: center; gap: 8px; color: var(--fra-alt-muted); font-size: 12px; }
 .alt-deck-editor .alt-deck-legality.passed { color: var(--fra-alt-accent); }
 .alt-deck-editor .alt-deck-legality.warning { color: var(--fra-alt-warning); }
