@@ -134,6 +134,18 @@ describe("AltDeckEditor Classic builder layout", () => {
   it("defaults fresh editor preferences to List mode", () => {
     expect(ALT_DECK_DEFAULT_VIEW_MODE).toBe("list");
   });
+
+  it("places the view switch in the shared pane controls", () => {
+    const html = render();
+    const topbar = html.match(/<header class="alt-topbar"[\s\S]*?<\/header>/)?.[0];
+    const controls = html.match(
+      /<section class="alt-deck-shared-controls"[\s\S]*?<\/section>/,
+    )?.[0];
+
+    expect(topbar).not.toContain('aria-label="Deck editor view mode"');
+    expect(controls).toContain('aria-label="Deck editor view mode"');
+  });
+
   it("keeps Color mode on the legacy collapsible pool path", () => {
     const html = render({ initialPoolGrouping: "color" });
     expect(html).toMatch(
