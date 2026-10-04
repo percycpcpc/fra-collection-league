@@ -46,6 +46,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Install Playwright browser (for mounted interaction tests)
+        run: npx playwright install --with-deps chromium
       - name: Type check
         run: npx tsc --noEmit
       - name: Unit tests

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AltPageState } from "./AltPageState";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { altSectionHref, useAltBrowsing, type AltBrowsing, type AltSection, type AltShellPlayer } from "./useAltPlayer";
+import { useLeagueState, type LeaguePlayer } from "./useLeaguePlayers";
 
 export type AltPlayer = { id: string; name: string; cardCount?: number };
 export type AltNav = AltSection | "analytics" | "home" | "admin";
@@ -26,16 +27,54 @@ export function altNavItems(browsing: AltBrowsing): AltNavItem[] {
   return [...sections, { id: "analytics", label: "Analytics", hint: "All players", href: "/analytics" }];
 }
 
-function PlayerChip({ browsing }: { browsing: AltBrowsing }) {
+export function playerSwitchHref(playerId: string, activeNav: AltNav) {
+  return altSectionHref(playerId, activeNav === "decks" || activeNav === "matches" ? activeNav : "collection");
+}
+
+export function filterPlayers(players: LeaguePlayer[], query: string) {
+  const needle = query.trim().toLocaleLowerCase();
+  return needle ? players.filter((player) => player.name.toLocaleLowerCase().includes(needle)) : players;
+}
+
+function PlayerSwitcher({ browsing, activeNav }: { browsing: AltBrowsing; activeNav: AltNav }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+  const { players, status, error, retry } = useLeagueState(open);
   const name = browsing.kind === "player" ? browsing.name
     : browsing.kind === "pending" ? "Loading…"
       : browsing.kind === "missing" ? "Player not found"
         : browsing.reason === "loading" ? "Loading…"
           : browsing.reason === "error" ? "Players unavailable"
             : browsing.reason === "empty" ? "No players yet" : "No player selected";
-  return <div className={`alt-player-chip ${browsing.kind === "player" ? "" : "is-empty"}`}>
-    <span className="alt-player-chip-avatar" aria-hidden="true">{browsing.kind === "player" ? <PlayerAvatar name={browsing.name} iconCard={browsing.iconCard} size={32} /> : <span className="alt-avatar">?</span>}</span>
-    <span className="alt-player-chip-text"><small>{browsing.kind === "player" || browsing.kind === "pending" ? "Browsing" : "Current player"}</small><strong>{name}</strong></span>
+  const matches = useMemo(() => filterPlayers(players ?? [], query), [players, query]);
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: MouseEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", escape);
+    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", escape); };
+  }, [open]);
+  return <div className="alt-player-switcher" ref={rootRef}>
+    <button className={`alt-player-chip ${browsing.kind === "player" ? "" : "is-empty"}`} type="button" onClick={() => { setOpen((value) => !value); setQuery(""); }} aria-haspopup="dialog" aria-expanded={open}>
+      <span className="alt-player-chip-avatar" aria-hidden="true">{browsing.kind === "player" ? <PlayerAvatar name={browsing.name} iconCard={browsing.iconCard} size={32} /> : <span className="alt-avatar">?</span>}</span>
+      <span className="alt-player-chip-text"><small>{browsing.kind === "player" || browsing.kind === "pending" ? "Browsing" : "Current player"}</small><strong>{name}</strong></span>
+      <span className="alt-player-chip-chevron" aria-hidden="true">⌄</span>
+    </button>
+    {open && <div className="alt-player-menu" role="dialog" aria-label="Switch player">
+      <label className="alt-player-search"><input aria-label="Search players" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search players…" autoFocus /></label>
+      <div className="alt-player-options">
+        {status === "loading" && <p className="alt-player-menu-state">Loading players…</p>}
+        {status === "error" && <div className="alt-player-menu-state"><p>{error || "Could not load players."}</p><button type="button" onClick={retry}>Try again</button></div>}
+        {status === "ready" && matches.length === 0 && <p className="alt-player-menu-state">{query.trim() ? "No matching players" : "No players yet"}</p>}
+        {matches.map((entry) => <Link className={browsing.kind === "player" && browsing.id === entry.id ? "is-current" : ""} href={playerSwitchHref(entry.id, activeNav)} key={entry.id} onClick={() => setOpen(false)}>
+          <PlayerAvatar name={entry.name} iconCard={entry.iconCard} size={36} />
+          <span><strong>{entry.name}</strong><small>{entry.cardCount} cards · {entry.deckCount} decks</small></span>
+          {browsing.kind === "player" && browsing.id === entry.id && <span className="alt-player-current">Current</span>}
+        </Link>)}
+      </div>
+    </div>}
   </div>;
 }
 
@@ -61,7 +100,7 @@ export function AltShell({ children, title, subtitle, topRight, activeNav, playe
     </aside>
     <main className="alt-main">
       <header className="alt-topbar">
-        <div className="alt-topbar-context">{showChip && <PlayerChip browsing={browsing} />}</div>
+        <div className="alt-topbar-context">{showChip && <PlayerSwitcher browsing={browsing} activeNav={activeNav} />}</div>
         <div className="alt-topbar-spacer" />{topRight}<button className="alt-pill alt-style-toggle" type="button" onClick={onToggleStyle} aria-label="Switch to Classic UI">Classic</button>
       </header>
       <div className="alt-greeting">{typeof title === "string" ? <h1>{title}</h1> : title}{subtitle && <p>{subtitle}</p>}</div>

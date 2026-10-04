@@ -145,7 +145,7 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect(html).toContain("Collapse all");
   });
 
-  it("hides collapsed groups and offers expand-all when every group is collapsed", () => {
+  it("hides collapsed pool groups while the shared bulk control reflects both panes", () => {
     const html = render({
       initialPoolGrouping: "color",
       initialCollapsedGroups: ["White", "Basic lands"],
@@ -154,7 +154,8 @@ describe("AltDeckEditor Classic builder layout", () => {
       /aria-expanded="false" aria-controls="alt-pool-group-white"/,
     );
     expect(html).toMatch(/id="alt-pool-group-white" hidden=""/);
-    expect(html).toContain("Expand all");
+    expect(html).toContain('aria-label="Deck editor controls"');
+    expect(html).toContain("Collapse all");
     const partial = render({
       initialPoolGrouping: "color",
       initialCollapsedGroups: ["White"],
@@ -209,16 +210,23 @@ describe("AltDeckEditor Classic builder layout", () => {
       ],
     });
     expect(html).toContain('aria-label="Spells, 1 cards" aria-pressed="true"');
-    expect(html).toContain('aria-label="All, 1 cards" aria-pressed="false"');
     expect(html).toContain(
       'aria-label="Creatures, 0 cards" aria-pressed="false"',
     );
     expect(html).toContain('id="alt-deck-pool-type-spell"');
     expect(html).not.toContain('id="alt-deck-pool-type-creature"');
     expect(html).not.toContain('id="alt-deck-pool-type-basics"');
-    const unfiltered = render({ initialPoolFilter: null });
-    expect(unfiltered).toContain('aria-label="All, 3 cards" aria-pressed="true"');
-    expect(unfiltered).toContain('id="alt-deck-pool-type-creature"');
+    expect(html).toContain('id="alt-deck-contents-spell"');
+    expect(html).not.toContain('id="alt-deck-contents-land"');
+    expect(html).toContain('aria-label="Search deck and collection"');
+    expect(html.match(/aria-label="Deck editor type filters"/g)).toHaveLength(1);
+    expect(render({ initialPoolFilter: null })).toContain(
+      'id="alt-deck-pool-type-creature"',
+    );
+    expect(render({ initialPoolFilter: null })).toContain(
+      'aria-label="All, 3 cards" aria-pressed="true"',
+    );
+    expect(html).toContain('aria-label="All, 1 cards" aria-pressed="false"');
   });
 
   it("isolates Type disclosures and grouping from the legacy Color key", () => {
@@ -323,10 +331,10 @@ describe("AltDeckEditor Classic builder layout", () => {
     expect([2, 3, 1, 7].reduce((sum, qty) => sum + qty, 0)).toBe(
       cards.reduce((sum, card) => sum + card.qty, 0),
     );
-    expect(html).toContain('aria-label="Deck contents sections"');
+    expect(html).toContain('aria-label="Deck editor type filters"');
   });
 
-  it("uses persisted disclosure IDs and flips the pane-local bulk label", () => {
+  it("uses persisted disclosure IDs with the shared bulk control", () => {
     const storage = memoryStorage();
     writeIdSet(
       storage,
@@ -345,7 +353,7 @@ describe("AltDeckEditor Classic builder layout", () => {
       ]),
     ]).toEqual(["creature", "spell"]);
     const html = render({ initialContentsCollapsed: ["spell", "land"] });
-    expect(html).toContain("Expand all");
+    expect(html).toContain("Collapse all");
     expect(html).toMatch(
       /id="alt-deck-contents-spell"[\s\S]*?aria-expanded="false"/,
     );
@@ -354,6 +362,7 @@ describe("AltDeckEditor Classic builder layout", () => {
   it("renders mana symbols (including split faces) and rarity in list rows", () => {
     const html = render({ viewMode: "list" });
     expect(html).toContain("alt-deck-list-name");
+    expect(html).toContain('class="alt-deck-list-details"');
     expect(html).toContain('aria-label="1 copies in deck">1×');
     expect(html).toContain("Instant");
     expect(html).toMatch(
@@ -367,10 +376,31 @@ describe("AltDeckEditor Classic builder layout", () => {
     );
   });
 
+  it("places the view switch in the shared deck editor controls", () => {
+    const html = render();
+    const sharedControls = html.indexOf('class="alt-deck-shared-controls"');
+    const viewSwitch = html.indexOf('class="alt-deck-view-switch"');
+    const workspace = html.indexOf('class="alt-deck-workspace"');
+
+    expect(sharedControls).toBeGreaterThan(-1);
+    expect(viewSwitch).toBeGreaterThan(sharedControls);
+    expect(viewSwitch).toBeLessThan(workspace);
+  });
+
   it("keeps the Alt off-color toggle, legality status and commander modal trigger", () => {
     const html = render({ hiddenPoolCount: 3 });
     expect(html).toContain("Show off-color (3)");
     expect(html).toContain("Color identity: no conflicts");
     expect(html).toContain("Change commanders");
+  });
+
+  it("uses commander art as the overview hero without repeating its name", () => {
+    const html = render();
+    expect(html).toMatch(
+      /class="alt-deck-commander-card" aria-label="Commander: Ajani"><div>.*?<\/div><\/div>/,
+    );
+    expect(html).not.toMatch(
+      /class="alt-deck-commander-card"[^>]*>.*?<strong>Ajani<\/strong>/,
+    );
   });
 });

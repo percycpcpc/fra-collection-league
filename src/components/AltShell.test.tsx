@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AltPlayerPageState, AltShell, altNavItems } from "./AltShell";
+import { AltPlayerPageState, AltShell, altNavItems, filterPlayers, playerSwitchHref } from "./AltShell";
 import { AltPlayersDirectory } from "./AltPlayersDirectory";
 import { AltAnalytics } from "./AltAnalytics";
 import { AltMatches } from "./AltMatches";
@@ -50,7 +50,7 @@ describe("AltShell", () => {
     expect(html).not.toContain("alt-players");
   });
 
-  it("renders a non-interactive player chip inside the topbar, with no back link", () => {
+  it("renders an interactive player switcher trigger inside the topbar", () => {
     const html = renderToStaticMarkup(<AltShell title="T" activeNav="collection" player={{ id: "p1", name: "Percy Long Name" }} onToggleStyle={noop}>x</AltShell>);
     const topbar = html.slice(html.indexOf('class="alt-topbar"'), html.indexOf("</header>"));
     expect(topbar).not.toContain("<a ");
@@ -58,7 +58,8 @@ describe("AltShell", () => {
     expect(topbar).toContain("Browsing");
     expect(topbar).toContain("Percy Long Name");
     const chip = topbar.slice(topbar.indexOf("alt-player-chip"));
-    expect(chip.slice(0, chip.indexOf("Percy Long Name"))).not.toMatch(/<(a|button)\b/);
+    expect(chip).toContain('aria-haspopup="dialog"');
+    expect(chip).toContain('aria-expanded="false"');
   });
 
   it("shows an indeterminate chip while the route player is unvalidated", () => {
@@ -74,6 +75,20 @@ describe("AltShell", () => {
     const home = renderToStaticMarkup(<AltShell title="T" activeNav="home" onToggleStyle={noop}>x</AltShell>);
     expect(home).not.toContain("aria-current");
     expect(home).not.toContain("← Players");
+  });
+});
+
+describe("player switcher", () => {
+  it("keeps player-scoped sections and defaults league-wide pages to collection", () => {
+    expect(playerSwitchHref("p2", "decks")).toBe("/p/p2/decks");
+    expect(playerSwitchHref("p2", "matches")).toBe("/p/p2/matches");
+    expect(playerSwitchHref("p2", "analytics")).toBe("/p/p2");
+  });
+
+  it("filters players case-insensitively and ignores surrounding whitespace", () => {
+    const players = [percy, alex].map((player) => ({ ...player, createdAt: "2026-01-01" }));
+    expect(filterPlayers(players, "  ERc ").map((player) => player.name)).toEqual(["Percy"]);
+    expect(filterPlayers(players, "")).toEqual(players);
   });
 });
 
