@@ -13,14 +13,14 @@ const SECTION_NAMES: Record<AltSection, string> = { collection: "collection", de
  * The Alt chooser at "/". Opening it never changes the browsing player; activating a card
  * selects that player and opens the pending section (or their collection).
  */
-export function AltPlayersDirectory<P extends DirectoryPlayer>({ players, status = "ready", currentId, next, createForm, actions, error, loadError, onRetry, onSelect, onToggleStyle }: {
+export function AltPlayersDirectory<P extends DirectoryPlayer>({ players, status = "ready", currentId, next, createForm, actions, error, loadError, onRetry, onSelect }: {
   players: P[]; status?: DirectoryStatus; currentId?: string | null; next?: AltSection; createForm: React.ReactNode; actions?: (player: P) => React.ReactNode;
-  error?: string; loadError?: string; onRetry?: () => void; onSelect?: (player: P) => void; onToggleStyle: () => void;
+  error?: string; loadError?: string; onRetry?: () => void; onSelect?: (player: P) => void;
 }) {
   const empty = status === "ready" && players.length === 0;
   const title = next ? "Choose a player to continue" : "Choose your player";
   const subtitle = next ? `Pick whose ${SECTION_NAMES[next]} to open.` : "Reality Fracture league · season 1";
-  return <AltShell title={title} subtitle={subtitle} activeNav="home" onToggleStyle={onToggleStyle} topRight={empty ? undefined : createForm}>
+  return <AltShell title={title} subtitle={subtitle} activeNav="home" topRight={empty ? undefined : createForm}>
     {status === "loading" && <AltPageState title="Loading players" busy>Fetching the league roster.</AltPageState>}
     {status === "error" && <AltPageState title="We couldn't load the players" onRetry={onRetry}>{loadError || "Could not load players."}</AltPageState>}
     {empty && <section className="alt-page-section alt-state-panel alt-empty-league"><h2>No players yet</h2><p>Create the first player to start tracking a collection. Analytics stays available while the league is empty.</p>{createForm}</section>}

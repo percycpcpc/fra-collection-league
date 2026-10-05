@@ -35,7 +35,6 @@ function render(overrides: { search?: string; selectedName?: string | null } = {
       onSelectedNameChange={noop}
       onImportOpenChange={noop}
       onImport={noop}
-      onToggleStyle={noop}
       onRename={async () => {}}
       onSaveCard={noop}
     />
@@ -58,7 +57,6 @@ describe("AltCollectionView SSR smoke", () => {
     expect(html).toContain("Ajani Resolute");
     expect(html).toContain("Countersculpt");
     expect(html).toContain("Aerid Konstrari");
-    expect(html).toContain("Classic");
     expect(html).toContain("Rename profile");
     expect(html).toContain("alt-ui-root");
   });
@@ -81,7 +79,6 @@ describe("AltCollectionView SSR smoke", () => {
         onSelectedNameChange={noop}
         onImportOpenChange={noop}
         onImport={noop}
-        onToggleStyle={noop}
         onRename={async () => {}}
         onSaveCard={noop}
         onRetryUnsynced={noop}
@@ -145,3 +142,4 @@ describe("AltCollectionView SSR smoke", () => {
     expect(focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 });
+

@@ -63,7 +63,6 @@ async function mountDeckList(onPost?: (route: Route) => void) {
     }
   });
   await page.goto("http://deck-list.test/");
-  await page.evaluate(() => localStorage.setItem("fra-ui-style", "alt"));
   await page.addScriptTag({ content: script });
   await page.getByRole("button", { name: "New deck" }).waitFor();
   return { page, deleteCount: () => deletes };
@@ -109,3 +108,4 @@ describe("Alt decks mounted dialog interactions", () => {
     await page.close();
   }, 30_000);
 });
+

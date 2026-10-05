@@ -110,7 +110,7 @@ function AltDeckRow({ deck, profileId, catalog, onDelete, deleteRef }: { deck: D
   </article>;
 }
 
-export function AltDeckList({ profileId, profileName, profileIcon = null, decks, catalog = [], query = "", onQuery, onNewDeck, onDelete, deleteRef, dialog, error, onToggleStyle }: { profileId: string; profileName: string; profileIcon?: string | null; decks: DeckSummary[]; catalog?: readonly CatalogCard[]; query?: string; onQuery?: (value: string) => void; onNewDeck?: () => void; onDelete?: (deck: DeckSummary) => void; deleteRef?: (deckId: string, node: HTMLButtonElement | null) => void; dialog?: ReactNode; error?: string; onToggleStyle: () => void }) {
+export function AltDeckList({ profileId, profileName, profileIcon = null, decks, catalog = [], query = "", onQuery, onNewDeck, onDelete, deleteRef, dialog, error }: { profileId: string; profileName: string; profileIcon?: string | null; decks: DeckSummary[]; catalog?: readonly CatalogCard[]; query?: string; onQuery?: (value: string) => void; onNewDeck?: () => void; onDelete?: (deck: DeckSummary) => void; deleteRef?: (deckId: string, node: HTMLButtonElement | null) => void; dialog?: ReactNode; error?: string }) {
   const shown = filterDecks(decks, query);
   const header = <div className="alt-decks-v2 alt-decks-head">
     <div className="alt-decks-head-text"><h1>{profileName}&apos;s decks</h1><p>{deckSummary(decks)}</p></div>
@@ -119,7 +119,7 @@ export function AltDeckList({ profileId, profileName, profileIcon = null, decks,
       <button className="alt-decks-btn alt-decks-btn-primary" type="button" onClick={onNewDeck}><Icon name="plus" />New deck</button>
     </div>
   </div>;
-  return <><div className="alt-decks-page-background" inert={dialog ? true : undefined}><AltShell title={header} activeNav="decks" player={{ id: profileId, name: profileName, iconCard: profileIcon }} onToggleStyle={onToggleStyle}>
+  return <><div className="alt-decks-page-background" inert={dialog ? true : undefined}><AltShell title={header} activeNav="decks" player={{ id: profileId, name: profileName, iconCard: profileIcon }}>
     <div className="alt-decks-v2 alt-decks-body">
       <div className="alt-decks-page-content">
         {error && !dialog && <p className="alt-notice error" role="alert">{error}</p>}

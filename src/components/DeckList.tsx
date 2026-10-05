@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard, type DeckSummary } from "@/lib/client";
 import { commanderCandidates } from "@/lib/commander-selection";
@@ -8,11 +7,8 @@ import { deckBanner } from "@/lib/deck-banner";
 import { parseCommanderNames, resolveCommanderIdentity } from "@/lib/deck-identity";
 import { AltCommanderField, AltDeckList, AltDeleteDeckDialog, AltNewDeckDialog } from "./AltDeckList";
 import { AltPlayerPageState } from "./AltShell";
-import { UiStyleToggle } from "./UiStyleToggle";
-import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers } from "./useLeaguePlayers";
 import { MutationLock } from "@/lib/mutation-lock";
-import { DeckCommanderImages } from "./DeckCommanderImages";
 
 type Data = { profile: { id: string; name: string; iconCard?: string | null }; cards: CollectionCard[]; decks: DeckSummary[] };
 
@@ -23,7 +19,6 @@ function commanderLabel(stored: string | null) {
 }
 
 export function DeckList({ profileId }: { profileId: string }) {
-  const { style, toggle } = useUiStyle();
   const [data, setData] = useState<Data | null>(null);
   const [catalog, setCatalog] = useState<CatalogCard[]>([]);
   const [error, setError] = useState("");
@@ -86,10 +81,9 @@ export function DeckList({ profileId }: { profileId: string }) {
   function closeConfirm(id: string) { setConfirmId(null); window.requestAnimationFrame(() => deleteTriggers.current.get(id)?.focus()); }
   async function remove(deckId: string) { closeConfirm(deckId); try { await jsonFetch(`/api/profiles/${profileId}/decks/${deckId}`, { method: "DELETE" }); refreshLeaguePlayers().catch(() => undefined); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not delete deck."); } }
 
-  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
-  if (!data || (style === "alt" && data.profile.id !== profileId)) {
-    if (style === "alt") return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading decks", loadingDetail: "Fetching this player's decks.", unavailable: "Decks unavailable", failed: "We couldn't load these decks" }} error={loading ? undefined : error} notFound={!loading && notFound} onRetry={() => void load()} onToggleStyle={toggle} />;
-    return <main className="shell"><p className="muted">{error || "Loading decks…"}</p></main>;
+  // The route id is authoritative, so another player's data still in state counts as loading.
+  if (!data || data.profile.id !== profileId) {
+    return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading decks", loadingDetail: "Fetching this player's decks.", unavailable: "Decks unavailable", failed: "We couldn't load these decks" }} error={loading ? undefined : error} notFound={!loading && notFound} onRetry={() => void load()} />;
   }
   const noCandidates = catalog.length > 0 && candidates.length === 0;
   const hint = catalog.length === 0
@@ -99,7 +93,6 @@ export function DeckList({ profileId }: { profileId: string }) {
       : `Choose up to 2 different legendary creatures from ${data.profile.name}'s collection.`;
   const cmdMatches = candidates.filter((name) => !cmdQuery || name.toLowerCase().includes(cmdQuery.toLowerCase()));
   const partnerMatches = candidates.filter((name) => name !== commander && (!partnerQuery || name.toLowerCase().includes(partnerQuery.toLowerCase())));
-  if (style === "alt") {
     const confirmDeck = confirmId ? data.decks.find((deck) => deck.id === confirmId) : undefined;
     const dialog = newDeckOpen
       ? <AltNewDeckDialog hint={hint} error={error} creating={creating} onClose={closeNewDeck} onSubmit={create}
@@ -109,31 +102,8 @@ export function DeckList({ profileId }: { profileId: string }) {
           <AltCommanderField label={<>Second commander <small>· optional</small></>} query={partnerQuery} open={partnerOpen} options={partnerMatches} clearLabel="— No second commander" placeholder="Search second commander…" disabled={!commander} describedBy="alt-commander-hint" onQuery={(value) => { setPartnerQuery(value); setPartner(""); setPartnerOpen(true); }} onOpen={setPartnerOpen} onChoose={choosePartner} />
         </>} />
       : confirmDeck ? <AltDeleteDeckDialog deckName={confirmDeck.name} onCancel={() => closeConfirm(confirmDeck.id)} onConfirm={() => void remove(confirmDeck.id)} /> : null;
-    return <AltDeckList profileId={profileId} profileName={data.profile.name} profileIcon={data.profile.iconCard ?? null} decks={data.decks} catalog={catalog} error={error} onToggleStyle={toggle}
+    return <AltDeckList profileId={profileId} profileName={data.profile.name} profileIcon={data.profile.iconCard ?? null} decks={data.decks} catalog={catalog} error={error}
       query={deckQuery} onQuery={setDeckQuery} onNewDeck={openNewDeck} dialog={dialog}
       onDelete={(deck) => setConfirmId(deck.id)}
       deleteRef={(id, node) => { if (node) deleteTriggers.current.set(id, node); else deleteTriggers.current.delete(id); }} />;
-  }
-  return <main className="shell decks-page">
-    <header className="page-heading"><div><Link className="back-link" href={`/p/${profileId}`}>← {data.profile.name}'s collection</Link><div className="eyebrow">Deck workshop</div><h1>{data.profile.name}'s decks</h1></div><span>{data.decks.length} total</span><UiStyleToggle onToggle={toggle} /></header>
-    <form className="deck-create" onSubmit={create}>
-      <label>Deck name<input name="name" required value={deckName} onChange={(event) => setDeckName(event.target.value)} placeholder="New deck" /></label>
-      <label>Commander (optional)
-        <div className="cmd-search">
-          <input type="text" value={cmdQuery} onChange={(e) => { setCmdQuery(e.target.value); setCommander(""); setCmdOpen(true); }} onFocus={() => setCmdOpen(true)} onBlur={() => setTimeout(() => setCmdOpen(false), 150)} placeholder={catalog.length === 0 ? "Loading…" : "Search legendary creatures…"} autoComplete="off" disabled={!candidates.length && catalog.length > 0} aria-describedby="commander-hint" />
-          {cmdOpen && candidates.length > 0 && <ul className="cmd-dropdown"><li onMouseDown={() => chooseCommander("")}>— No commander</li>{cmdMatches.map((name) => <li key={name} onMouseDown={() => chooseCommander(name)}>{name}</li>)}</ul>}
-        </div>
-      </label>
-      <label>Second commander (optional)
-        <div className="cmd-search">
-          <input type="text" value={partnerQuery} onChange={(e) => { setPartnerQuery(e.target.value); setPartner(""); setPartnerOpen(true); }} onFocus={() => setPartnerOpen(true)} onBlur={() => setTimeout(() => setPartnerOpen(false), 150)} placeholder="Search second commander…" autoComplete="off" disabled={!commander} aria-describedby="commander-hint" />
-          {partnerOpen && commander && <ul className="cmd-dropdown"><li onMouseDown={() => choosePartner("")}>— No second commander</li>{partnerMatches.map((name) => <li key={name} onMouseDown={() => choosePartner(name)}>{name}</li>)}</ul>}
-        </div>
-      </label>
-      <button className="primary" type="submit" disabled={creating}>{creating ? "Creating…" : "Create deck"}</button>
-      <p id="commander-hint" className="field-hint">{hint}</p>
-    </form>
-    {error && <p className="error-banner" role="alert">{error}</p>}
-    <section className="deck-list">{data.decks.length === 0 ? <div className="empty"><h2>No decks yet</h2><p>Create one above, then add cards from this collection.</p></div> : data.decks.map((deck) => { const banner = banners.get(deck.id); return <article className={banner ? "deck-row has-identity" : "deck-row"} key={deck.id} style={banner ? { background: banner.background } : undefined} title={banner?.label}><div className="deck-row-main"><DeckCommanderImages commander={deck.commander} catalog={catalog} variant="classic" /><div><h2>{deck.name}</h2><p>{commanderLabel(deck.commander)}</p>{banner && <span className="visually-hidden">{banner.label}</span>}</div></div><span>{deck.cardCount} card entries</span><Link className="button-link" href={`/p/${profileId}/decks/${deck.id}`}>Edit</Link>{confirmId === deck.id ? <div className="inline-confirm"><span>Delete {deck.name}?</span><button className="danger" type="button" onClick={() => void remove(deck.id)}>Confirm</button><button type="button" onClick={() => closeConfirm(deck.id)}>Cancel</button></div> : <button ref={(node) => { if (node) deleteTriggers.current.set(deck.id, node); else deleteTriggers.current.delete(deck.id); }} className="danger-ghost" type="button" onClick={() => setConfirmId(deck.id)}>Delete</button>}</article>; })}</section>
-  </main>;
 }

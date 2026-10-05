@@ -1,10 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { CardImage } from "./CardImage";
-import { ManaCost } from "./ManaCost";
-import { DeckAnalysis } from "./DeckAnalysis";
 import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard, type DeckCard } from "@/lib/client";
 import { commanderCandidates } from "@/lib/commander-selection";
 import { BASIC_LANDS_GROUP, buildPoolGroups } from "@/lib/deck-pool";
@@ -19,8 +16,6 @@ import {
 } from "@/lib/deck-identity";
 import { ALT_DECK_DEFAULT_VIEW_MODE, AltDeckEditor } from "./AltDeckEditor";
 import { AltPlayerPageState } from "./AltShell";
-import { UiStyleToggle } from "./UiStyleToggle";
-import { useUiStyle } from "./useUiStyle";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
 
 type ProfileData = { profile: { id: string; name: string; iconCard?: string | null }; cards: CollectionCard[] };
@@ -73,7 +68,6 @@ function PoolGroupSection({ title, count, collapsed, onToggle, className = "", c
 }
 
 export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: string }) {
-  const { style, toggle } = useUiStyle();
   const [profile, setProfile] = useState<ProfileData | null>(null); const [deck, setDeck] = useState<DeckData | null>(null); const [catalog, setCatalog] = useState<CatalogCard[]>([]); const [search, setSearch] = useState(""); const [renameDraft, setRenameDraft] = useState(""); const [status, setStatus] = useState(""); const [error, setError] = useState(""); const [viewMode, setViewMode] = useState<ViewMode>(ALT_DECK_DEFAULT_VIEW_MODE);
   const deckQueue = useRef<LatestWriteQueue<{ name: string; commander: string | null }> | null>(null);
   const cardQueue = useRef<LatestWriteQueue<{ name: string; qty: number }> | null>(null);
@@ -179,10 +173,9 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     storeCollapsed(next);
   }
 
-  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
-  if (!profile || !deck || (style === "alt" && profile.profile.id !== profileId)) {
-    if (style === "alt") return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading deck", loadingDetail: "Fetching the deck, collection, and card catalog.", unavailable: "Deck unavailable", failed: "We couldn't load this deck" }} error={error} notFound={notFound} onRetry={() => { setError(""); setNotFound(false); void load(); }} onToggleStyle={toggle} />;
-    return <main className="shell"><p className="muted">{error || "Loading deck…"}</p></main>;
+  // The route id is authoritative, so another player's data still in state counts as loading.
+  if (!profile || !deck || profile.profile.id !== profileId) {
+    return <AltPlayerPageState profileId={profileId} activeNav="decks" copy={{ loading: "Loading deck", loadingDetail: "Fetching the deck, collection, and card catalog.", unavailable: "Deck unavailable", failed: "We couldn't load this deck" }} error={error} notFound={notFound} onRetry={() => { setError(""); setNotFound(false); void load(); }} />;
   }
   const owned = profile.cards.filter((card) => card.owned).sort((a, b) => a.name.localeCompare(b.name)); const ownedMap = new Map(owned.map((card) => [card.name.toLowerCase(), card]));
   const total = deck.cards.reduce((sum, card) => sum + card.qty, 0); const groups: Record<string, DeckCard[]> = { Creatures: [], Other: [], Lands: [] };
@@ -218,7 +211,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
   </div>;
   const emptyPool = pool.groups.length === 0 && <p className="muted pool-empty">{search.trim() ? "No owned cards match your search." : pool.hiddenCount ? "Every other owned card is outside the commander's colors." : "No owned cards yet."}</p>;
 
-  if (style === "alt") return <AltDeckEditor
+  return <AltDeckEditor
     profileId={profileId} profileName={profile.profile.name} profileIcon={profile.profile.iconCard ?? null}
     deckName={deck.deck.name} renameDraft={renameDraft} cards={deck.cards} catalog={catalog} collection={profile.cards}
     poolGroups={pool.groups} basics={basics} hiddenPoolCount={pool.hiddenCount} search={search}
@@ -227,29 +220,7 @@ export function DeckEditor({ profileId, deckId }: { profileId: string; deckId: s
     hasCommanderIdentity={commanderIdentity !== undefined} isOffColor={isCardOutOfIdentity}
     onSearch={setSearch} onRenameDraft={setRenameDraft} onShowOffColor={setShowOffColor} onViewMode={changeViewMode}
     onQty={(name, qty) => void saveCard(name, qty)} onCommander={setCommander}
-    onRename={(name) => { setRenameDraft(name); void saveDeck({ name }); }} onToggleStyle={toggle}
+    onRename={(name) => { setRenameDraft(name); void saveDeck({ name }); }}
   />;
 
-  return <main className="deck-editor" ref={editorRef}><header className="workspace-header"><div><Link className="back-link" href={`/p/${profileId}/decks`}>← Back to decks</Link><form className="inline-title" onSubmit={rename}><input name="name" aria-label="Deck name" value={renameDraft || deck.deck.name} onChange={(event) => setRenameDraft(event.target.value)} /><button>Rename</button></form></div><div className="header-stats"><strong>{total} cards · commander excluded</strong><span className={`save-state ${status.toLowerCase()}`}>{status}</span><div className="view-mode-switch" role="group" aria-label="Deck editor view mode"><button type="button" className={viewMode === "images" ? "active" : ""} aria-pressed={viewMode === "images"} onClick={() => changeViewMode("images")}>Images</button><button type="button" className={viewMode === "list" ? "active" : ""} aria-pressed={viewMode === "list"} onClick={() => changeViewMode("list")}>List</button></div><UiStyleToggle onToggle={toggle} /></div></header>
-    {error && <p className="error-banner deck-error" role="alert">{error}</p>}{viewMode === "images" ? <div className="editor-columns">
-      <section className="deck-contents"><div className="panel-title"><h2>Deck</h2><span>{total} cards · commander excluded</span></div>
-        {commanderNames.length > 0 && <section className="deck-group"><h3><span>★ {commanderNames.length > 1 ? "Commanders" : "Commander"}</span><small>{commanderNames.length}</small></h3><div className="commander-with-analysis"><div className="deck-grid">{commanderNames.map((cmd) => <GalleryCard key={cmd} name={cmd} catalog={catalogMap.get(cmd.toLowerCase())} qty={deckMap.get(cmd.toLowerCase())?.qty || 0} owned={ownedMap.get(cmd.toLowerCase())?.qty} cap={ownedMap.get(cmd.toLowerCase())?.qty || 0} star="active" onQty={(qty) => void saveCard(cmd, qty)} onCommander={() => setCommander(cmd)} />)}</div><DeckAnalysis cards={deck.cards} commanderNames={commanderNames} catalogMap={catalogMap} /></div></section>}
-        {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3><span>{group}</span><small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3><div className="deck-grid">{items.sort((a, b) => a.name.localeCompare(b.name)).map(deckTile)}</div></section> : null)}
-      </section>
-      <aside className="add-panel">{poolTitle("Your collection")}
-        {emptyPool}
-        {pool.groups.map(({ group, entries }) => <PoolGroupSection key={group} title={group} count={`${entries.length} owned`} collapsed={collapsed.has(group)} onToggle={() => toggleGroup(group)}><div className="pool-grid">{entries.map(({ card, offColor }) => { const qty = deckMap.get(card.name.toLowerCase())?.qty || 0; return <GalleryCard key={card.name} name={card.name} catalog={catalogMap.get(card.name.toLowerCase())} qty={qty} owned={card.qty} cap={card.qty} star={starState(card.name)} outOfIdentity={offColor} imageAdds onQty={(next) => void saveCard(card.name, next)} onCommander={() => setCommander(card.name)} />; })}</div></PoolGroupSection>)}
-        {basics.length > 0 && <PoolGroupSection title={BASIC_LANDS_GROUP} count="Unlimited · max 99" className="basic-block" collapsed={collapsed.has(BASIC_LANDS_GROUP)} onToggle={() => toggleGroup(BASIC_LANDS_GROUP)}><div className="pool-grid">{basics.map((name) => { const qty = deckMap.get(name.toLowerCase())?.qty || 0; return <GalleryCard key={name} name={name} catalog={catalogMap.get(name.toLowerCase())} qty={qty} cap={99} star={starState(name)} imageAdds onQty={(next) => void saveCard(name, next)} onCommander={() => setCommander(name)} />; })}</div></PoolGroupSection>}
-      </aside>
-    </div> : <div className="editor-columns list-view">
-      <section className="deck-contents"><div className="panel-title"><h2>Deck contents</h2><span>{total} cards · commander excluded</span></div>
-        {commanderNames.length > 0 && <section className="deck-group"><h3>{commanderNames.length > 1 ? "Commanders" : "Commander"} <small>{commanderNames.length}</small></h3>{commanderNames.map((cmd) => <div className="card-line" key={cmd}><span><b>{cmd}</b><ManaCost cost={catalogMap.get(cmd.toLowerCase())?.manaCost || ""} />{rarityGem(cmd)}</span>{rowActions(cmd, deckMap.get(cmd.toLowerCase())?.qty || 0, ownedMap.get(cmd.toLowerCase())?.qty || 0)}</div>)}</section>}
-        {Object.entries(groups).map(([group, items]) => items.length ? <section className="deck-group" key={group}><h3>{group} <small>{items.reduce((sum, card) => sum + card.qty, 0)}</small></h3>{items.sort((a, b) => a.name.localeCompare(b.name)).map((card) => <div className={`card-line ${isCardOutOfIdentity(card.name, card.isBasic) ? "out-of-identity" : ""}`} key={card.name}><span><b>{card.name}{isCardOutOfIdentity(card.name, card.isBasic) && offColorBadge(card.name)}</b><ManaCost cost={catalogMap.get(card.name.toLowerCase())?.manaCost || ""} />{rarityGem(card.name)}</span>{rowActions(card.name, card.qty, card.isBasic ? 99 : ownedMap.get(card.name.toLowerCase())?.qty || 0, card.isBasic)}</div>)}</section> : null)}
-      </section>
-      <aside className="add-panel">{poolTitle("Add cards")}
-        {emptyPool}
-        {pool.groups.map(({ group, entries }) => <PoolGroupSection key={group} title={group} count={`${entries.length} owned`} collapsed={collapsed.has(group)} onToggle={() => toggleGroup(group)}><div className="add-list">{entries.map(({ card, offColor }) => { const qty = deckMap.get(card.name.toLowerCase())?.qty || 0; return <div className={`add-row ${offColor ? "out-of-identity" : ""}`} key={card.name}><span><span className="add-row-name"><b>{card.name}{offColor && offColorBadge(card.name)}</b><ManaCost cost={catalogMap.get(card.name.toLowerCase())?.manaCost || ""} />{rarityGem(card.name)}</span><small>{qty} in deck · {card.qty} owned{offColor ? " · off-color" : ""}</small></span>{rowActions(card.name, qty, card.qty)}</div>; })}</div></PoolGroupSection>)}
-        {basics.length > 0 && <PoolGroupSection title={BASIC_LANDS_GROUP} count="Unlimited · max 99" className="basic-block" collapsed={collapsed.has(BASIC_LANDS_GROUP)} onToggle={() => toggleGroup(BASIC_LANDS_GROUP)}><div className="add-list">{basics.map((name) => { const qty = deckMap.get(name.toLowerCase())?.qty || 0; return <div className="add-row" key={name}><span><span className="add-row-name"><b>{name}</b><ManaCost cost={catalogMap.get(name.toLowerCase())?.manaCost || ""} />{rarityGem(name)}</span><small>{qty} in deck · unlimited owned</small></span>{rowActions(name, qty, 99, true)}</div>; })}</div></PoolGroupSection>}
-      </aside>
-    </div>}</main>;
 }
