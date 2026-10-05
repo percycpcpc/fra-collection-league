@@ -114,7 +114,6 @@ function render(overrides: Partial<Parameters<typeof AltDeckEditor>[0]> = {}) {
       onQty={noop}
       onCommander={noop}
       onRename={noop}
-      onToggleStyle={noop}
       isOffColor={() => false}
       {...overrides}
     />,
@@ -404,3 +403,4 @@ describe("AltDeckEditor Classic builder layout", () => {
     );
   });
 });
+

@@ -84,10 +84,10 @@ function NavEntry({ item, active, mobile }: { item: AltNavItem; active: boolean;
   return <Link className={active ? "active" : ""} href={item.href} aria-current={active ? "page" : undefined}>{content}</Link>;
 }
 
-export function AltShell({ children, title, subtitle, topRight, activeNav, player, nowPlaying, onToggleStyle }: {
+export function AltShell({ children, title, subtitle, topRight, activeNav, player, nowPlaying }: {
   children: ReactNode; title: ReactNode; subtitle?: string; topRight?: ReactNode; activeNav: AltNav;
   /** The page's player: the route player on /p/:id/* (name once validated, missing if confirmed absent). */
-  player?: AltShellPlayer; nowPlaying?: ReactNode; onToggleStyle: () => void;
+  player?: AltShellPlayer; nowPlaying?: ReactNode;
 }) {
   const { browsing } = useAltBrowsing(player);
   const nav = altNavItems(browsing);
@@ -101,7 +101,7 @@ export function AltShell({ children, title, subtitle, topRight, activeNav, playe
     <main className="alt-main">
       <header className="alt-topbar">
         <div className="alt-topbar-context">{showChip && <PlayerSwitcher browsing={browsing} activeNav={activeNav} />}</div>
-        <div className="alt-topbar-spacer" />{topRight}<button className="alt-pill alt-style-toggle" type="button" onClick={onToggleStyle} aria-label="Switch to Classic UI">Classic</button>
+        <div className="alt-topbar-spacer" />{topRight}
       </header>
       <div className="alt-greeting">{typeof title === "string" ? <h1>{title}</h1> : title}{subtitle && <p>{subtitle}</p>}</div>
       {children}
@@ -119,14 +119,14 @@ export type AltPlayerPageCopy = { loading: string; loadingDetail: string; unavai
  * Shell for a player page that has not loaded: loading, load failure (with retry), or a
  * confirmed-missing player. A missing player gets a way back to the chooser, never a substitute.
  */
-export function AltPlayerPageState({ profileId, activeNav, copy, error, notFound, onRetry, onToggleStyle }: {
-  profileId: string; activeNav: AltSection; copy: AltPlayerPageCopy; error?: string; notFound?: boolean; onRetry?: () => void; onToggleStyle: () => void;
+export function AltPlayerPageState({ profileId, activeNav, copy, error, notFound, onRetry }: {
+  profileId: string; activeNav: AltSection; copy: AltPlayerPageCopy; error?: string; notFound?: boolean; onRetry?: () => void;
 }) {
-  if (notFound) return <AltShell title="Player not found" activeNav={activeNav} player={{ id: profileId, missing: true }} onToggleStyle={onToggleStyle}>
+  if (notFound) return <AltShell title="Player not found" activeNav={activeNav} player={{ id: profileId, missing: true }}>
     <section className="alt-page-section alt-state-panel" role="alert"><h2>This player doesn&apos;t exist</h2><p>The link may be out of date, or the player was removed.</p><Link className="alt-pill alt-primary" href="/">Choose a player</Link></section>
   </AltShell>;
-  if (error) return <AltShell title={copy.unavailable} activeNav={activeNav} player={{ id: profileId }} onToggleStyle={onToggleStyle}>
+  if (error) return <AltShell title={copy.unavailable} activeNav={activeNav} player={{ id: profileId }}>
     <AltPageState title={copy.failed} onRetry={onRetry}>{error}</AltPageState>
   </AltShell>;
-  return <AltShell title={`${copy.loading}…`} activeNav={activeNav} player={{ id: profileId }} onToggleStyle={onToggleStyle}><AltPageState title={copy.loading} busy>{copy.loadingDetail}</AltPageState></AltShell>;
+  return <AltShell title={`${copy.loading}…`} activeNav={activeNav} player={{ id: profileId }}><AltPageState title={copy.loading} busy>{copy.loadingDetail}</AltPageState></AltShell>;
 }

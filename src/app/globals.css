@@ -523,8 +523,7 @@ h1, h2, h3, p { margin-top: 0; }
 .card-meta .rarity-gem { color: #0d0e10; }
 .card-meta .rarity-gem.rarity-common { color: #fff; }
 
-/* Alternate collection UI. Tokens and selectors are scoped so Classic stays unchanged. */
-.ui-style-toggle { border-radius: 9999px; white-space: nowrap; }
+/* Alternate collection UI. */
 .alt-ui-root {
   --fra-alt-page: #121212;
   --fra-alt-surface: #181818;

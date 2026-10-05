@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState, type ReactNode } from "react";
 import { jsonFetch, type CatalogCard } from "@/lib/client";
 import { AltShell } from "./AltShell";
-import { useUiStyle, type UiStyle } from "./useUiStyle";
 
 type Session = { enabled: boolean; authenticated: boolean };
 type SettingRow = { key: string; value: string; updatedAt: string };
@@ -29,17 +28,15 @@ const TEXT_FIELDS: { key: keyof CatalogCard; label: string }[] = [
   { key: "img", label: "Image URL" },
 ];
 
-/** Classic renders the admin page bare; Alt wraps the same content in AltShell chrome. */
-export function AdminFrame({ style, onToggleStyle, children }: { style: UiStyle; onToggleStyle: () => void; children: ReactNode }) {
-  if (style !== "alt") return <main className="admin">{children}</main>;
-  return <AltShell title="Admin panel" subtitle="Catalog and league settings" activeNav="admin" onToggleStyle={onToggleStyle}>
+/** Wraps admin content in the app's Alt chrome. */
+export function AdminFrame({ children }: { children: ReactNode }) {
+  return <AltShell title="Admin panel" subtitle="Catalog and league settings" activeNav="admin">
     <div className="admin alt-admin">{children}</div>
   </AltShell>;
 }
 
 export function AdminPanel() {
-  const { style, toggle } = useUiStyle();
-  const frame = (children: ReactNode) => <AdminFrame style={style} onToggleStyle={toggle}>{children}</AdminFrame>;
+  const frame = (children: ReactNode) => <AdminFrame>{children}</AdminFrame>;
   const [session, setSession] = useState<Session | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -470,3 +467,4 @@ export function AdminPanel() {
     </>)
   );
 }
+

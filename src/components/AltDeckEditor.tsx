@@ -71,7 +71,6 @@ type Props = {
   onQty: (name: string, qty: number) => void;
   onCommander: (name: string) => void;
   onRename: (name: string) => void;
-  onToggleStyle: () => void;
   isOffColor: (name: string, isBasic: boolean) => boolean;
 };
 const COLOR_CLASS: Record<string, string> = {
@@ -194,7 +193,6 @@ export function AltDeckEditor(props: Props) {
     onQty,
     onCommander,
     onRename,
-    onToggleStyle,
     isOffColor,
     initialCollapsedGroups,
     initialContentsCollapsed,
@@ -839,7 +837,6 @@ export function AltDeckEditor(props: Props) {
         subtitle={`${profileName} · ${total} cards · commander excluded`}
         activeNav="decks"
         player={{ id: profileId, name: profileName, iconCard: profileIcon }}
-        onToggleStyle={onToggleStyle}
         topRight={topRight}
       >
         {showAnalysis ? (

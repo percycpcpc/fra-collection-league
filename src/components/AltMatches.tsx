@@ -41,8 +41,8 @@ function MatchSide({ name, iconCard, deckName }: { name: string; iconCard: strin
 }
 
 /** A player's match history. Names are plain text: browsing another player happens only via the chooser. */
-export function AltMatches({ player, matches, wins, losses, summary, pagination, onPage, recordForm, headToHead, actions, error, onToggleStyle }: { player: { id: string; name: string; iconCard?: string | null }; matches: MatchRecord[]; wins: number; losses: number; summary?: string; pagination?: MatchPagination; onPage?: (offset: number) => void; recordForm?: React.ReactNode; headToHead?: HeadToHeadRow[]; actions?: (match: MatchRecord) => React.ReactNode; error?: string; onToggleStyle: () => void }) {
-  return <AltShell title={`${player.name}'s matches`} subtitle={summary ?? `${wins} wins · ${losses} losses`} activeNav="matches" player={player} onToggleStyle={onToggleStyle}>
+export function AltMatches({ player, matches, wins, losses, summary, pagination, onPage, recordForm, headToHead, actions, error }: { player: { id: string; name: string; iconCard?: string | null }; matches: MatchRecord[]; wins: number; losses: number; summary?: string; pagination?: MatchPagination; onPage?: (offset: number) => void; recordForm?: React.ReactNode; headToHead?: HeadToHeadRow[]; actions?: (match: MatchRecord) => React.ReactNode; error?: string }) {
+  return <AltShell title={`${player.name}'s matches`} subtitle={summary ?? `${wins} wins · ${losses} losses`} activeNav="matches" player={player}>
     {error && <p className="alt-notice error" role="alert">{error}</p>}
     {recordForm && <section className="alt-page-section"><h2>Record a match</h2>{recordForm}</section>}
     {headToHead && <section className="alt-page-section"><h2>Head to head</h2>{headToHead.length === 0 ? <p className="alt-field-hint">No opponents recorded yet.</p> : <div className="alt-list">{headToHead.map((row) => <article className="alt-h2h-row" key={row.opponentId}><span className="alt-match-side"><PlayerAvatar name={row.opponentName} iconCard={row.opponentIconCard} size={28} /><strong>{row.opponentName}</strong></span><span>{row.wins}W · {row.losses}L</span></article>)}</div>}</section>}

@@ -1,13 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CardImage } from "./CardImage";
-import { PlayerAvatar } from "./PlayerAvatar";
 import { AltCollectionView } from "./AltCollectionView";
 import { AltPlayerPageState } from "./AltShell";
-import { UiStyleToggle } from "./UiStyleToggle";
-import { useUiStyle } from "./useUiStyle";
 import { refreshLeaguePlayers } from "./useLeaguePlayers";
 import { isNotFound, jsonFetch, type CatalogCard, type CollectionCard } from "@/lib/client";
 import { LatestWriteQueue } from "@/lib/latest-write-queue";
@@ -40,7 +35,6 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   const [loading, setLoading] = useState(true);
   const [importing, setImporting] = useState(false);
   const [pendingEdits, setPendingEdits] = useState<PendingEdits>({});
-  const { style: uiStyle, toggle: toggleUiStyle } = useUiStyle();
   const [loadError, setLoadError] = useState<{ message: string; notFound: boolean } | null>(null);
   const saveQueue = useRef<LatestWriteQueue<{ name: string; qty: number; owned: boolean }> | null>(null);
   const importLock = useRef(new MutationLock());
@@ -189,50 +183,15 @@ export function CollectionManager({ profileId }: { profileId: string }) {
   async function copyOwned() { await navigator.clipboard.writeText(exportText()); setMessage("Owned list copied."); }
   function download() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([exportText()], { type: "text/plain" })); link.download = `${profile?.name || "collection"}-FRA.txt`; link.click(); URL.revokeObjectURL(link.href); }
 
-  // Alt: the route id is authoritative, so another player's data still in state counts as loading.
-  if (!profile || (uiStyle === "alt" && profile.id !== profileId)) {
-    if (uiStyle === "alt") return <AltPlayerPageState profileId={profileId} activeNav="collection" copy={{ loading: "Loading collection", loadingDetail: "Fetching the player and card catalog.", unavailable: "Collection unavailable", failed: "We couldn't load this collection" }} error={loading ? undefined : loadError?.message} notFound={!loading && loadError?.notFound} onRetry={() => void load()} onToggleStyle={toggleUiStyle} />;
-    return <main className="shell"><p className="muted">{message || "Loading collection…"}</p></main>;
+  // The route id is authoritative, so another player's data still in state counts as loading.
+  if (!profile || profile.id !== profileId) {
+    return <AltPlayerPageState profileId={profileId} activeNav="collection" copy={{ loading: "Loading collection", loadingDetail: "Fetching the player and card catalog.", unavailable: "Collection unavailable", failed: "We couldn't load this collection" }} error={loading ? undefined : loadError?.message} notFound={!loading && loadError?.notFound} onRetry={() => void load()} />;
   }
-  if (uiStyle === "alt") return <AltCollectionView
-    profile={profile}
-    catalog={catalog}
-    cards={cards}
-    importText={importText}
-    message={message}
-    status={status}
-    search={search}
-    selectedName={selectedName}
-    importOpen={importOpen}
-    unsyncedCount={Object.keys(pendingEdits).length}
-    onImportTextChange={setImportText}
-    onSearchChange={setSearch}
-    onSelectedNameChange={setSelectedName}
-    onImportOpenChange={setImportOpen}
-    onImport={() => void runImport()}
-    importing={importing}
-    onToggleStyle={toggleUiStyle}
-    onRename={renameProfile}
-    onSaveCard={(name, patch) => void saveCard(name, patch)}
-    onRetryUnsynced={() => void retryUnsynced()}
-    onDiscardUnsynced={() => void discardUnsynced()}
+  return <AltCollectionView
+    profile={profile} catalog={catalog} cards={cards} importText={importText} message={message} status={status}
+    search={search} selectedName={selectedName} importOpen={importOpen} unsyncedCount={Object.keys(pendingEdits).length}
+    onImportTextChange={setImportText} onSearchChange={setSearch} onSelectedNameChange={setSelectedName} onImportOpenChange={setImportOpen}
+    onImport={() => void runImport()} importing={importing} onRename={renameProfile}
+    onSaveCard={(name, patch) => void saveCard(name, patch)} onRetryUnsynced={() => void retryUnsynced()} onDiscardUnsynced={() => void discardUnsynced()}
   />;
-  return <main className="collection-page">
-    <header className="workspace-header">
-      <div className="profile-heading"><button className="avatar-edit" type="button" onClick={() => setIconPickerOpen((open) => !open)} aria-expanded={iconPickerOpen} aria-controls="icon-picker" aria-label="Edit profile icon"><PlayerAvatar name={profile.name} iconCard={profile.iconCard} size={44} /></button><div><Link className="back-link" href="/">← Players</Link><form className="inline-title" onSubmit={rename}><input aria-label="Profile name" name="name" defaultValue={profile.name} key={profile.name} /><button type="submit">Rename</button></form></div></div>
-      <div className="header-stats"><strong>Owned: {ownedCount} / {catalog.length}</strong><span className={`save-state ${status}`}>{status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Save failed" : ""}</span><Link className="button-link" href="/analytics">Analytics</Link><Link className="button-link" href={`/p/${profileId}/matches`}>Matches →</Link><Link className="primary" href={`/p/${profileId}/decks`}>Decks →</Link><UiStyleToggle onToggle={toggleUiStyle} /></div>
-    </header>
-    {iconPickerOpen && <section className="icon-picker" id="icon-picker" aria-label="Choose profile icon"><div className="icon-picker-tools"><strong>Choose an icon</strong><input type="search" placeholder="Search owned cards" value={iconSearch} onChange={(event) => setIconSearch(event.target.value)} autoFocus /></div><div className="icon-picker-grid"><button className="icon-choice initial-choice" type="button" onClick={() => void setIcon(null)}><PlayerAvatar name={profile.name} iconCard={null} size={90} /><span>Use initial</span></button>{ownedIconCards.map((card) => <div className={`icon-choice ${profile.iconCard === card.name ? "selected" : ""}`} key={card.name}><CardImage name={card.name} catalog={card} onClick={() => void setIcon(card.name)} ariaLabel={`Use ${card.name} as profile icon`} /><span title={card.name}>{card.name}</span></div>)}</div>{ownedIconCards.length === 0 && <p className="muted">No owned cards match that search.</p>}</section>}
-    <section className="collection-tools">
-      {Object.keys(pendingEdits).length > 0 && <div className="notice error-banner" role="alert"><strong>{Object.keys(pendingEdits).length} unsynced {Object.keys(pendingEdits).length === 1 ? "change" : "changes"}</strong> recovered from this browser. <button type="button" onClick={() => void retryUnsynced()} disabled={status === "saving"}>Retry</button> <button type="button" onClick={() => void discardUnsynced()} disabled={status === "saving"}>Discard</button></div>}
-      <div className="tool-row"><input className="search" type="search" placeholder="Search collection" value={search} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => void copyOwned()}>Copy owned list</button><button onClick={download}>Download .txt</button></div>
-      <div className="import-box"><textarea value={importText} onChange={(e) => setImportText(e.target.value)} placeholder={"Accepted formats:\n1 Card Name (FRA)\n1x Card Name (fra) 121 [Creature]"} disabled={importing} /><button className="primary" onClick={() => void runImport()} disabled={importing}>{importing ? "Importing…" : "Import & merge"}</button></div>
-      {message && <p className="notice" role="status">{message}</p>}
-    </section>
-    {GROUPS.map((group) => {
-      const items = grouped.get(group) || []; if (!items.length) return null;
-      const sectionOwned = catalog.reduce((sum, info) => sum + (colorGroup(info) === group && collectionMap.get(info.name.toLowerCase())?.owned ? 1 : 0), 0);
-      return <section className="card-section" key={group}><h2><span>{group}</span><small>{sectionOwned} / {groupTotals.get(group) || 0} owned</small></h2><div className="card-grid">{items.map((info) => { const card = collectionMap.get(info.name.toLowerCase()); const owned = card?.owned === true; return <article className={`card-tile ${card ? "" : "never-added"}`} key={info.name}><CardImage name={info.name} catalog={info} dimmed={!owned} onClick={() => void saveCard(info.name, card ? { owned: !owned } : { qty: 1, owned: true })} /><div className="card-meta"><strong title={info.name}>{info.name}</strong><span>{info.rarity}</span></div>{owned && card && <div className="stepper"><button onClick={() => void saveCard(info.name, { qty: Math.max(0, card.qty - 1) })} aria-label={`Decrease ${info.name}`}>−</button><b>{card.qty}</b><button onClick={() => void saveCard(info.name, { qty: card.qty + 1 })} aria-label={`Increase ${info.name}`}>+</button><button className="remove" onClick={() => void saveCard(info.name, { qty: 0 })} aria-label={`Remove ${info.name}`}>×</button></div>}</article>; })}</div></section>;
-    })}
-  </main>;
 }
